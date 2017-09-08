@@ -40,5 +40,5 @@ setup(name='usgs_wma_mlr_validator',
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
-      py_modules=['app', 'config', 'services', 'validator_utils']
+      py_modules=['app', 'config', 'services', 'validator']
       )

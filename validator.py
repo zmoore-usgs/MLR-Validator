@@ -1,5 +1,4 @@
 from cerberus import Validator
-import json
 
 
 class ValidateError(Exception):

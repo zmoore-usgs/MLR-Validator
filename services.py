@@ -80,8 +80,6 @@ error_model = api.model('ErrorModel', {
     'error_message': fields.String()
 })
 
-parser = reqparse.RequestParser()
-
 
 @api.route('/validators')
 class Validator(Resource):
