@@ -1,0 +1,4 @@
+cerberus==1.1
+jsonschema==2.6.0
+Flask==0.12.2
+flask-restplus==0.10.1
