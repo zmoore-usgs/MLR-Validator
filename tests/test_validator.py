@@ -1,6 +1,6 @@
 
 from unittest import TestCase
-from insert_schema import get_schema
+from schema import get_insert_schema
 
 from validator import ValidateError, validate
 
@@ -16,7 +16,7 @@ class ValidateTestCase(TestCase):
             'agencyCode': '',
             'siteNumber': 'br549'
             }
-        self.schema = get_schema()
+        self.schema = get_insert_schema()
 
     def test_validate_ok(self):
         self.assertTrue(validate(self.data1, self.schema))

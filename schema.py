@@ -1,4 +1,4 @@
-def get_schema():
+def get_insert_schema():
     schema = {
         'agencyCode': {
             'type': 'string',

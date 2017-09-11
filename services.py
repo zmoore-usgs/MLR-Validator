@@ -1,6 +1,6 @@
 from flask import request
 from flask_restplus import Api, Resource, reqparse, fields
-from insert_schema import get_schema
+from schema import get_insert_schema
 
 from app import application
 from validator import ValidateError, validate as validate_data
@@ -89,7 +89,7 @@ class Validator(Resource):
     @api.expect(location_model)
     def post(self):
         data = request.get_json()
-        schema = get_schema()
+        schema = get_insert_schema()
         try:
             result = validate_data(data, schema)
         except ValidateError as err:
