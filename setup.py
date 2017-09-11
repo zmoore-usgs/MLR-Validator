@@ -26,7 +26,6 @@ def read(filepath):
     return content
 
 
-
 requirements = read_requirements('requirements.txt')
 
 setup(name='usgs_wma_mlr_validator',
@@ -40,5 +39,5 @@ setup(name='usgs_wma_mlr_validator',
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
-      py_modules=['app', 'config', 'services', 'validator']
+      py_modules=['app', 'config', 'services', 'schema', 'validator']
       )
