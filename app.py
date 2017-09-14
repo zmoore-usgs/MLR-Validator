@@ -13,8 +13,8 @@ if os.path.exists(os.path.join(PROJECT_DIR, '.env')):
 
 from services import *
 
-v = SitefileValidator()
-v.allow_unknown = True
+sitefile_validator = SitefileValidator()
+sitefile_validator.allow_unknown = True
 
 if __name__ == '__main__':
     application.run()

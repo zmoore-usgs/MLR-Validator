@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from schema import get_insert_schema
-
+from site_file_validator import SitefileValidator
 from validator import ValidateError, validate
 
 
@@ -17,13 +17,15 @@ class ValidateTestCase(TestCase):
             'siteNumber': 'br549'
             }
         self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
 
     def test_validate_ok(self):
-        self.assertTrue(validate(self.data1, self.schema))
+        self.assertTrue(validate(self.data1, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
-            validate(self.data2, self.schema)
+            validate(self.data2, self.schema, self.site_validator)
 
 
 class ValidateNumericCheck(TestCase):
@@ -80,32 +82,34 @@ class ValidateNumericCheck(TestCase):
             'altitude': '9.p.1'
         }
         self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
 
     def test_validate_ok(self):
-        self.assertTrue(validate(self.good_data, self.schema))
-        self.assertTrue(validate(self.good_data2, self.schema))
-        self.assertTrue(validate(self.good_data3, self.schema))
-        self.assertTrue(validate(self.good_data4, self.schema))
-        self.assertTrue(validate(self.good_data5, self.schema))
-        self.assertTrue(validate(self.good_data6, self.schema))
-        self.assertTrue(validate(self.good_data7, self.schema))
-        self.assertTrue(validate(self.good_data8, self.schema))
-        self.assertTrue(validate(self.good_data9, self.schema))
-        self.assertTrue(validate(self.good_data10, self.schema))
-        self.assertTrue(validate(self.good_data11, self.schema))
-        self.assertTrue(validate(self.good_data12, self.schema))
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data2, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data3, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data4, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data5, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data6, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data7, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data8, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data9, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data10, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data11, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data12, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
-            validate(self.bad_data, self.schema)
+            validate(self.bad_data, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data2, self.schema)
+            validate(self.bad_data2, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data3, self.schema)
+            validate(self.bad_data3, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data4, self.schema)
+            validate(self.bad_data4, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data5, self.schema)
+            validate(self.bad_data5, self.schema, self.site_validator)
 
 
 class ValidatePositiveNumericCheck(TestCase):
@@ -162,38 +166,40 @@ class ValidatePositiveNumericCheck(TestCase):
             'contributingDrainageArea': '9.p.1'
         }
         self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
 
     def test_validate_ok(self):
-        self.assertTrue(validate(self.good_data, self.schema))
-        self.assertTrue(validate(self.good_data2, self.schema))
-        self.assertTrue(validate(self.good_data3, self.schema))
-        self.assertTrue(validate(self.good_data4, self.schema))
-        self.assertTrue(validate(self.good_data5, self.schema))
-        self.assertTrue(validate(self.good_data6, self.schema))
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data2, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data3, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data4, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data5, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data6, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
-            validate(self.bad_data, self.schema)
+            validate(self.bad_data, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data2, self.schema)
+            validate(self.bad_data2, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data3, self.schema)
+            validate(self.bad_data3, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data4, self.schema)
+            validate(self.bad_data4, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data5, self.schema)
+            validate(self.bad_data5, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data6, self.schema)
+            validate(self.bad_data6, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data7, self.schema)
+            validate(self.bad_data7, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data8, self.schema)
+            validate(self.bad_data8, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data9, self.schema)
+            validate(self.bad_data9, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data10, self.schema)
+            validate(self.bad_data10, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data11, self.schema)
+            validate(self.bad_data11, self.schema, self.site_validator)
 
 
 class ValidateValidChars(TestCase):
@@ -254,32 +260,34 @@ class ValidateValidChars(TestCase):
             'dataTypesCode': '/A'
         }
         self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
 
     def test_validate_ok(self):
-        self.assertTrue(validate(self.good_data, self.schema))
-        self.assertTrue(validate(self.good_data2, self.schema))
-        self.assertTrue(validate(self.good_data3, self.schema))
-        self.assertTrue(validate(self.good_data4, self.schema))
-        self.assertTrue(validate(self.good_data5, self.schema))
-        self.assertTrue(validate(self.good_data6, self.schema))
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data2, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data3, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data4, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data5, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data6, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
-            validate(self.bad_data, self.schema)
+            validate(self.bad_data, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data2, self.schema)
+            validate(self.bad_data2, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data3, self.schema)
+            validate(self.bad_data3, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data4, self.schema)
+            validate(self.bad_data4, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data5, self.schema)
+            validate(self.bad_data5, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data6, self.schema)
+            validate(self.bad_data6, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data7, self.schema)
+            validate(self.bad_data7, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data8, self.schema)
+            validate(self.bad_data8, self.schema, self.site_validator)
 
 
 class ValidateValidDMS(TestCase):
@@ -349,37 +357,39 @@ class ValidateValidDMS(TestCase):
             'latitude': '-123496',
         }
         self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
 
     def test_validate_ok(self):
-        self.assertTrue(validate(self.good_data, self.schema))
-        self.assertTrue(validate(self.good_data2, self.schema))
-        self.assertTrue(validate(self.good_data3, self.schema))
-        self.assertTrue(validate(self.good_data4, self.schema))
-        self.assertTrue(validate(self.good_data5, self.schema))
-        self.assertTrue(validate(self.good_data6, self.schema))
-        self.assertTrue(validate(self.good_data7, self.schema))
-        self.assertTrue(validate(self.good_data8, self.schema))
-        self.assertTrue(validate(self.good_data9, self.schema))
-        self.assertTrue(validate(self.good_data10, self.schema))
-        self.assertTrue(validate(self.good_data11, self.schema))
-        self.assertTrue(validate(self.good_data12, self.schema))
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data2, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data3, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data4, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data5, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data6, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data7, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data8, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data9, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data10, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data11, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data12, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
-            validate(self.bad_data, self.schema)
+            validate(self.bad_data, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data2, self.schema)
+            validate(self.bad_data2, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data3, self.schema)
+            validate(self.bad_data3, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data4, self.schema)
+            validate(self.bad_data4, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data5, self.schema)
+            validate(self.bad_data5, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data6, self.schema)
+            validate(self.bad_data6, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data7, self.schema)
+            validate(self.bad_data7, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data8, self.schema)
+            validate(self.bad_data8, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
-            validate(self.bad_data9, self.schema)
+            validate(self.bad_data9, self.schema, self.site_validator)

@@ -17,6 +17,6 @@ def validate(data, schema, site_validator):
     result = site_validator.validate(data, schema)
 
     if not result:
-        raise ValidateError('Validation Error: {0}'.format(v.errors))
+        raise ValidateError('Validation Error: {0}'.format(site_validator.errors))
 
     return 'Validation Successful'
