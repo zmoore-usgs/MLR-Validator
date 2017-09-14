@@ -25,9 +25,11 @@ class SitefileValidator(Validator):
 
     def _validate_valid_chars(self, valid_chars, field, value):
         """
+        # Check that tab, #, *, \, ", ^, _, and $ do not exist in field
+
+        The rule's arguments are validated against this schema:
         {'valid_chars': True}
         """
-        # Check that tab, #, *, \, ", ^, _, and $ do not exist in field
         if valid_chars:
             if field == 'stationName':
                 test_field = re.search('[\\t\#\*\\\\"\^\_\$]+', value)
@@ -41,7 +43,10 @@ class SitefileValidator(Validator):
                     self._error(field, "Invalid Character: contains a character other than A, I, O, N, or a blank space")
 
     def _validate_valid_dms(self, valid_dms, field, value):
+        # Check that field consists of valid degrees, minutes and second values
+
         """
+        The rule's arguments are validated against this schema:
         {'valid_chars': True}
         """
         if valid_dms:
