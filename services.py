@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Api, Resource, reqparse, fields
 from schema import get_insert_schema
 
-from app import application
+from app import application, sitefile_validator
 from validator import ValidateError, validate as validate_data
 
 api = Api(application,
@@ -91,7 +91,7 @@ class Validator(Resource):
         data = request.get_json()
         schema = get_insert_schema()
         try:
-            result = validate_data(data, schema)
+            result = validate_data(data, schema, sitefile_validator)
         except ValidateError as err:
             response, status = {
                 'error_message': err.message
