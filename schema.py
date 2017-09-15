@@ -12,13 +12,15 @@ def get_insert_schema():
         stationName:
             maxlength: 50
             empty: False
-            valid_chars: True
+            valid_special_chars: True
         siteTypeCode:
             empty: False
         latitude:
-            valid_dms: True
+            maxlength: 11
+            valid_latitude_dms: True
         longitude:
-            valid_dms: True
+            maxlength: 12
+            valid_longitude_dms: True
         altitude:
             type: numeric
         altitudeAccuracyValue:
@@ -34,17 +36,17 @@ def get_insert_schema():
             empty: False
         landNet:
             maxlength: 23
-            valid_chars: True
+            valid_special_chars: True
         mapName:
             maxlength: 20
         mapScale:
             maxlength: 7
         dataTypesCode:
             maxlength: 30
-            valid_chars: True
+            valid_data_types_chars: True
         instrumentsCode:
             maxlength: 30
-            valid_chars: True
+            valid_instruments_chars: True
         contributingDrainageArea:
             type: positive_numeric
             maxlength: 8

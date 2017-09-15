@@ -1,5 +1,5 @@
 import os
-from site_file_validator import SitefileValidator
+from site_file_validator_rules import SitefileValidator
 
 from flask import Flask
 

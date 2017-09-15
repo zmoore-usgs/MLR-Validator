@@ -3,6 +3,9 @@ class ValidateError(Exception):
     def __init__(self, message):
         self.message = message
 
+    def __str__(self):
+        return 'Validation Error: {0}'.format(self.message)
+
 
 def validate(data, schema, site_validator):
     '''

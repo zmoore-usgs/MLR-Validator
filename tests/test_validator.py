@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from schema import get_insert_schema
-from site_file_validator import SitefileValidator
+from site_file_validator_rules import SitefileValidator
 from validator import ValidateError, validate
 
 
@@ -239,24 +239,45 @@ class ValidateValidChars(TestCase):
             'stationName': 'br5#49'
             }
         self.bad_data2 = {
-            'instrumentsCode': 'K'
+            'stationName': 'br\t549'
         }
         self.bad_data3 = {
-            'instrumentsCode': 'N K'
+            'stationName': 'br5\\49'
         }
         self.bad_data4 = {
-            'instrumentsCode': '9Y'
+            'stationName': '$br549'
         }
         self.bad_data5 = {
-            'instrumentsCode': '-Y'
+            'stationName': 'b^r549'
         }
         self.bad_data6 = {
-            'dataTypesCode': '-N'
+            'stationName': 'br5*49'
         }
         self.bad_data7 = {
-            'dataTypesCode': '3IOk'
+            'stationName': 'br54"9'
         }
         self.bad_data8 = {
+            'stationName': 'br549_'
+        }
+        self.bad_data9 = {
+            'instrumentsCode': 'K'
+        }
+        self.bad_data10 = {
+            'instrumentsCode': 'N K'
+        }
+        self.bad_data11 = {
+            'instrumentsCode': '9Y'
+        }
+        self.bad_data12 = {
+            'instrumentsCode': '-Y'
+        }
+        self.bad_data13 = {
+            'dataTypesCode': '-N'
+        }
+        self.bad_data14 = {
+            'dataTypesCode': '3IOk'
+        }
+        self.bad_data15 = {
             'dataTypesCode': '/A'
         }
         self.schema = get_insert_schema()
@@ -288,74 +309,138 @@ class ValidateValidChars(TestCase):
             validate(self.bad_data7, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data8, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data9, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data10, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data11, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data12, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data13, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data14, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data15, self.schema, self.site_validator)
 
 
-class ValidateValidDMS(TestCase):
+
+class ValidateValidLatDMS(TestCase):
 
     def setUp(self):
         self.good_data = {
-            'latitude': ' 123456',
+            'latitude': ' 123456'
         }
         self.good_data2 = {
-            'latitude': '-123456',
+            'latitude': '-123456'
         }
         self.good_data3 = {
-            'latitude': ' 023456',
+            'latitude': ' 023456'
         }
         self.good_data4 = {
-            'latitude': ' 003456',
+            'latitude': ' 003456'
         }
         self.good_data5 = {
-            'latitude': ' 000456',
+            'latitude': ' 000456'
         }
         self.good_data6 = {
-            'latitude': ' 000056',
+            'latitude': ' 000056'
         }
         self.good_data7 = {
-            'latitude': ' 000006',
+            'latitude': ' 000006'
         }
         self.good_data8 = {
-            'latitude': '-023456',
+            'latitude': '-023456'
         }
         self.good_data9 = {
-            'latitude': '-003456',
+            'latitude': '-003456'
         }
         self.good_data10 = {
-            'latitude': '-000456',
+            'latitude': '-000456'
         }
         self.good_data11 = {
-            'latitude': '-000056',
+            'latitude': '-000056'
         }
         self.good_data12 = {
-            'latitude': '-000006',
+            'latitude': '-000006'
+        }
+        self.good_data13 = {
+            'latitude': '-000000'
+        }
+        self.good_data14 = {
+            'latitude': ' 000000'
+        }
+        self.good_data15 = {
+            'latitude': ' 900000'
+        }
+        self.good_data16 = {
+            'latitude': ' 900000.0'
+        }
+        self.good_data17 = {
+            'latitude': ' 900000.93'
+        }
+        self.good_data18 = {
+            'latitude': ' 900000.093'
         }
         self.bad_data = {
-            'latitude': 'k',
+            'latitude': 'k'
         }
         self.bad_data2 = {
-            'latitude': 'fds342',
+            'latitude': 'fds342'
         }
         self.bad_data3 = {
-            'latitude': '3',
+            'latitude': '3'
         }
         self.bad_data4 = {
-            'latitude': ' 127456',
+            'latitude': ' 127456'
         }
         self.bad_data5 = {
-            'latitude': ' 123496',
+            'latitude': ' 123496'
         }
         self.bad_data6 = {
-            'latitude': ' 923426',
+            'latitude': ' 923426'
         }
         self.bad_data7 = {
-            'latitude': '-923426',
+            'latitude': '-923426'
         }
         self.bad_data8 = {
-            'latitude': '-127456',
+            'latitude': '-127456'
         }
         self.bad_data9 = {
-            'latitude': '-123496',
+            'latitude': '-123496'
         }
+        self.bad_data10 = {
+            'latitude': '-126036'
+        }
+        self.bad_data11 = {
+            'latitude': '-123060'
+        }
+        self.bad_data12 = {
+            'latitude': ' 1.27456'
+        }
+        self.bad_data13 = {
+            'latitude': ' 12.7456'
+        }
+        self.bad_data14 = {
+            'latitude': ' 127.456'
+        }
+        self.bad_data15 = {
+            'latitude': ' 1274.56'
+        }
+        self.bad_data16 = {
+            'latitude': ' 12745.6'
+        }
+        self.bad_data17 = {
+            'latitude': ' 900000.'
+        }
+        self.bad_data18 = {
+            'latitude': ' 900000.-9'
+        }
+        self.bad_data19 = {
+            'latitude': ' 900000.5454'
+        }
+
         self.schema = get_insert_schema()
         self.site_validator = SitefileValidator()
         self.site_validator.allow_unknown = True
@@ -373,6 +458,12 @@ class ValidateValidDMS(TestCase):
         self.assertTrue(validate(self.good_data10, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data11, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data12, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data13, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data14, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data15, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data16, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data17, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data18, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
@@ -393,3 +484,194 @@ class ValidateValidDMS(TestCase):
             validate(self.bad_data8, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data9, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data10, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data11, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data12, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data13, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data14, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data15, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data16, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data17, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data18, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data19, self.schema, self.site_validator)
+
+
+class ValidateValidLongDMS(TestCase):
+
+    def setUp(self):
+        self.good_data = {
+            'longitude': ' 1234556'
+        }
+        self.good_data2 = {
+            'longitude': '-1234556'
+        }
+        self.good_data3 = {
+            'longitude': ' 0234556'
+        }
+        self.good_data4 = {
+            'longitude': ' 0034556'
+        }
+        self.good_data5 = {
+            'longitude': ' 0004556'
+        }
+        self.good_data6 = {
+            'longitude': ' 0000556'
+        }
+        self.good_data7 = {
+            'longitude': ' 0000056'
+        }
+        self.good_data8 = {
+            'longitude': '-0234556'
+        }
+        self.good_data9 = {
+            'longitude': '-0034556'
+        }
+        self.good_data10 = {
+            'longitude': '-0004556'
+        }
+        self.good_data11 = {
+            'longitude': '-0000556'
+        }
+        self.good_data12 = {
+            'longitude': '-0000006'
+        }
+        self.good_data13 = {
+            'longitude': '-0000000'
+        }
+        self.good_data14 = {
+            'longitude': '-1800000'
+        }
+        self.good_data15 = {
+            'longitude': '-1800000.0'
+        }
+        self.good_data16 = {
+            'longitude': '-1800000.01'
+        }
+        self.good_data17 = {
+            'longitude': '-1800000.023'
+        }
+        self.bad_data = {
+            'longitude': 'k'
+        }
+        self.bad_data2 = {
+            'longitude': 'fds342'
+        }
+        self.bad_data3 = {
+            'longitude': '3'
+        }
+        self.bad_data4 = {
+            'longitude': ' 1237456'
+        }
+        self.bad_data5 = {
+            'longitude': ' 1233496'
+        }
+        self.bad_data6 = {
+            'longitude': ' 1923426'
+        }
+        self.bad_data7 = {
+            'longitude': '-1923426'
+        }
+        self.bad_data8 = {
+            'longitude': '-1227456'
+        }
+        self.bad_data9 = {
+            'longitude': '-1223496'
+        }
+        self.bad_data10 = {
+            'longitude': ' 1.227456'
+        }
+        self.bad_data11 = {
+            'longitude': ' 12.72456'
+        }
+        self.bad_data12 = {
+            'longitude': ' 127.4546'
+        }
+        self.bad_data13 = {
+            'longitude': ' 1274.546'
+        }
+        self.bad_data14 = {
+            'longitude': ' 12745.64'
+        }
+        self.bad_data15 = {
+            'longitude': ' 127246.4'
+        }
+        self.bad_data16 = {
+            'longitude': '-1800000.'
+        }
+        self.bad_data17 = {
+            'longitude': '-1800000.0233'
+        }
+        self.bad_data18 = {
+            'longitude': '-1800000.-02'
+        }
+
+        self.schema = get_insert_schema()
+        self.site_validator = SitefileValidator()
+        self.site_validator.allow_unknown = True
+
+    def test_validate_ok(self):
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data2, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data3, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data4, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data5, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data6, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data7, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data8, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data9, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data10, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data11, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data12, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data13, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data14, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data15, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data16, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data17, self.schema, self.site_validator))
+
+    def test_with_validate_not_ok(self):
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data2, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data3, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data4, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data5, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data6, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data7, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data8, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data9, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data10, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data11, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data12, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data13, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data14, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data15, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data16, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data17, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data18, self.schema, self.site_validator)
