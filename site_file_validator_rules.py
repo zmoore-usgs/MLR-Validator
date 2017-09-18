@@ -1,5 +1,9 @@
+
 from cerberus import Validator
 import re
+import datetime
+from land_net_templates import schema
+
 
 class SitefileValidator(Validator):
     def _validate_type_numeric(self, value):
@@ -23,6 +27,43 @@ class SitefileValidator(Validator):
         else:
             return True
 
+    def _validate_valid_precision(self, valid_precision, field, value):
+        """
+        # Check that precision is no more than 2 decimal places
+
+        The rule's arguments are validated against this schema:
+        {'valid_valid_precision': False}
+        """
+        error_message = "Invalid Value, decimal precision error"
+
+        stripped_value = value.strip()
+        test_split = stripped_value.split(".")
+        # there is a decimal, so need to check what's after it
+        if len(test_split) > 1:
+            if test_split[1] == "":
+                self._error(field, error_message)
+            else:
+                # Check that only digits 0-9 exist after the decimal
+                test_field = re.search('[^0-9]+', test_split[1])
+                if test_field is not None:
+                    # There is something besides digits 0-9 after the decimal
+                    self._error(field, error_message)
+                if len(test_split[1]) > 2:
+                    self._error(field, error_message)
+
+    def _validate_is_empty(self, is_empty, field, value):
+        """
+        # Since the value coming in could consist of spaces, check that a value of only spaces is considered null
+
+        The rule's arguments are validated against this schema:
+        {'valid_is_empty': False}
+        """
+        stripped_value = value.strip()
+        if not is_empty:
+            if not stripped_value:
+                self._error(field, "Mandatory Field Missing")
+
+
     def _validate_valid_special_chars(self, valid_special_chars, field, value):
         """
         # Check that tab, #, *, \, ", ^, _, and $ do not exist in field
@@ -34,6 +75,19 @@ class SitefileValidator(Validator):
             test_field = re.search('[\\t#*\\\\\"^_$]+', value)
             if test_field is not None:
                 self._error(field, "Invalid Character: contains tab, #, *, \, "", ^, _, and $")
+
+    def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
+        """
+        # Check that characters other than 0-9 or a blank space do not exist in field
+
+        The rule's arguments are validated against this schema:
+        {'valid_map_scale_chars': True}
+        """
+        if valid_map_scale_chars:
+            test_field = re.search('[^0-9 ]+', value)
+            if test_field is not None:
+                # There is something besides digits 0-9 or space
+                self._error(field, "Invalid Character: contains a character other than 0-9")
 
     def _validate_valid_instruments_chars(self, valid_instruments_chars, field, value):
         """
@@ -64,6 +118,8 @@ class SitefileValidator(Validator):
         The rule's arguments are validated against this schema:
         {'valid_latitude_dms': True}
         """
+        error_message = "Invalid Degree/Minute/Second Value"
+
         def check_100th_seconds(val):
             try:
                 val[7] in ["."]
@@ -97,9 +153,9 @@ class SitefileValidator(Validator):
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 90) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
                         and check_100th_seconds(value)):
-                    self._error(field, "Invalid Degree/Minute/Second Value")
+                    self._error(field, error_message)
             except ValueError:
-                return self._error(field, "Invalid Degree/Minute/Second Value")
+                return self._error(field, error_message)
             except IndexError:
                 return
 
@@ -110,6 +166,8 @@ class SitefileValidator(Validator):
         The rule's arguments are validated against this schema:
         {'valid_longitude_dms': True}
         """
+        error_message = "Invalid Degree/Minute/Second Value"
+
         def check_100th_seconds(val):
             try:
                 val[8] in ["."]
@@ -142,6 +200,69 @@ class SitefileValidator(Validator):
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 180) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
                         and check_100th_seconds(value)):
-                    self._error(field, "Invalid Degree/Minute/Second Value")
+                    self._error(field, error_message)
             except ValueError:
-                return self._error(field, "Invalid Degree/Minute/Second Value")
+                return self._error(field, error_message)
+
+    def _validate_valid_date(self, valid_date, field, value):
+        # Check that field is a formatted date of YYYY, YYYYMM or YYYYMMDD
+
+        """
+        The rule's arguments are validated against this schema:
+        {'valid_date': True}
+        """
+        error_message = "Invalid Date, should be YYYY, YYYYMM or YYYYMMDD"
+        stripped_value = value.strip()
+
+        # Check for valid full or partial date lengths
+        if len(stripped_value) in [8, 6, 4]:
+            # Check that only digits 0-9 exist in the string
+            test_field = re.search('[^0-9]+', stripped_value)
+            if test_field is None:
+                # There are only digits 0-9 in the string
+                check_year = stripped_value[0:4]
+                check_month = stripped_value[4:6]
+                try:
+                    if not 1582 <= int(check_year) <= int(datetime.date.today().year):
+                        self._error(field, error_message)
+                    if check_month:
+                        try:
+                            if not 1 <= int(check_month) <= 12:
+                                self._error(field, error_message)
+                        except ValueError:
+                            return self._error(field, error_message)
+                    if len(stripped_value) == 8:
+                        try:
+                            valid_date = datetime.datetime.strptime(stripped_value, '%Y%m%d')
+                        except ValueError:
+                            return self._error(field, error_message)
+                except ValueError:
+                    return self._error(field, error_message)
+
+            else:
+                self._error(field, error_message)
+        else:
+            self._error(field, error_message)
+
+    def _validate_valid_land_net(self, valid_land_net, field, value):
+        # Check that the land net description field follows the correct template
+
+        """
+        The rule's arguments are validated against this schema:
+        {'valid_land_net': True}
+        """
+        error_message = "Invalid format - Land Net does not fit template"
+
+        if valid_land_net:
+            land_net_template = schema["55"]
+            value_end = len(value) - 1
+            section_start = land_net_template.index("S")
+            township_start = land_net_template.index("T")
+            range_start = land_net_template.index("R")
+            try:
+                if not (value[section_start] == "S" and value[township_start] == "T" and value[range_start] == "R"):
+                    return self._error(field, error_message)
+                if not (re.match(r'[\w ]*$', value[section_start:value_end])):
+                    return self._error(field, error_message)
+            except IndexError:
+                return self._error(field, error_message)
