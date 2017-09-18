@@ -1,5 +1,5 @@
 from flask import request
-from flask_restplus import Api, Resource, reqparse, fields
+from flask_restplus import Api, Resource, fields
 from schema import get_insert_schema
 
 from app import application, sitefile_validator

@@ -2,7 +2,7 @@
 from cerberus import Validator
 import re
 import datetime
-from land_net_templates import schema
+from land_net_templates import land_net_ref
 
 
 class SitefileValidator(Validator):
@@ -124,22 +124,18 @@ class SitefileValidator(Validator):
             try:
                 val[7] in ["."]
                 test_split = val.split(".")
-                if len(test_split) == 1:
-                    # no 100th second decimal to check, we're all good
-                    return True
+                # There is a decimal, but have to check if anything was split from it
+                if test_split[1] == "":
+                    return False
                 else:
-                    # There is a decimal, but have to check if anything was split from it
-                    if test_split[1] == "":
-                        return False
+                    # Check that only digits 0-9 exist after the decimal
+                    test_field = re.search('[^0-9]+', test_split[1])
+                    if test_field is None:
+                        # There are only digits 0-9 after the decimal
+                        return True
                     else:
-                        # Check that only digits 0-9 exist after the decimal
-                        test_field = re.search('[^0-9]+', test_split[1])
-                        if test_field is None:
-                            # There are only digits 0-9 after the decimal
-                            return True
-                        else:
-                            # There is something besides digits 0-9 after the decimal
-                            return False
+                        # There is something besides digits 0-9 after the decimal
+                        return False
             except IndexError:
                 return True
 
@@ -172,22 +168,18 @@ class SitefileValidator(Validator):
             try:
                 val[8] in ["."]
                 test_split = val.split(".")
-                if len(test_split) == 1:
-                    # no 100th second decimal to check, we're all good
-                    return True
+                # There is a decimal, but have to check if anything was split from it
+                if test_split[1] == "":
+                    return False
                 else:
-                    # There is a decimal, but have to check if anything was split from it
-                    if test_split[1] == "":
-                        return False
+                    # Check that only digits 0-9 exist after the decimal
+                    test_field = re.search('[^0-9]+', test_split[1])
+                    if test_field is None:
+                        # There are only digits 0-9 after the decimal
+                        return True
                     else:
-                        # Check that only digits 0-9 exist after the decimal
-                        test_field = re.search('[^0-9]+', test_split[1])
-                        if test_field is None:
-                            # There are only digits 0-9 after the decimal
-                            return True
-                        else:
-                            # There is something besides digits 0-9 after the decimal
-                            return False
+                        # There is something besides digits 0-9 after the decimal
+                        return False
             except IndexError:
                 return True
 
@@ -213,36 +205,30 @@ class SitefileValidator(Validator):
         """
         error_message = "Invalid Date, should be YYYY, YYYYMM or YYYYMMDD"
         stripped_value = value.strip()
-
+        if valid_date:
         # Check for valid full or partial date lengths
-        if len(stripped_value) in [8, 6, 4]:
-            # Check that only digits 0-9 exist in the string
-            test_field = re.search('[^0-9]+', stripped_value)
-            if test_field is None:
-                # There are only digits 0-9 in the string
-                check_year = stripped_value[0:4]
-                check_month = stripped_value[4:6]
-                try:
+            if len(stripped_value) in [8, 6, 4]:
+                # Check that only digits 0-9 exist in the string
+                test_field = re.search('[^0-9]+', stripped_value)
+                if test_field is None:
+                    # There are only digits 0-9 in the string
+                    check_year = stripped_value[0:4]
+                    check_month = stripped_value[4:6]
                     if not 1582 <= int(check_year) <= int(datetime.date.today().year):
                         self._error(field, error_message)
                     if check_month:
-                        try:
-                            if not 1 <= int(check_month) <= 12:
-                                self._error(field, error_message)
-                        except ValueError:
-                            return self._error(field, error_message)
+                        if not 1 <= int(check_month) <= 12:
+                            self._error(field, error_message)
                     if len(stripped_value) == 8:
                         try:
                             valid_date = datetime.datetime.strptime(stripped_value, '%Y%m%d')
                         except ValueError:
                             return self._error(field, error_message)
-                except ValueError:
-                    return self._error(field, error_message)
 
+                else:
+                    self._error(field, error_message)
             else:
                 self._error(field, error_message)
-        else:
-            self._error(field, error_message)
 
     def _validate_valid_land_net(self, valid_land_net, field, value):
         # Check that the land net description field follows the correct template
@@ -254,7 +240,7 @@ class SitefileValidator(Validator):
         error_message = "Invalid format - Land Net does not fit template"
 
         if valid_land_net:
-            land_net_template = schema["55"]
+            land_net_template = land_net_ref["55"]
             value_end = len(value) - 1
             section_start = land_net_template.index("S")
             township_start = land_net_template.index("T")

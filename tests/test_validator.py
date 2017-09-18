@@ -133,13 +133,19 @@ class ValidateValidPrecisionCheck(TestCase):
             'altitude': '-1'
         }
         self.bad_data = {
-            'altitude': '9.6.1'
+            'altitude': '961.'
         }
         self.bad_data2 = {
             'altitude': '9.p.1'
         }
         self.bad_data3 = {
             'altitude': '9.242'
+        }
+        self.bad_data4 = {
+            'altitude': '9.6.1'
+        }
+        self.bad_data4 = {
+            'altitude': '234.f8'
         }
         self.schema = get_insert_schema()
         self.site_validator = SitefileValidator()
@@ -163,6 +169,8 @@ class ValidateValidPrecisionCheck(TestCase):
             validate(self.bad_data2, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data3, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data4, self.schema, self.site_validator)
 
 
 class ValidatePositiveNumericCheck(TestCase):
@@ -842,6 +850,9 @@ class ValidateValidDate(TestCase):
         self.bad_data18 = {
             'firstConstructionDate': '2014 9 2'
         }
+        self.bad_data19 = {
+            'firstConstructionDate': '2014O902'
+        }
         self.schema = get_insert_schema()
         self.site_validator = SitefileValidator()
         self.site_validator.allow_unknown = True
@@ -891,6 +902,8 @@ class ValidateValidDate(TestCase):
             validate(self.bad_data17, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data18, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data19, self.schema, self.site_validator)
 
 
 class ValidateLandNetCase(TestCase):
