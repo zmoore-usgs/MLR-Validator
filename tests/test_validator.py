@@ -344,7 +344,7 @@ class ValidateValidChars(TestCase):
             'stationName': 'br\t549'
         }
         self.bad_data3 = {
-            'stationName': 'br5\\49'
+            'stationName': "br5\\49"
         }
         self.bad_data4 = {
             'stationName': '$br549'
@@ -925,16 +925,25 @@ class ValidateLandNetCase(TestCase):
             'landNet': 'Q'
         }
         self.bad_data2 = {
-            'landNet': 'NWNWSWS15 T014N R02^E 4'
+            'landNet': 'NWNWSWS15 T014N R02-E 4'
         }
         self.bad_data3 = {
-            'landNet': 'NWNWSWS15  T014N R022E 4'
+            'landNet': 'NWNWSWS15  T014N R022E4'
         }
         self.bad_data4 = {
-            'landNet': 'NWNWSW S15 T014N R022E 4'
+            'landNet': 'NWNWSW S15 T014N R022E4'
         }
         self.bad_data5 = {
             'landNet': 'NWNWSWS15 T014N R 022E 4'
+        }
+        self.bad_data6 = {
+            'landNet': 'NWNWSWF15 T014N R 022E4'
+        }
+        self.bad_data7 = {
+            'landNet': 'NWNWSWS15 S014N R 022E4'
+        }
+        self.bad_data8 = {
+            'landNet': 'NWNWSWF15 T014N S 022E4'
         }
         self.schema = get_insert_schema()
         self.site_validator = SitefileValidator()
@@ -957,3 +966,9 @@ class ValidateLandNetCase(TestCase):
             validate(self.bad_data4, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data5, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data6, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data7, self.schema, self.site_validator)
+        with self.assertRaises(ValidateError):
+            validate(self.bad_data8, self.schema, self.site_validator)

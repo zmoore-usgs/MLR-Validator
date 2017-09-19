@@ -63,7 +63,6 @@ class SitefileValidator(Validator):
             if not stripped_value:
                 self._error(field, "Mandatory Field Missing")
 
-
     def _validate_valid_special_chars(self, valid_special_chars, field, value):
         """
         # Check that tab, #, *, \, ", ^, _, and $ do not exist in field
@@ -72,7 +71,7 @@ class SitefileValidator(Validator):
         {'valid_special_chars': True}
         """
         if valid_special_chars:
-            test_field = re.search('[\\t#*\\\\\"^_$]+', value)
+            test_field = re.search(r'[\t#*\\\"^_$]+', value)
             if test_field is not None:
                 self._error(field, "Invalid Character: contains tab, #, *, \, "", ^, _, and $")
 
@@ -242,13 +241,14 @@ class SitefileValidator(Validator):
         if valid_land_net:
             land_net_template = land_net_ref["55"]
             value_end = len(value) - 1
-            section_start = land_net_template.index("S")
-            township_start = land_net_template.index("T")
-            range_start = land_net_template.index("R")
+            section = land_net_template.index("S")
+            township = land_net_template.index("T")
+            range = land_net_template.index("R")
             try:
-                if not (value[section_start] == "S" and value[township_start] == "T" and value[range_start] == "R"):
+                if not (value[section] == "S" and value[township] == "T" and value[range] == "R"):
                     return self._error(field, error_message)
-                if not (re.match(r'[\w ]*$', value[section_start:value_end])):
+                test_match = re.search('[^a-zA-Z0-9 ]', value[section:value_end])
+                if test_match is not None:
                     return self._error(field, error_message)
             except IndexError:
                 return self._error(field, error_message)
