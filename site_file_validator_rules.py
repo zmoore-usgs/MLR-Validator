@@ -151,8 +151,6 @@ class SitefileValidator(Validator):
                     self._error(field, error_message)
             except ValueError:
                 return self._error(field, error_message)
-            except IndexError:
-                return
 
     def _validate_valid_longitude_dms(self, valid_longitude_dms, field, value):
         # Check that field consists of valid degrees, minutes and second values
