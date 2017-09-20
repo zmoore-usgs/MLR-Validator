@@ -2,6 +2,7 @@ import json
 import yaml
 from unittest import TestCase, mock
 import app
+from validator import ValidateError
 
 
 class AddValidateTransactionTestCase(TestCase):
@@ -39,3 +40,12 @@ class AddValidateTransactionTestCase(TestCase):
         resp_data = json.loads(response.data)
         self.assertEqual(len(resp_data), 3)
         self.assertEqual(self.location, resp_data)
+
+    def test_invalid_transaction(self):
+        with mock.patch('services.validate_data', side_effect=ValidateError('Validation Failed')):
+            response = self.app_client.post('/validators',
+                                            content_type='application/json',
+                                            data=json.dumps(self.location))
+        self.assertEqual(response.status_code, 401)
+        resp_data = json.loads(response.data)
+        self.assertEqual({'error_message': 'Validation Failed'}, resp_data)
