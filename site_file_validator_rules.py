@@ -215,14 +215,14 @@ class SitefileValidator(Validator):
                     check_month = stripped_value[4:6]
                     if not 1582 <= int(check_year) <= int(datetime.date.today().year):
                         self._error(field, error_message)
-                    if check_month:
-                        if not 1 <= int(check_month) <= 12:
-                            self._error(field, error_message)
                     if len(stripped_value) == 8:
                         try:
                             valid_date = datetime.datetime.strptime(stripped_value, '%Y%m%d')
                         except ValueError:
                             return self._error(field, error_message)
+                    if check_month:
+                        if not 1 <= int(check_month) <= 12:
+                            self._error(field, error_message)
 
                 else:
                     self._error(field, error_message)
