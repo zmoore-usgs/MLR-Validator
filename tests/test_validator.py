@@ -485,6 +485,9 @@ class ValidateValidLatDMS(TestCase):
         self.good_data18 = {
             'latitude': ' 900000.093'
         }
+        self.good_data19 = {
+            'latitude': ' 454856.27 '
+        }
         self.bad_data = {
             'latitude': 'k'
         }
@@ -566,6 +569,7 @@ class ValidateValidLatDMS(TestCase):
         self.assertTrue(validate(self.good_data16, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data17, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data18, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data19, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):
@@ -662,6 +666,9 @@ class ValidateValidLongDMS(TestCase):
         self.good_data17 = {
             'longitude': '-1800000.023'
         }
+        self.good_data18 = {
+            'longitude': ' 0880452.1  '
+        }
         self.bad_data = {
             'longitude': 'k'
         }
@@ -739,6 +746,7 @@ class ValidateValidLongDMS(TestCase):
         self.assertTrue(validate(self.good_data15, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data16, self.schema, self.site_validator))
         self.assertTrue(validate(self.good_data17, self.schema, self.site_validator))
+        self.assertTrue(validate(self.good_data18, self.schema, self.site_validator))
 
     def test_with_validate_not_ok(self):
         with self.assertRaises(ValidateError):

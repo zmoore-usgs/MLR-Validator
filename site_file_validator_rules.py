@@ -73,7 +73,7 @@ class SitefileValidator(Validator):
         if valid_special_chars:
             test_field = re.search(r'[\t#*\\\"^_$]+', value)
             if test_field is not None:
-                self._error(field, "Invalid Character: contains tab, #, *, \, "", ^, _, and $")
+                self._error(field, "Invalid Character: contains tab, #, *, \, "", ^, _, or $")
 
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
@@ -118,6 +118,7 @@ class SitefileValidator(Validator):
         {'valid_latitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
+        rstripped_value = value.rstrip()
 
         def check_100th_seconds(val):
             try:
@@ -139,15 +140,15 @@ class SitefileValidator(Validator):
                 return True
 
         if valid_latitude_dms:
-            first_val = value[0]
-            check_degrees = value[1:3]
-            check_minutes = value[3:5]
-            check_seconds = value[5:7]
+            first_val = rstripped_value[0]
+            check_degrees = rstripped_value[1:3]
+            check_minutes = rstripped_value[3:5]
+            check_seconds = rstripped_value[5:7]
 
             try:
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 90) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
-                        and check_100th_seconds(value)):
+                        and check_100th_seconds(rstripped_value)):
                     self._error(field, error_message)
             except ValueError:
                 return self._error(field, error_message)
@@ -160,6 +161,7 @@ class SitefileValidator(Validator):
         {'valid_longitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
+        rstripped_value = value.rstrip()
 
         def check_100th_seconds(val):
             try:
@@ -181,14 +183,14 @@ class SitefileValidator(Validator):
                 return True
 
         if valid_longitude_dms:
-            first_val = value[0]
-            check_degrees = value[1:4]
-            check_minutes = value[4:6]
-            check_seconds = value[6:8]
+            first_val = rstripped_value[0]
+            check_degrees = rstripped_value[1:4]
+            check_minutes = rstripped_value[4:6]
+            check_seconds = rstripped_value[6:8]
             try:
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 180) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
-                        and check_100th_seconds(value)):
+                        and check_100th_seconds(rstripped_value)):
                     self._error(field, error_message)
             except ValueError:
                 return self._error(field, error_message)
