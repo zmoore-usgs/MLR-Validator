@@ -17,4 +17,4 @@ class SitefileWarningValidator(Validator):
             if ((value.startswith("'") and not value.endswith("'")) or
                     (not value.startswith("'") and value.endswith("'"))):
                 # There is something besides digits 0-9 or space
-                self._error(field, "Missing Quote -- Station Name may be missing a quote at beginning or ending of the name")
+                self._error(field, "Missing Quote: may be missing a quote at beginning or ending of the name")

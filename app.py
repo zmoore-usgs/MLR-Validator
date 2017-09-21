@@ -1,6 +1,6 @@
 import os
 from site_file_validator_rules import SitefileValidator
-from site_file_validator_rules_warnings import SitefileWarningValidator
+from site_file_validator_warnings import SitefileWarningValidator
 
 from flask import Flask
 

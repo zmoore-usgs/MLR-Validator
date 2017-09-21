@@ -3,7 +3,7 @@ from flask_restplus import Api, Resource, fields
 from schema import get_insert_schema, get_warning_schema
 
 from app import application, sitefile_validator, sitefile_warning_validator
-from validator import ValidateError, validate as validate_data
+from validator import ValidateError, ValidateWarning, validate as validate_data
 
 api = Api(application,
           title='MLR Validator',
@@ -77,41 +77,41 @@ location_model = api.model('LocationModel', {
 success_model = api.model('SuccessModel', {'success_message': fields.String()})
 
 error_model = api.model('ErrorModel', {
-    'validation_error_message': fields.String()
+    'fatal_error_message': fields.String()
 })
 
 
 @api.route('/validators')
 class Validator(Resource):
 
-    @api.response(200, 'Successfully validated', success_model)
-    @api.response(400, 'File can not be validated', error_model)
+    @api.response(200, 'Validations passed', success_model)
+    @api.response(400, 'Fatal errors returned from validation', error_model)
     @api.expect(location_model)
     def post(self):
         data = request.get_json()
         schema = get_insert_schema()
         warning_schema = get_warning_schema()
+        result = False
+        result_warn = False
         err_message = ""
         warn_message = ""
         try:
-            result = validate_data(data, schema, sitefile_validator)
+            result = validate_data(data, schema, sitefile_validator, 'error')
         except ValidateError as err:
             err_message = err.message
         try:
-            result_warn = validate_data(data, warning_schema, sitefile_warning_validator)
-        except ValidateError as warn:
+            result_warn = validate_data(data, warning_schema, sitefile_warning_validator, 'warning')
+        except ValidateWarning as warn:
             warn_message = warn.message
 
         status_object = {}
         if err_message:
-            status_object['fatal_error_message'] = err_message
+            status_object["fatal_error_message"] = err_message
         if warn_message:
-            status_object['warning_message'] = warn_message
+            status_object["warning_message"] = warn_message
         if result and result_warn:
-            status_object['success_message'] = result
+            status_object["success_message"] = result
 
-        response, status = {
-                status_object
-                }, 200
+        response, status = status_object, 200
 
         return response, status

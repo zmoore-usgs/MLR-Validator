@@ -39,5 +39,5 @@ setup(name='usgs_wma_mlr_validator',
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
-      py_modules=['app', 'config', 'services', 'schema', 'site_file_validator_rules', 'validator', 'land_net_templates']
+      py_modules=['app', 'config', 'services', 'schema', 'site_file_validator_rules', 'site_file_validator_warnings', 'validator', 'land_net_templates']
       )
