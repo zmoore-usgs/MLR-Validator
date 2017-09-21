@@ -1,9 +1,9 @@
 from flask import request
 from flask_restplus import Api, Resource, fields
-from schema import get_insert_schema
 
-from app import application, sitefile_validator
-from validator import ValidateError, validate as validate_data
+from .validator import ValidateError, validate as validate_data
+from .app import application, sitefile_validator
+from .schema import get_insert_schema
 
 api = Api(application,
           title='MLR Validator',

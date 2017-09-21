@@ -1,8 +1,9 @@
 
 from unittest import TestCase
-from schema import get_insert_schema
-from site_file_validator_rules import SitefileValidator
-from validator import ValidateError, validate
+
+from mlrvalidator.validator import ValidateError, validate
+from mlrvalidator.schema import get_insert_schema
+from mlrvalidator.site_file_validator_rules import SitefileValidator
 
 
 class ValidateIsEmptyCase(TestCase):

@@ -1,8 +1,10 @@
 import json
-import yaml
 from unittest import TestCase, mock
-import app
-from validator import ValidateError
+
+import yaml
+
+from mlrvalidator import app
+from mlrvalidator.validator import ValidateError
 
 
 class AddValidateTransactionTestCase(TestCase):
