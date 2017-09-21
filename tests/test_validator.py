@@ -1,9 +1,9 @@
 
 from unittest import TestCase
-from schema import get_insert_schema
+from schema import get_insert_schema, get_warning_schema
 from site_file_validator_rules import SitefileValidator
-from validator import ValidateError, validate
-
+from site_file_validator_rules_warnings import SitefileWarningValidator
+from validator import ValidateError, ValidateWarning, validate
 
 class ValidateIsEmptyCase(TestCase):
 
@@ -980,3 +980,25 @@ class ValidateLandNetCase(TestCase):
             validate(self.bad_data7, self.schema, self.site_validator)
         with self.assertRaises(ValidateError):
             validate(self.bad_data8, self.schema, self.site_validator)
+
+
+class ValidateWarningsCase(TestCase):
+
+    def setUp(self):
+        self.good_data = {
+            'stationName': '12345'
+        }
+        self.bad_data = {
+            'stationName': "12345'"
+        }
+        self.schema = get_warning_schema()
+        self.site_validator = SitefileWarningValidator()
+        self.site_validator.allow_unknown = True
+        self.site_validator.name = 'warning'
+
+    def test_validate_ok(self):
+        self.assertTrue(validate(self.good_data, self.schema, self.site_validator))
+
+    def test_with_validate_not_ok(self):
+        with self.assertRaises(ValidateWarning):
+            validate(self.bad_data, self.schema, self.site_validator)

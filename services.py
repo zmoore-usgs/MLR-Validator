@@ -1,8 +1,8 @@
 from flask import request
 from flask_restplus import Api, Resource, fields
-from schema import get_insert_schema
+from schema import get_insert_schema, get_warning_schema
 
-from app import application, sitefile_validator
+from app import application, sitefile_validator, sitefile_warning_validator
 from validator import ValidateError, validate as validate_data
 
 api = Api(application,
@@ -77,7 +77,7 @@ location_model = api.model('LocationModel', {
 success_model = api.model('SuccessModel', {'success_message': fields.String()})
 
 error_model = api.model('ErrorModel', {
-    'error_message': fields.String()
+    'validation_error_message': fields.String()
 })
 
 
@@ -85,18 +85,33 @@ error_model = api.model('ErrorModel', {
 class Validator(Resource):
 
     @api.response(200, 'Successfully validated', success_model)
-    @api.response(401, 'File can not be validated', error_model)
+    @api.response(400, 'File can not be validated', error_model)
     @api.expect(location_model)
     def post(self):
         data = request.get_json()
         schema = get_insert_schema()
+        warning_schema = get_warning_schema()
+        err_message = ""
+        warn_message = ""
         try:
             result = validate_data(data, schema, sitefile_validator)
         except ValidateError as err:
-            response, status = {
-                'error_message': err.message
-            }, 401
-        else:
-            response, status = result, 200
+            err_message = err.message
+        try:
+            result_warn = validate_data(data, warning_schema, sitefile_warning_validator)
+        except ValidateError as warn:
+            warn_message = warn.message
+
+        status_object = {}
+        if err_message:
+            status_object['fatal_error_message'] = err_message
+        if warn_message:
+            status_object['warning_message'] = warn_message
+        if result and result_warn:
+            status_object['success_message'] = result
+
+        response, status = {
+                status_object
+                }, 200
 
         return response, status
