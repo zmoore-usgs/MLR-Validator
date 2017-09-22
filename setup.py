@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read_requirements(filename):
@@ -33,11 +33,12 @@ setup(name='usgs_wma_mlr_validator',
       description='MLR Validator Microservice',
       author='Mary Bucknell, Andrew Yan, Dave Steinich, Zack Moore, Kathy Schoephoester',
       author_email='mlr-devs@usgs.gov',
-      include_package_data=False,
+      include_package_data=True,
       long_description =read('README.md'),
       install_requires=requirements,
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
-      py_modules=['app', 'config', 'services', 'schema', 'site_file_validator_rules', 'site_file_validator_warnings', 'validator', 'land_net_templates']
+      py_modules=['config', 'app'],
+      packages=find_packages()
       )
