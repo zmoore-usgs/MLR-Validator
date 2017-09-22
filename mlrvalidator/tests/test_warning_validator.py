@@ -3,7 +3,7 @@ from unittest import TestCase
 from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
 from mlrvalidator.schema import schema_registry
 
-schema = schema_registry.get('insert_warning_schema')
+schema = schema_registry.get('warning_schema')
 site_validator = SitefileWarningValidator()
 site_validator.allow_unknown = True
 

@@ -1,5 +1,5 @@
 
-from app import application, sitefile_insert_error_validator, sitefile_insert_warning_validator
+from app import application, sitefile_error_validator, sitefile_warning_validator
 from .schema import schema_registry
 from flask import request
 from flask_restplus import Api, Resource, fields
@@ -87,17 +87,17 @@ class Validator(Resource):
     @api.expect(location_model)
     def post(self):
         data = request.get_json()
-        insert_error_schema = schema_registry.get('insert_error_schema')
-        insert_warning_schema = schema_registry.get('insert_warning_schema')
-        error_result = sitefile_insert_error_validator.validate(data, insert_error_schema)
-        warning_result = sitefile_insert_warning_validator.validate(data, insert_warning_schema)
+        insert_error_schema = schema_registry.get('error_schema')
+        insert_warning_schema = schema_registry.get('warning_schema')
+        error_result = sitefile_error_validator.validate(data, insert_error_schema)
+        warning_result = sitefile_warning_validator.validate(data, insert_warning_schema)
         status_object = {}
 
         if not error_result:
-            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(sitefile_insert_error_validator.errors)
+            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(sitefile_error_validator.errors)
         if not warning_result:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
-                sitefile_insert_warning_validator.errors)
+                sitefile_warning_validator.errors)
         if error_result and warning_result:
             status_object["validation_passed_message"] = 'Validations Passed'
 
