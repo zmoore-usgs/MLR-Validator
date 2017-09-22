@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 
-from .site_file_validator_rules import SitefileValidator
+from mlrvalidator.site_file_validator_rules import SitefileValidator
 
 
 application = Flask(__name__)
@@ -16,7 +16,7 @@ if os.path.exists(os.path.join(PROJECT_DIR, '.env')):
 sitefile_validator = SitefileValidator()
 sitefile_validator.allow_unknown = True
 
-from .services import *
+from mlrvalidator.services import *
 
 if __name__ == '__main__':
     application.run()

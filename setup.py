@@ -39,6 +39,6 @@ setup(name='usgs_wma_mlr_validator',
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
-      py_modules=['config'],
+      py_modules=['config', 'app'],
       packages=find_packages()
       )

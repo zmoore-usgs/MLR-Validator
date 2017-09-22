@@ -18,4 +18,4 @@ ENV bind_ip 0.0.0.0
 ENV bind_port ${listening_port}
 ENV log_level INFO
 EXPOSE ${bind_port}
-CMD ["/usr/bin/gunicorn", "--reload",  "mlrvalidator.app", "--config", "file:/local/gunicorn_config.py"]
+CMD ["/usr/bin/gunicorn", "--reload",  "app", "--config", "file:/local/gunicorn_config.py"]
