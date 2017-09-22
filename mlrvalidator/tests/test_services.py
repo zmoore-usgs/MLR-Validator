@@ -3,7 +3,7 @@ from unittest import TestCase, mock
 
 import yaml
 
-from mlrvalidator import app
+import app
 from mlrvalidator.validator import ValidateError
 
 
