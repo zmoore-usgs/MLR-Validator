@@ -1,8 +1,10 @@
 import json
-import yaml
 from unittest import TestCase, mock
-import app
-from validator import ValidateError
+
+import yaml
+
+from mlrvalidator import app
+from mlrvalidator.validator import ValidateError
 
 
 class AddValidateTransactionTestCase(TestCase):
@@ -32,7 +34,7 @@ class AddValidateTransactionTestCase(TestCase):
             'siteNumber': '123456789012345',
             'stationName': 'This station name '
         }
-        with mock.patch('services.validate_data', return_value=valid_result):
+        with mock.patch('mlrvalidator.services.validate_data', return_value=valid_result):
             response = self.app_client.post('/validators',
                                         content_type='application/json',
                                         data=json.dumps(self.location))
@@ -42,7 +44,7 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertEqual(self.location, resp_data)
 
     def test_invalid_transaction(self):
-        with mock.patch('services.validate_data', side_effect=ValidateError('Validation Failed')):
+        with mock.patch('mlrvalidator.services.validate_data', side_effect=ValidateError('Validation Failed')):
             response = self.app_client.post('/validators',
                                             content_type='application/json',
                                             data=json.dumps(self.location))

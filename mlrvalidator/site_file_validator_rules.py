@@ -1,8 +1,10 @@
 
-from cerberus import Validator
-import re
 import datetime
-from land_net_templates import land_net_ref
+import re
+
+from cerberus import Validator
+
+from .land_net_templates import land_net_ref
 
 
 class SitefileValidator(Validator):
