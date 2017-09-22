@@ -2,7 +2,7 @@ from flask import request
 from flask_restplus import Api, Resource, fields
 
 from .validator import ValidateError, validate as validate_data
-from .app import application, sitefile_validator
+from app import application, sitefile_validator
 from .schema import get_insert_schema
 
 api = Api(application,
