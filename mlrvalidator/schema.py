@@ -17,13 +17,3 @@ with fdw:
 
 schema_registry.add('insert_error_schema', insert_schema)
 schema_registry.add('insert_warning_schema', warning_schema)
-
-
-def get_insert_schema():
-
-    return insert_schema
-
-
-def get_warning_schema():
-
-    return warning_schema
