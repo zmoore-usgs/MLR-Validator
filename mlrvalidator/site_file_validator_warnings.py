@@ -1,8 +1,5 @@
 
 from cerberus import Validator
-import re
-import datetime
-from land_net_templates import land_net_ref
 
 
 class SitefileWarningValidator(Validator):
