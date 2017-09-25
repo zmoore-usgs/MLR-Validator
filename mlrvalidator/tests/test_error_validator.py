@@ -1,10 +1,9 @@
 
 from unittest import TestCase
 from mlrvalidator.site_file_validator_rules import SitefileValidator
-from mlrvalidator.schema import schema_registry
+from mlrvalidator.schema import error_schema
 
-schema = schema_registry.get('error_schema')
-site_validator = SitefileValidator()
+site_validator = SitefileValidator(error_schema)
 site_validator.allow_unknown = True
 
 
@@ -22,11 +21,11 @@ class ValidateIsEmptyCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
 
 
 class ValidateNumericCheck(TestCase):
@@ -75,22 +74,22 @@ class ValidateNumericCheck(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
-        self.assertTrue(site_validator.validate(self.good_data7, schema))
-        self.assertTrue(site_validator.validate(self.good_data8, schema))
-        self.assertTrue(site_validator.validate(self.good_data9, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
 
 
 class ValidateValidPrecisionCheck(TestCase):
@@ -139,21 +138,21 @@ class ValidateValidPrecisionCheck(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
-        self.assertTrue(site_validator.validate(self.good_data7, schema))
-        self.assertTrue(site_validator.validate(self.good_data8, schema))
-        self.assertTrue(site_validator.validate(self.good_data9, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
 
 
 class ValidatePositiveNumericCheck(TestCase):
@@ -211,25 +210,25 @@ class ValidatePositiveNumericCheck(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
-        self.assertFalse(site_validator.validate(self.bad_data9, schema))
-        self.assertFalse(site_validator.validate(self.bad_data10, schema))
-        self.assertFalse(site_validator.validate(self.bad_data11, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
 
 
 class ValidateValidMapScaleCharsCase(TestCase):
@@ -258,15 +257,15 @@ class ValidateValidMapScaleCharsCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
 
 
 class ValidateValidChars(TestCase):
@@ -349,33 +348,33 @@ class ValidateValidChars(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
-        self.assertTrue(site_validator.validate(self.good_data7, schema))
-        self.assertTrue(site_validator.validate(self.good_data8, schema))
-        self.assertTrue(site_validator.validate(self.good_data9, schema))
-        self.assertTrue(site_validator.validate(self.good_data10, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
+        self.assertTrue(site_validator.validate(self.good_data10))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
-        self.assertFalse(site_validator.validate(self.bad_data9, schema))
-        self.assertFalse(site_validator.validate(self.bad_data10, schema))
-        self.assertFalse(site_validator.validate(self.bad_data11, schema))
-        self.assertFalse(site_validator.validate(self.bad_data12, schema))
-        self.assertFalse(site_validator.validate(self.bad_data13, schema))
-        self.assertFalse(site_validator.validate(self.bad_data14, schema))
-        self.assertFalse(site_validator.validate(self.bad_data15, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
+        self.assertFalse(site_validator.validate(self.bad_data12))
+        self.assertFalse(site_validator.validate(self.bad_data13))
+        self.assertFalse(site_validator.validate(self.bad_data14))
+        self.assertFalse(site_validator.validate(self.bad_data15))
 
 
 
@@ -498,46 +497,46 @@ class ValidateValidLatDMS(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
-        self.assertTrue(site_validator.validate(self.good_data7, schema))
-        self.assertTrue(site_validator.validate(self.good_data8, schema))
-        self.assertTrue(site_validator.validate(self.good_data9, schema))
-        self.assertTrue(site_validator.validate(self.good_data10, schema))
-        self.assertTrue(site_validator.validate(self.good_data11, schema))
-        self.assertTrue(site_validator.validate(self.good_data12, schema))
-        self.assertTrue(site_validator.validate(self.good_data13, schema))
-        self.assertTrue(site_validator.validate(self.good_data14, schema))
-        self.assertTrue(site_validator.validate(self.good_data15, schema))
-        self.assertTrue(site_validator.validate(self.good_data16, schema))
-        self.assertTrue(site_validator.validate(self.good_data17, schema))
-        self.assertTrue(site_validator.validate(self.good_data18, schema))
-        self.assertTrue(site_validator.validate(self.good_data19, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
+        self.assertTrue(site_validator.validate(self.good_data10))
+        self.assertTrue(site_validator.validate(self.good_data11))
+        self.assertTrue(site_validator.validate(self.good_data12))
+        self.assertTrue(site_validator.validate(self.good_data13))
+        self.assertTrue(site_validator.validate(self.good_data14))
+        self.assertTrue(site_validator.validate(self.good_data15))
+        self.assertTrue(site_validator.validate(self.good_data16))
+        self.assertTrue(site_validator.validate(self.good_data17))
+        self.assertTrue(site_validator.validate(self.good_data18))
+        self.assertTrue(site_validator.validate(self.good_data19))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
-        self.assertFalse(site_validator.validate(self.bad_data9, schema))
-        self.assertFalse(site_validator.validate(self.bad_data10, schema))
-        self.assertFalse(site_validator.validate(self.bad_data11, schema))
-        self.assertFalse(site_validator.validate(self.bad_data12, schema))
-        self.assertFalse(site_validator.validate(self.bad_data13, schema))
-        self.assertFalse(site_validator.validate(self.bad_data14, schema))
-        self.assertFalse(site_validator.validate(self.bad_data15, schema))
-        self.assertFalse(site_validator.validate(self.bad_data16, schema))
-        self.assertFalse(site_validator.validate(self.bad_data17, schema))
-        self.assertFalse(site_validator.validate(self.bad_data18, schema))
-        self.assertFalse(site_validator.validate(self.bad_data19, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
+        self.assertFalse(site_validator.validate(self.bad_data12))
+        self.assertFalse(site_validator.validate(self.bad_data13))
+        self.assertFalse(site_validator.validate(self.bad_data14))
+        self.assertFalse(site_validator.validate(self.bad_data15))
+        self.assertFalse(site_validator.validate(self.bad_data16))
+        self.assertFalse(site_validator.validate(self.bad_data17))
+        self.assertFalse(site_validator.validate(self.bad_data18))
+        self.assertFalse(site_validator.validate(self.bad_data19))
 
 
 class ValidateValidLongDMS(TestCase):
@@ -654,44 +653,44 @@ class ValidateValidLongDMS(TestCase):
 
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
-        self.assertTrue(site_validator.validate(self.good_data6, schema))
-        self.assertTrue(site_validator.validate(self.good_data7, schema))
-        self.assertTrue(site_validator.validate(self.good_data8, schema))
-        self.assertTrue(site_validator.validate(self.good_data9, schema))
-        self.assertTrue(site_validator.validate(self.good_data10, schema))
-        self.assertTrue(site_validator.validate(self.good_data11, schema))
-        self.assertTrue(site_validator.validate(self.good_data12, schema))
-        self.assertTrue(site_validator.validate(self.good_data13, schema))
-        self.assertTrue(site_validator.validate(self.good_data14, schema))
-        self.assertTrue(site_validator.validate(self.good_data15, schema))
-        self.assertTrue(site_validator.validate(self.good_data16, schema))
-        self.assertTrue(site_validator.validate(self.good_data17, schema))
-        self.assertTrue(site_validator.validate(self.good_data18, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
+        self.assertTrue(site_validator.validate(self.good_data10))
+        self.assertTrue(site_validator.validate(self.good_data11))
+        self.assertTrue(site_validator.validate(self.good_data12))
+        self.assertTrue(site_validator.validate(self.good_data13))
+        self.assertTrue(site_validator.validate(self.good_data14))
+        self.assertTrue(site_validator.validate(self.good_data15))
+        self.assertTrue(site_validator.validate(self.good_data16))
+        self.assertTrue(site_validator.validate(self.good_data17))
+        self.assertTrue(site_validator.validate(self.good_data18))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
-        self.assertFalse(site_validator.validate(self.bad_data9, schema))
-        self.assertFalse(site_validator.validate(self.bad_data10, schema))
-        self.assertFalse(site_validator.validate(self.bad_data11, schema))
-        self.assertFalse(site_validator.validate(self.bad_data12, schema))
-        self.assertFalse(site_validator.validate(self.bad_data13, schema))
-        self.assertFalse(site_validator.validate(self.bad_data14, schema))
-        self.assertFalse(site_validator.validate(self.bad_data15, schema))
-        self.assertFalse(site_validator.validate(self.bad_data16, schema))
-        self.assertFalse(site_validator.validate(self.bad_data17, schema))
-        self.assertFalse(site_validator.validate(self.bad_data18, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
+        self.assertFalse(site_validator.validate(self.bad_data12))
+        self.assertFalse(site_validator.validate(self.bad_data13))
+        self.assertFalse(site_validator.validate(self.bad_data14))
+        self.assertFalse(site_validator.validate(self.bad_data15))
+        self.assertFalse(site_validator.validate(self.bad_data16))
+        self.assertFalse(site_validator.validate(self.bad_data17))
+        self.assertFalse(site_validator.validate(self.bad_data18))
 
 
 class ValidateValidDate(TestCase):
@@ -771,32 +770,32 @@ class ValidateValidDate(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
-        self.assertTrue(site_validator.validate(self.good_data5, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
-        self.assertFalse(site_validator.validate(self.bad_data9, schema))
-        self.assertFalse(site_validator.validate(self.bad_data10, schema))
-        self.assertFalse(site_validator.validate(self.bad_data11, schema))
-        self.assertFalse(site_validator.validate(self.bad_data12, schema))
-        self.assertFalse(site_validator.validate(self.bad_data13, schema))
-        self.assertFalse(site_validator.validate(self.bad_data14, schema))
-        self.assertFalse(site_validator.validate(self.bad_data15, schema))
-        self.assertFalse(site_validator.validate(self.bad_data16, schema))
-        self.assertFalse(site_validator.validate(self.bad_data17, schema))
-        self.assertFalse(site_validator.validate(self.bad_data18, schema))
-        self.assertFalse(site_validator.validate(self.bad_data19, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
+        self.assertFalse(site_validator.validate(self.bad_data12))
+        self.assertFalse(site_validator.validate(self.bad_data13))
+        self.assertFalse(site_validator.validate(self.bad_data14))
+        self.assertFalse(site_validator.validate(self.bad_data15))
+        self.assertFalse(site_validator.validate(self.bad_data16))
+        self.assertFalse(site_validator.validate(self.bad_data17))
+        self.assertFalse(site_validator.validate(self.bad_data18))
+        self.assertFalse(site_validator.validate(self.bad_data19))
 
 
 class ValidateLandNetCase(TestCase):
@@ -840,17 +839,17 @@ class ValidateLandNetCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
-        self.assertTrue(site_validator.validate(self.good_data2, schema))
-        self.assertTrue(site_validator.validate(self.good_data3, schema))
-        self.assertTrue(site_validator.validate(self.good_data4, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
-        self.assertFalse(site_validator.validate(self.bad_data2, schema))
-        self.assertFalse(site_validator.validate(self.bad_data3, schema))
-        self.assertFalse(site_validator.validate(self.bad_data4, schema))
-        self.assertFalse(site_validator.validate(self.bad_data5, schema))
-        self.assertFalse(site_validator.validate(self.bad_data6, schema))
-        self.assertFalse(site_validator.validate(self.bad_data7, schema))
-        self.assertFalse(site_validator.validate(self.bad_data8, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))

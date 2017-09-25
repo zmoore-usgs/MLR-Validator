@@ -1,10 +1,9 @@
 
 from unittest import TestCase
 from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
-from mlrvalidator.schema import schema_registry
+from mlrvalidator.schema import warning_schema
 
-schema = schema_registry.get('warning_schema')
-site_validator = SitefileWarningValidator()
+site_validator = SitefileWarningValidator(warning_schema)
 site_validator.allow_unknown = True
 
 
@@ -18,7 +17,7 @@ class ValidateWarningsCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, schema))
+        self.assertTrue(site_validator.validate(self.good_data))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, schema))
+        self.assertFalse(site_validator.validate(self.bad_data))
