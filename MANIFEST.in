@@ -1,2 +1,1 @@
 recursive-include mlrvalidator/data *
-recursive-include mlrvalidator/references *

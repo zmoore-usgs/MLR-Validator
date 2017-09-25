@@ -1,9 +1,8 @@
+
 from flask import request
 from flask_restplus import Api, Resource, fields
 
-from .validator import ValidateError, validate as validate_data
-from app import application, sitefile_validator
-from .schema import get_insert_schema
+from app import application, sitefile_error_validator, sitefile_warning_validator
 
 api = Api(application,
           title='MLR Validator',
@@ -74,29 +73,30 @@ location_model = api.model('LocationModel', {
     "transactionType": fields.String()
 })
 
-success_model = api.model('SuccessModel', {'success_message': fields.String()})
-
-error_model = api.model('ErrorModel', {
-    'error_message': fields.String()
-})
+validation_model = api.model('SuccessModel', {'validation_passed_message': fields.String(),
+                                              'warning_message': fields.String(),
+                                              'fatal_error_message': fields.String()})
 
 
 @api.route('/validators')
 class Validator(Resource):
 
-    @api.response(200, 'Successfully validated', success_model)
-    @api.response(401, 'File can not be validated', error_model)
+    @api.response(200, 'Successfully validated', validation_model)
     @api.expect(location_model)
     def post(self):
         data = request.get_json()
-        schema = get_insert_schema()
-        try:
-            result = validate_data(data, schema, sitefile_validator)
-        except ValidateError as err:
-            response, status = {
-                'error_message': err.message
-            }, 401
-        else:
-            response, status = result, 200
+        no_errors = sitefile_error_validator.validate(data)
+        no_warnings = sitefile_warning_validator.validate(data)
+        status_object = {}
+
+        if not no_errors:
+            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(sitefile_error_validator.errors)
+        if not no_warnings:
+            status_object["warning_message"] = 'Validation Warnings: {0}'.format(
+                sitefile_warning_validator.errors)
+        if no_errors and no_warnings:
+            status_object["validation_passed_message"] = 'Validations Passed'
+
+        response, status = status_object, 200
 
         return response, status
