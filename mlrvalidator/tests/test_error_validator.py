@@ -853,3 +853,233 @@ class ValidateLandNetCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data6))
         self.assertFalse(site_validator.validate(self.bad_data7))
         self.assertFalse(site_validator.validate(self.bad_data8))
+
+
+class ValidateCrossFields(TestCase):
+
+    def setUp(self):
+        self.good_data = {
+            'latitude': ' 123456',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': '1'
+
+        }
+        self.good_data2 = {
+            'altitude': '01234567',
+            'altitudeDatumCode': '0123456789',
+            'altitudeAccuracyValue': '012'
+        }
+        self.good_data3 = {
+            'primaryUseOfSite': '1',
+            'secondaryUseOfSite': '2',
+            'tertiaryUseOfSiteCode': '3'
+        }
+        self.good_data4 = {
+            'primaryUseOfWaterCode': '1',
+            'secondaryUseOfWaterCode': '2',
+            'tertiaryUseOfWaterCode': '3'
+        }
+        self.good_data5 = {
+            #is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '20000101',
+            'siteEstablishmentDate': '20000102'
+        }
+        self.good_data6 = {
+            'wellDepth': '00000001',
+            'holeDepth': '00000001'
+        }
+        self.good_data7 = {
+            'wellDepth': '00000001',
+            'holeDepth': '00000002'
+        }
+        self.good_data8 = {
+            'wellDepth': '',
+            'holeDepth': '00000001'
+        }
+        self.good_data9 = {
+            'wellDepth': '00000001',
+            'holeDepth': ''
+        }
+        self.good_data10 = {
+            'wellDepth': '',
+            'holeDepth': ''
+        }
+        self.bad_data = {
+            'latitude': '',
+            'longitude': '',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': '1'
+        }
+        self.bad_data2 = {
+            'latitude': ' 123456',
+            'longitude': '',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': '1'
+        }
+        self.bad_data3 = {
+            'latitude': '',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': '1'
+        }
+        self.bad_data4 = {
+            'latitude': ' 123456',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': '1'
+        }
+        self.bad_data5 = {
+            'latitude': ' 123456',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '',
+            'coordinateMethodCode': '1'
+        }
+        self.bad_data6 = {
+            'latitude': ' 123456',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '1',
+            'coordinateDatumCode': '0123456789',
+            'coordinateMethodCode': ''
+        }
+        self.bad_data7 = {
+            'latitude': ' 123456',
+            'longitude': ' 123456',
+            'coordinateAccuracyCode': '',
+            'coordinateDatumCode': '',
+            'coordinateMethodCode': ''
+        }
+        self.bad_data8 = {
+            'altitude': '',
+            'altitudeDatumCode': '0123456789',
+            'altitudeAccuracyValue': '012'
+        }
+        self.bad_data9 = {
+            'altitude': '01234567',
+            'altitudeDatumCode': '',
+            'altitudeAccuracyValue': '012'
+        }
+        self.bad_data10 = {
+            'altitude': '01234567',
+            'altitudeDatumCode': '0123456789',
+            'altitudeAccuracyValue': ''
+        }
+        self.bad_data11 = {
+            'altitude': '01234567',
+            'altitudeDatumCode': '',
+            'altitudeAccuracyValue': ''
+        }
+        self.bad_data12 = {
+            'primaryUseOfSite': '1',
+            'secondaryUseOfSite': '1',
+            'tertiaryUseOfSiteCode': '1'
+        }
+        self.bad_data13 = {
+            'primaryUseOfSite': '1',
+            'secondaryUseOfSite': '1',
+            'tertiaryUseOfSiteCode': '2'
+        }
+        self.bad_data14 = {
+            'primaryUseOfSite': '1',
+            'secondaryUseOfSite': '2',
+            'tertiaryUseOfSiteCode': '1'
+        }
+        self.bad_data15 = {
+            'primaryUseOfSite': '2',
+            'secondaryUseOfSite': '1',
+            'tertiaryUseOfSiteCode': '1'
+        }
+        self.bad_data16 = {
+            'primaryUseOfSite': 'None',
+            'secondaryUseOfSite': '2',
+            'tertiaryUseOfSiteCode': '3'
+        }
+        self.bad_data17 = {
+            'primaryUseOfSite': '1',
+            'secondaryUseOfSite': 'None',
+            'tertiaryUseOfSiteCode': '3'
+        }
+        self.bad_data18 = {
+            'primaryUseOfWaterCode': '1',
+            'secondaryUseOfWaterCode': '1',
+            'tertiaryUseOfWaterCode': '1'
+        }
+        self.bad_data19 = {
+            'primaryUseOfWaterCode': '1',
+            'secondaryUseOfWaterCode': '1',
+            'tertiaryUseOfWaterCode': '2'
+        }
+        self.bad_data20 = {
+            'primaryUseOfWaterCode': '1',
+            'secondaryUseOfWaterCode': '2',
+            'tertiaryUseOfWaterCode': '1'
+        }
+        self.bad_data21 = {
+            'primaryUseOfWaterCode': '2',
+            'secondaryUseOfWaterCode': '1',
+            'tertiaryUseOfWaterCode': '1'
+        }
+        self.bad_data22 = {
+            'primaryUseOfWaterCode': 'None',
+            'secondaryUseOfWaterCode': '2',
+            'tertiaryUseOfWaterCode': '3'
+        }
+        self.bad_data23 = {
+            'primaryUseOfWaterCode': '1',
+            'secondaryUseOfWaterCode': 'None',
+            'tertiaryUseOfWaterCode': '3'
+        }
+        self.bad_data24 = {
+            # is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '20000102',
+            'siteEstablishmentDate': '20000101'
+        }
+        self.bad_data25 = {
+            'wellDepth': '00000002',
+            'holeDepth': '00000001'
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data6))
+        self.assertTrue(site_validator.validate(self.good_data7))
+        self.assertTrue(site_validator.validate(self.good_data8))
+        self.assertTrue(site_validator.validate(self.good_data9))
+        self.assertTrue(site_validator.validate(self.good_data10))
+
+    def test_validate_not_ok(self):
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
+        self.assertFalse(site_validator.validate(self.bad_data6))
+        self.assertFalse(site_validator.validate(self.bad_data7))
+        self.assertFalse(site_validator.validate(self.bad_data8))
+        self.assertFalse(site_validator.validate(self.bad_data9))
+        self.assertFalse(site_validator.validate(self.bad_data10))
+        self.assertFalse(site_validator.validate(self.bad_data11))
+        self.assertFalse(site_validator.validate(self.bad_data12))
+        self.assertFalse(site_validator.validate(self.bad_data13))
+        self.assertFalse(site_validator.validate(self.bad_data14))
+        self.assertFalse(site_validator.validate(self.bad_data15))
+        self.assertFalse(site_validator.validate(self.bad_data16))
+        self.assertFalse(site_validator.validate(self.bad_data17))
+        self.assertFalse(site_validator.validate(self.bad_data18))
+        self.assertFalse(site_validator.validate(self.bad_data19))
+        self.assertFalse(site_validator.validate(self.bad_data20))
+        self.assertFalse(site_validator.validate(self.bad_data21))
+        self.assertFalse(site_validator.validate(self.bad_data22))
+        self.assertFalse(site_validator.validate(self.bad_data23))
+        self.assertFalse(site_validator.validate(self.bad_data24))
+        self.assertFalse(site_validator.validate(self.bad_data25))
