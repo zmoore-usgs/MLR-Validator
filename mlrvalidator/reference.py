@@ -1,9 +1,7 @@
 import os
-import sys
 import json
 
 PROJECT_DIR = os.path.dirname(__file__)
-EXEC_PREFIX = sys.exec_prefix
 
 agency_file = open(os.path.join(PROJECT_DIR, 'references/agency.json'))
 with agency_file:
