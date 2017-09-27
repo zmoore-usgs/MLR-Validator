@@ -1,0 +1,506 @@
+{
+  "RM": {
+    "00": [
+      "N9999OTHER"
+    ]
+  },
+  "US": {
+    "01": [
+      "N100ALLUVL",
+      "N300PNSLVN",
+      "N400PDMBRX",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100CSLLWD",
+      "S100MSEMBM",
+      "S100SECSLP",
+      "S100SURFCL",
+      "S400FLORDN"
+    ],
+    "02": [
+      "N100AKUNCD",
+      "N9999OTHER"
+    ],
+    "04": [
+      "N100BSNRGB",
+      "N300COPLTS",
+      "N400BSNRGC",
+      "N9999OTHER"
+    ],
+    "05": [
+      "N100ALLUVL",
+      "N100MSRVVL",
+      "N9999OTHER",
+      "S100MSEMBM",
+      "S400OZRKPL",
+      "S500EDRTRN"
+    ],
+    "06": [
+      "N100BSNRGB",
+      "N100CACSTL",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N400BSNRGC",
+      "N9999OTHER",
+      "S100CNRLVL"
+    ],
+    "08": [
+      "N100ALLUVL",
+      "N100HGHPLN",
+      "N300COPLTS",
+      "N9999OTHER",
+      "S100RIOGRD",
+      "S300DNVRBS"
+    ],
+    "09": [
+      "N100GLCIAL",
+      "N300ERLMZC",
+      "N400NYNECB",
+      "N600NECRSN",
+      "N9999OTHER"
+    ],
+    "10": [
+      "N100ALLUVL",
+      "N400PDMBRX",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "11": [
+      "N400PDMBRX",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "12": [
+      "N400BISCYN",
+      "N9999OTHER",
+      "S100CSLLWD",
+      "S100SURFCL",
+      "S400FLORDN",
+      "S500INTRMD"
+    ],
+    "13": [
+      "N300PNSLVN",
+      "N400PDMBRX",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100SECSLP",
+      "S100SURFCL",
+      "S400FLORDN"
+    ],
+    "15": [
+      "N600HIVLCC",
+      "N9999OTHER"
+    ],
+    "16": [
+      "N100BSNRGB",
+      "N100CMBPLB",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N400BSNRGC",
+      "N600CMBPLV",
+      "N600SKRVPB",
+      "N600SKRVPV",
+      "N9999OTHER",
+      "S100NRMTIB"
+    ],
+    "17": [
+      "N100GLCIAL",
+      "N100MSRVVL",
+      "N300PNSLVN",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N9999OTHER",
+      "S100MSEMBM",
+      "S100SECSLP",
+      "S300CAMORD",
+      "S400OZRKPL"
+    ],
+    "18": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300PNSLVN",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N9999OTHER"
+    ],
+    "19": [
+      "N100GLCIAL",
+      "N300LCRTCS",
+      "N400SLRDVN",
+      "N400UPCRBN",
+      "N500MSSPPI",
+      "N9999OTHER",
+      "S300CAMORD"
+    ],
+    "20": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100HGHPLN",
+      "N300LCRTCS",
+      "N9999OTHER",
+      "S400OZRKPL"
+    ],
+    "21": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100MSRVVL",
+      "N300PNSLVN",
+      "N400ORDVCN",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N9999OTHER",
+      "S100MSEMBM"
+    ],
+    "22": [
+      "N100ALLUVL",
+      "N100MSRVVL",
+      "N9999OTHER",
+      "S100CSLLWD",
+      "S100MSEMBM",
+      "S100TXCLUP"
+    ],
+    "23": [
+      "N100GLCIAL",
+      "N400NYNECB",
+      "N600NECRSN",
+      "N9999OTHER"
+    ],
+    "24": [
+      "N100ALLUVL",
+      "N300ERLMZC",
+      "N300PNSLVN",
+      "N400PDMBRC",
+      "N400PDMBRX",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "25": [
+      "N100GLCIAL",
+      "N300ERLMZC",
+      "N400NYNECB",
+      "N600NECRSN",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "26": [
+      "N100GLCIAL",
+      "N300JCBSVL",
+      "N300MRSHLL",
+      "N300PNSLVN",
+      "N400SLRDVN",
+      "N9999OTHER",
+      "S300CAMORD"
+    ],
+    "27": [
+      "N100GLCIAL",
+      "N300LCRTCS",
+      "N400UPCRBN",
+      "N500PLOZOC",
+      "N9999OTHER",
+      "S300CAMORD"
+    ],
+    "28": [
+      "N100MSRVVL",
+      "N9999OTHER",
+      "S100CSLLWD",
+      "S100MSEMBM",
+      "S100SECSLP"
+    ],
+    "29": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100MSRVVL",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N9999OTHER",
+      "S100MSEMBM",
+      "S300CAMORD",
+      "S400OZRKPL"
+    ],
+    "30": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100PCFNWV",
+      "N300LCRTCS",
+      "N300LTRTRY",
+      "N300UPCTCS",
+      "N500PLOZOC",
+      "N9999OTHER",
+      "S100NRMTIB"
+    ],
+    "31": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100HGHPLN",
+      "N300LCRTCS",
+      "N9999OTHER"
+    ],
+    "32": [
+      "N100BSNRGB",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N400BSNRGC",
+      "N600SRNVDV",
+      "N9999OTHER"
+    ],
+    "33": [
+      "N100GLCIAL",
+      "N600NECRSN",
+      "N9999OTHER"
+    ],
+    "34": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300ERLMZC",
+      "N400NYNECB",
+      "N400PDMBRC",
+      "N400PDMBRX",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "35": [
+      "N100BSNRGB",
+      "N100HGHPLN",
+      "N100PCSRVR",
+      "N300COPLTS",
+      "N9999OTHER",
+      "S100RIOGRD",
+      "S400RSWLBS"
+    ],
+    "36": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300ERLMZC",
+      "N300NYSDSN",
+      "N400NYNECB",
+      "N500VLYRDG",
+      "N600NECRSN",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "37": [
+      "N300ERLMZC",
+      "N400CSLHYN",
+      "N400PDMBRC",
+      "N400PDMBRX",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100NATLCP",
+      "S100SURFCL"
+    ],
+    "38": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300LCRTCS",
+      "N300LTRTRY",
+      "N300UPCTCS",
+      "N500PLOZOC",
+      "N9999OTHER"
+    ],
+    "39": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300PNSLVN",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N9999OTHER"
+    ],
+    "40": [
+      "N100ALLUVL",
+      "N100HGHPLN",
+      "N300ADAVMS",
+      "N300CNRLOK",
+      "N300RSHSPG",
+      "N400ABKSMP",
+      "N400BLAINE",
+      "N9999OTHER",
+      "S400OZRKPL",
+      "S500EDRTRN"
+    ],
+    "41": [
+      "N100BSNRGB",
+      "N100CMBPLB",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N100WLMLWD",
+      "N600CMBPLV",
+      "N600SKRVPB",
+      "N600SKRVPV",
+      "N9999OTHER"
+    ],
+    "42": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N300ERLMZC",
+      "N300PNSLVN",
+      "N400NYNECB",
+      "N400PDMBRC",
+      "N400PDMBRX",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "44": [
+      "N100GLCIAL",
+      "N600NECRSN",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "45": [
+      "N400PDMBRX",
+      "N9999OTHER",
+      "S100SECSLP",
+      "S100SURFCL",
+      "S400FLORDN"
+    ],
+    "46": [
+      "N100ALLUVL",
+      "N100GLCIAL",
+      "N100HGHPLN",
+      "N300LCRTCS",
+      "N300LTRTRY",
+      "N300UPCTCS",
+      "N500PLOZOC",
+      "N9999OTHER"
+    ],
+    "47": [
+      "N100ALLUVL",
+      "N100MSRVVL",
+      "N300PNSLVN",
+      "N400ORDVCN",
+      "N400PDMBRX",
+      "N400SLRDVN",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100MSEMBM",
+      "S100SECSLP"
+    ],
+    "48": [
+      "N100ALLUVL",
+      "N100HGHPLN",
+      "N100PCSRVR",
+      "N100SYMOUR",
+      "N400BLAINE",
+      "N9999OTHER",
+      "S100CSLLWD",
+      "S100RIOGRD",
+      "S100TXCLUP",
+      "S500EDRTRN"
+    ],
+    "49": [
+      "N100ALLUVL",
+      "N100BSNRGB",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N300COPLTS",
+      "N400BSNRGC",
+      "N9999OTHER"
+    ],
+    "50": [
+      "N100GLCIAL",
+      "N400NYNECB",
+      "N600NECRSN",
+      "N9999OTHER"
+    ],
+    "51": [
+      "N100ALLUVL",
+      "N300ERLMZC",
+      "N300PNSLVN",
+      "N400PDMBRX",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER",
+      "S100NATLCP"
+    ],
+    "53": [
+      "N100CMBPLB",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N100WLMLWD",
+      "N600CMBPLV",
+      "N9999OTHER",
+      "S100NRMTIB",
+      "S100PGTSND"
+    ],
+    "54": [
+      "N100ALLUVL",
+      "N300PNSLVN",
+      "N400PDMBRX",
+      "N500MSSPPI",
+      "N500VLYRDG",
+      "N9999OTHER"
+    ],
+    "55": [
+      "N100GLCIAL",
+      "N300JCBSVL",
+      "N400SLRDVN",
+      "N9999OTHER",
+      "S300CAMORD"
+    ],
+    "56": [
+      "N100ALLUVL",
+      "N100HGHPLN",
+      "N100PCFNWB",
+      "N100PCFNWV",
+      "N300COPLTS",
+      "N300LCRTCS",
+      "N300LTRTRY",
+      "N300UPCTCS",
+      "N300WYTRTR",
+      "N500PLOZOC",
+      "N9999OTHER",
+      "S100NRMTIB"
+    ],
+    "60": [
+      "N9999OTHER"
+    ],
+    "62": [
+      "N9999OTHER"
+    ],
+    "66": [
+      "N9999OTHER"
+    ],
+    "67": [
+      "N9999OTHER"
+    ],
+    "69": [
+      "N9999OTHER"
+    ],
+    "71": [
+      "N9999OTHER"
+    ],
+    "72": [
+      "N300STHCST",
+      "N400NCSTLM",
+      "N9999OTHER"
+    ],
+    "73": [
+      "N9999OTHER"
+    ],
+    "74": [
+      "N9999OTHER"
+    ],
+    "75": [
+      "N9999OTHER"
+    ],
+    "76": [
+      "N9999OTHER"
+    ],
+    "77": [
+      "N9999OTHER"
+    ],
+    "78": [
+      "N400KNGSHL",
+      "N9999OTHER"
+    ],
+    "79": [
+      "N9999OTHER"
+    ]
+  }
+}
