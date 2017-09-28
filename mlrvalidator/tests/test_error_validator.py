@@ -860,26 +860,25 @@ class ValidateCrossFields(TestCase):
     def setUp(self):
         self.good_data = {
             'latitude': ' 123456',
-            'longitude': ' 123456',
+            'longitude': ' 1234556',
             'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '0123456789',
-            'coordinateMethodCode': '1'
-
+            'coordinateDatumCode': 'ABIDJAN',
+            'coordinateMethodCode': 'C'
         }
         self.good_data2 = {
-            'altitude': '01234567',
-            'altitudeDatumCode': '0123456789',
-            'altitudeAccuracyValue': '012'
+            'altitude': '1234',
+            'altitudeDatumCode': 'ASVD02',
+            'altitudeAccuracyValue': '12'
         }
         self.good_data3 = {
-            'primaryUseOfSite': '1',
-            'secondaryUseOfSite': '2',
-            'tertiaryUseOfSiteCode': '3'
+            'primaryUseOfSite': 'A',
+            'secondaryUseOfSite': 'C',
+            'tertiaryUseOfSiteCode': 'E'
         }
         self.good_data4 = {
-            'primaryUseOfWaterCode': '1',
-            'secondaryUseOfWaterCode': '2',
-            'tertiaryUseOfWaterCode': '3'
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': 'C',
+            'tertiaryUseOfWaterCode': 'E'
         }
         self.good_data5 = {
             #is this same as construction_dt and inventory_dt?
@@ -887,22 +886,32 @@ class ValidateCrossFields(TestCase):
             'siteEstablishmentDate': '20000102'
         }
         self.good_data6 = {
-            'wellDepth': '00000001',
-            'holeDepth': '00000001'
+            # is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '200001',
+            'siteEstablishmentDate': '200101'
         }
         self.good_data7 = {
-            'wellDepth': '00000001',
-            'holeDepth': '00000002'
+            # is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '2000',
+            'siteEstablishmentDate': '2001'
         }
         self.good_data8 = {
-            'wellDepth': '',
-            'holeDepth': '00000001'
+            'wellDepth': '10',
+            'holeDepth': '10'
         }
         self.good_data9 = {
-            'wellDepth': '00000001',
-            'holeDepth': ''
+            'wellDepth': '10',
+            'holeDepth': '11'
         }
         self.good_data10 = {
+            'wellDepth': '',
+            'holeDepth': '10'
+        }
+        self.good_data11 = {
+            'wellDepth': '10',
+            'holeDepth': ''
+        }
+        self.good_data12 = {
             'wellDepth': '',
             'holeDepth': ''
         }
@@ -910,130 +919,124 @@ class ValidateCrossFields(TestCase):
             'latitude': '',
             'longitude': '',
             'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '0123456789',
-            'coordinateMethodCode': '1'
+            'coordinateDatumCode': 'ABIDJAN',
+            'coordinateMethodCode': 'C'
         }
         self.bad_data2 = {
             'latitude': ' 123456',
             'longitude': '',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '0123456789',
-            'coordinateMethodCode': '1'
         }
         self.bad_data3 = {
             'latitude': '',
-            'longitude': ' 123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '0123456789',
-            'coordinateMethodCode': '1'
+            'longitude': ' 1234556',
         }
         self.bad_data4 = {
             'latitude': ' 123456',
-            'longitude': ' 123456',
+            'longitude': ' 1234556',
             'coordinateAccuracyCode': '',
-            'coordinateDatumCode': '0123456789',
-            'coordinateMethodCode': '1'
+            'coordinateDatumCode': 'ABIDJAN',
+            'coordinateMethodCode': 'C'
         }
         self.bad_data5 = {
             'latitude': ' 123456',
-            'longitude': ' 123456',
+            'longitude': ' 1234556',
             'coordinateAccuracyCode': '1',
             'coordinateDatumCode': '',
-            'coordinateMethodCode': '1'
+            'coordinateMethodCode': 'C'
         }
         self.bad_data6 = {
             'latitude': ' 123456',
-            'longitude': ' 123456',
+            'longitude': ' 1234556',
             'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '0123456789',
+            'coordinateDatumCode': 'ABIDJAN',
             'coordinateMethodCode': ''
         }
         self.bad_data7 = {
             'latitude': ' 123456',
-            'longitude': ' 123456',
+            'longitude': ' 1234556',
             'coordinateAccuracyCode': '',
             'coordinateDatumCode': '',
             'coordinateMethodCode': ''
         }
         self.bad_data8 = {
             'altitude': '',
-            'altitudeDatumCode': '0123456789',
-            'altitudeAccuracyValue': '012'
+            'altitudeDatumCode': 'ASVD02',
+            'altitudeAccuracyValue': '12'
         }
         self.bad_data9 = {
-            'altitude': '01234567',
+            'altitude': '1234',
             'altitudeDatumCode': '',
-            'altitudeAccuracyValue': '012'
+            'altitudeAccuracyValue': '12'
         }
         self.bad_data10 = {
-            'altitude': '01234567',
-            'altitudeDatumCode': '0123456789',
+            'altitude': '1234',
+            'altitudeDatumCode': 'ASVD02',
             'altitudeAccuracyValue': ''
         }
         self.bad_data11 = {
-            'altitude': '01234567',
+            'altitude': '1234',
             'altitudeDatumCode': '',
             'altitudeAccuracyValue': ''
         }
         self.bad_data12 = {
-            'primaryUseOfSite': '1',
-            'secondaryUseOfSite': '1',
-            'tertiaryUseOfSiteCode': '1'
+            'primaryUseOfSite': 'A',
+            'secondaryUseOfSite': 'A',
+            'tertiaryUseOfSiteCode': 'A'
         }
         self.bad_data13 = {
-            'primaryUseOfSite': '1',
-            'secondaryUseOfSite': '1',
-            'tertiaryUseOfSiteCode': '2'
+            'primaryUseOfSite': 'A',
+            'secondaryUseOfSite': 'A',
+            'tertiaryUseOfSiteCode': 'C'
         }
         self.bad_data14 = {
-            'primaryUseOfSite': '1',
-            'secondaryUseOfSite': '2',
-            'tertiaryUseOfSiteCode': '1'
+            'primaryUseOfSite': 'A',
+            'secondaryUseOfSite': 'C',
+            'tertiaryUseOfSiteCode': 'A'
         }
         self.bad_data15 = {
-            'primaryUseOfSite': '2',
-            'secondaryUseOfSite': '1',
-            'tertiaryUseOfSiteCode': '1'
+            'primaryUseOfSite': 'C',
+            'secondaryUseOfSite': 'A',
+            'tertiaryUseOfSiteCode': 'A'
         }
         self.bad_data16 = {
-            'primaryUseOfSite': 'None',
-            'secondaryUseOfSite': '2',
-            'tertiaryUseOfSiteCode': '3'
+            'primaryUseOfSite': None,
+            'secondaryUseOfSite': 'C',
+            'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data17 = {
-            'primaryUseOfSite': '1',
-            'secondaryUseOfSite': 'None',
-            'tertiaryUseOfSiteCode': '3'
+            'primaryUseOfSite': 'A',
+            'secondaryUseOfSite': None,
+            'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data18 = {
-            'primaryUseOfWaterCode': '1',
-            'secondaryUseOfWaterCode': '1',
-            'tertiaryUseOfWaterCode': '1'
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': 'A',
+            'tertiaryUseOfWaterCode': 'A'
         }
         self.bad_data19 = {
-            'primaryUseOfWaterCode': '1',
-            'secondaryUseOfWaterCode': '1',
-            'tertiaryUseOfWaterCode': '2'
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': 'A',
+            'tertiaryUseOfWaterCode': 'C'
         }
         self.bad_data20 = {
-            'primaryUseOfWaterCode': '1',
-            'secondaryUseOfWaterCode': '2',
-            'tertiaryUseOfWaterCode': '1'
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': 'C',
+            'tertiaryUseOfWaterCode': 'A'
         }
         self.bad_data21 = {
-            'primaryUseOfWaterCode': '2',
-            'secondaryUseOfWaterCode': '1',
-            'tertiaryUseOfWaterCode': '1'
+            'primaryUseOfWaterCode': 'C',
+            'secondaryUseOfWaterCode': 'A',
+            'tertiaryUseOfWaterCode': 'A'
         }
         self.bad_data22 = {
-            'primaryUseOfWaterCode': 'None',
-            'secondaryUseOfWaterCode': '2',
-            'tertiaryUseOfWaterCode': '3'
+            'primaryUseOfWaterCode': None,
+            'secondaryUseOfWaterCode': 'C',
+            'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data23 = {
-            'primaryUseOfWaterCode': '1',
-            'secondaryUseOfWaterCode': 'None',
-            'tertiaryUseOfWaterCode': '3'
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': None,
+            'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data24 = {
             # is this same as construction_dt and inventory_dt?
@@ -1041,8 +1044,18 @@ class ValidateCrossFields(TestCase):
             'siteEstablishmentDate': '20000101'
         }
         self.bad_data25 = {
-            'wellDepth': '00000002',
-            'holeDepth': '00000001'
+            # is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '200002',
+            'siteEstablishmentDate': '200001'
+        }
+        self.bad_data26 = {
+            # is this same as construction_dt and inventory_dt?
+            'firstConstructionDate': '2001',
+            'siteEstablishmentDate': '2000'
+        }
+        self.bad_data27 = {
+            'wellDepth': '11',
+            'holeDepth': '10'
         }
 
     def test_validate_ok(self):
@@ -1056,6 +1069,9 @@ class ValidateCrossFields(TestCase):
         self.assertTrue(site_validator.validate(self.good_data8))
         self.assertTrue(site_validator.validate(self.good_data9))
         self.assertTrue(site_validator.validate(self.good_data10))
+        self.assertTrue(site_validator.validate(self.good_data11))
+        self.assertTrue(site_validator.validate(self.good_data12))
+
 
     def test_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data))
@@ -1083,3 +1099,5 @@ class ValidateCrossFields(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data23))
         self.assertFalse(site_validator.validate(self.bad_data24))
         self.assertFalse(site_validator.validate(self.bad_data25))
+        self.assertFalse(site_validator.validate(self.bad_data26))
+        self.assertFalse(site_validator.validate(self.bad_data27))
