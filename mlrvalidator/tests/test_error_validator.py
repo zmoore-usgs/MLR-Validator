@@ -999,13 +999,13 @@ class ValidateCrossFields(TestCase):
             'tertiaryUseOfSiteCode': 'A'
         }
         self.bad_data16 = {
-            'primaryUseOfSite': None,
+            'primaryUseOfSite': '',
             'secondaryUseOfSite': 'C',
             'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data17 = {
             'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': None,
+            'secondaryUseOfSite': '',
             'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data18 = {
@@ -1029,13 +1029,13 @@ class ValidateCrossFields(TestCase):
             'tertiaryUseOfWaterCode': 'A'
         }
         self.bad_data22 = {
-            'primaryUseOfWaterCode': None,
+            'primaryUseOfWaterCode': '',
             'secondaryUseOfWaterCode': 'C',
             'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data23 = {
             'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': None,
+            'secondaryUseOfWaterCode': '',
             'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data24 = {
