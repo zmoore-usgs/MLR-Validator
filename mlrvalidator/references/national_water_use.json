@@ -1,0 +1,339 @@
+{
+  "siteTypeCodes": [
+    {
+      "siteTypeCode": "AG",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "AS",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "AW",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "PH",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-AWL",
+      "nationalWaterUseCodes": [
+        "LV"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-CI",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-CS",
+      "nationalWaterUseCodes": [
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-DV",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "PH",
+        "RM",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-FON",
+      "nationalWaterUseCodes": [
+        "IR"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-GC",
+      "nationalWaterUseCodes": [
+        "CO",
+        "IR",
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-HP",
+      "nationalWaterUseCodes": [
+        "PH"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-OF",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "PH",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-SEW",
+      "nationalWaterUseCodes": [
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-SPS",
+      "nationalWaterUseCodes": [
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-STS",
+      "nationalWaterUseCodes": [
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-TEP",
+      "nationalWaterUseCodes": [
+        "TE"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WDS",
+      "nationalWaterUseCodes": [
+        "IR",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WIW",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WTP",
+      "nationalWaterUseCodes": [
+        "RM",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WU",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "PH",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WWD",
+      "nationalWaterUseCodes": [
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "FA-WWTP",
+      "nationalWaterUseCodes": [
+        "RM",
+        "ST"
+      ]
+    },
+    {
+      "siteTypeCode": "GW",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "GW-CR",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "GW-IW",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "GW-MW",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "LK",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "IN",
+        "LV",
+        "MI",
+        "PH",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "SB-GWD",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "SB-TSM",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    },
+    {
+      "siteTypeCode": "SP",
+      "nationalWaterUseCodes": [
+        "AQ",
+        "CO",
+        "DO",
+        "IN",
+        "IR",
+        "LV",
+        "MI",
+        "RM",
+        "ST",
+        "TE",
+        "WS"
+      ]
+    }
+  ]
+}
