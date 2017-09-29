@@ -120,7 +120,7 @@ class SitefileValidator(Validator):
         {'valid_latitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
-        rstripped_value = value.rstrip()
+        rstripped_value = self.document['latitude'].rstrip()
 
         def check_100th_seconds(val):
             try:
@@ -166,7 +166,7 @@ class SitefileValidator(Validator):
         {'valid_longitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
-        rstripped_value = value.rstrip()
+        rstripped_value = self.document['longitude'].rstrip()
 
         def check_100th_seconds(val):
             try:
