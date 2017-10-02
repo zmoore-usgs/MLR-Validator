@@ -6,9 +6,13 @@ import yaml
 PROJECT_DIR = os.path.dirname(__file__)
 EXEC_PREFIX = sys.exec_prefix
 
-fd = open(os.path.join(PROJECT_DIR, 'schemas/error_schema.yml'))
+fd = open(os.path.join(PROJECT_DIR, 'schemas/reference_validation_schema.yml'))
 with fd:
-    error_schema = yaml.load(fd.read())
+    reference_schema = yaml.load(fd.read())
+
+fd = open(os.path.join(PROJECT_DIR, 'schemas/single_field_validation_schema.yml'))
+with fd:
+    single_field_schema = yaml.load(fd.read())
 
 fdw = open(os.path.join(PROJECT_DIR, 'schemas/warning_schema.yml'))
 with fdw:

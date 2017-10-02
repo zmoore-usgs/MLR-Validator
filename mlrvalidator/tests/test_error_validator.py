@@ -1,9 +1,9 @@
 
 from unittest import TestCase
 from mlrvalidator.site_file_validator_rules import SitefileValidator
-from mlrvalidator.schema import error_schema
+from mlrvalidator.schema import single_field_schema
 
-site_validator = SitefileValidator(error_schema)
+site_validator = SitefileValidator(single_field_schema)
 site_validator.allow_unknown = True
 
 

@@ -1,10 +1,9 @@
 
 from unittest import TestCase
-from mlrvalidator.site_file_validator_rules import SitefileValidator
-from mlrvalidator.schema import error_schema
-import yaml
+from mlrvalidator.site_file_reference_validator import SitefileReferenceValidator
+from mlrvalidator.schema import reference_schema
 
-site_validator = SitefileValidator(error_schema)
+site_validator = SitefileReferenceValidator(reference_schema)
 site_validator.allow_unknown = True
 
 
@@ -495,13 +494,6 @@ class ValidateNationalWaterUseCode(TestCase):
 class ValidateCountyCode(TestCase):
 
     def setUp(self):
-        schema = '''
-        countyCode:
-            valid_county: True
-        '''
-        es = yaml.load(schema)
-        self.site_validator = SitefileValidator(es)
-        self.site_validator.allow_unknown = True
         self.good_data = {
             'countryCode': 'FM',
             'stateFipsCode': '64',
@@ -539,12 +531,51 @@ class ValidateCountyCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(self.site_validator.validate(self.good_data))
-        self.assertTrue(self.site_validator.validate(self.good_data2))
-        self.assertTrue(self.site_validator.validate(self.good_data3))
-        self.assertTrue(self.site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(self.site_validator.validate(self.bad_data))
-        self.assertFalse(self.site_validator.validate(self.bad_data2))
-        self.assertFalse(self.site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data3))
+
+
+class ValidateStateCode(TestCase):
+
+    def setUp(self):
+        self.good_data = {
+            'countryCode': 'FM',
+            'stateFipsCode': '64',
+        }
+        self.good_data2 = {
+            'countryCode': 'FM',
+            'stateFipsCode': ' ',
+        }
+        self.good_data3 = {
+            'countryCode': 'FM',
+            'stateFipsCode': '',
+        }
+        self.good_data4 = {
+            'countryCode': 'fm',
+            'stateFipsCode': '64',
+        }
+        self.bad_data = {
+            'countryCode': 'XY',
+            'stateFipsCode': '64',
+        }
+        self.bad_data2 = {
+            'countryCode': 'FM',
+            'stateFipsCode': 'XY',
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))

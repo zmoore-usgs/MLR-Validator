@@ -19,12 +19,14 @@ def get_aquifers(country_code, state_code):
     return aquifer_list
 
 
-def get_counties(country_code, state_code):
+county_file = open(os.path.join(PROJECT_DIR, 'references/county.json'))
+with county_file:
+    county_json = json.loads(county_file.read())
+
+
+def get_county_codes(country_code, state_code):
     try:
-        county_file = open(os.path.join(PROJECT_DIR, 'references/county.json'))
-        with county_file:
-            county = json.loads(county_file.read())
-        country_list = county['countries']
+        country_list = county_json['countries']
         country = list(filter(lambda c: c['countryCode'] == country_code, country_list))[0]
         state_list = country['states']
         state = list(filter(lambda s: s['stateFipsCode'] == state_code, state_list))[0]
@@ -37,18 +39,15 @@ def get_counties(country_code, state_code):
 
 def get_county_attributes(country_code, state_code, county_code):
     try:
-        county_file = open(os.path.join(PROJECT_DIR, 'references/county.json'))
-        with county_file:
-            county = json.loads(county_file.read())
-        country_list = county['countries']
+        country_list = county_json['countries']
         country = list(filter(lambda c: c['countryCode'] == country_code, country_list))[0]
         state_list = country['states']
         state = list(filter(lambda s: s['stateFipsCode'] == state_code, state_list))[0]
         county_list = state['counties']
-        county = list(filter(lambda cc: cc['countyCode'] == county_code, county_list))[0]
+        county_attributes = list(filter(lambda cc: cc['countyCode'] == county_code, county_list))[0]
     except IndexError:
-        county = {}
-    return county
+        county_attributes = {}
+    return county_attributes
 
 
 def get_hucs(country_code, state_code):
@@ -119,4 +118,26 @@ with site_type_transition_file:
 
 state_file = open(os.path.join(PROJECT_DIR, 'references/state.json'))
 with state_file:
-    state = json.loads(state_file.read())
+    state_json = json.loads(state_file.read())
+
+
+def get_state_codes(country_code):
+    try:
+        country_list = state_json['countries']
+        country = list(filter(lambda c: c['countryCode'] == country_code, country_list))[0]
+        state_list = country['states']
+        state_code_list = [d['stateFipsCode'] for d in state_list]
+    except IndexError:
+        state_code_list = []
+    return state_code_list
+
+
+def get_state_attributes(country_code, state_code):
+    try:
+        country_list = state_json['countries']
+        country = list(filter(lambda c: c['countryCode'] == country_code, country_list))[0]
+        state_list = country['states']
+        state_attributes = list(filter(lambda s: s['stateFipsCode'] == state_code, state_list))[0]
+    except IndexError:
+        state_attributes = {}
+    return state_attributes

@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from mlrvalidator.reference import get_aquifers, get_national_aquifers, get_hucs, get_mcds, \
-    get_national_water_use_codes, get_counties, get_county_attributes
+    get_national_water_use_codes, get_county_codes, get_county_attributes, get_state_codes, get_state_attributes
 
 
 class ValidateGetAquifersCase(TestCase):
@@ -137,27 +137,27 @@ class ValidateGetNationalWaterUseCase(TestCase):
         self.assertEqual(test_national_water_use, bad_national_water_use)
 
 
-class ValidateGetCountiesCase(TestCase):
+class ValidateGetCountyCodeCase(TestCase):
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
-        test_county = get_counties('FM', '64')
+        test_county = get_county_codes('FM', '64')
 
         self.assertEqual(test_county, good_county)
 
     def test_validate_not_ok(self):
         bad_county = []
-        test_county = get_counties('FM', 'XY')
+        test_county = get_county_codes('FM', 'XY')
 
         self.assertEqual(test_county, bad_county)
 
         bad_county = []
-        test_county = get_counties('XY', '64')
+        test_county = get_county_codes('XY', '64')
 
         self.assertEqual(test_county, bad_county)
 
 
-class ValidateGetCountyCase(TestCase):
+class ValidateGetCountyAttributesCase(TestCase):
 
     def test_validate_ok(self):
         good_county = {
@@ -188,3 +188,46 @@ class ValidateGetCountyCase(TestCase):
         test_county = get_county_attributes('FM', 'XY', '000')
 
         self.assertEqual(test_county, bad_county)
+
+
+class ValidateGetStateCodeCase(TestCase):
+
+    def test_validate_ok(self):
+        good_state = ["00", "90", "91", "92", "93", "94", "95", "96", "97", "98"]
+        test_state = get_state_codes('CA')
+
+        self.assertEqual(test_state, good_state)
+
+    def test_validate_not_ok(self):
+        bad_state = []
+        test_state = get_state_codes('XY')
+
+        self.assertEqual(test_state, bad_state)
+
+
+class ValidateGetStateAttributesCase(TestCase):
+
+    def test_validate_ok(self):
+        good_state = {
+          "stateFipsCode": "00",
+          "state_min_lat_va": "414036",
+          "state_max_lat_va": "694000",
+          "state_min_long_va": "0553000",
+          "state_max_long_va": "1410000",
+          "state_min_alt_va": "00000",
+          "state_max_alt_va": "30000"
+        }
+        test_state = get_state_attributes('CA', '00')
+
+        self.assertEqual(test_state, good_state)
+
+    def test_validate_not_ok(self):
+        bad_state = {}
+        test_state = get_state_attributes('CA', 'XY')
+
+        self.assertEqual(test_state, bad_state)
+
+        bad_state = {}
+        test_state = get_state_attributes('XY', '00')
+
+        self.assertEqual(test_state, bad_state)
