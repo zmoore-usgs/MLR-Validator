@@ -1,6 +1,7 @@
 agencyCode:
     is_empty: False
     maxlength: 5
+    valid_reference: True
 siteNumber:
     maxlength: 15
     is_empty: False
@@ -11,6 +12,7 @@ stationName:
 siteTypeCode:
     is_empty: False
     maxlength: 7
+    valid_reference: True
 latitude:
     maxlength: 11
     valid_latitude_dms: True
@@ -19,49 +21,64 @@ longitude:
     valid_longitude_dms: True
 coordinateAccuracyCode:
     maxlength: 1
+    valid_reference: True
 coordinateDatumCode:
     maxlength: 10
+    valid_reference: True
 coordinateMethodCode:
     maxlength: 1
+    valid_reference: True
 altitude:
     type: numeric
     maxlength: 8
     valid_precision: True
 altitudeDatumCode:
     maxlength: 10
+    valid_reference: True
 altitudeMethodCode:
     maxlength: 1
+    valid_reference: True
 altitudeAccuracyValue:
     type: numeric
     maxlength: 3
 districtCode:
     is_empty: False
     maxlength: 3
+    valid_reference: True
 countryCode:
     is_empty: False
     maxlength: 2
+    valid_reference: True
 stateFipsCode:
     is_empty: False
     maxlength: 2
 countyCode:
     is_empty: False
     maxlength: 3
+    valid_county: True
 minorCivilDivisionCode:
     maxlength: 5
+    valid_mcd: True
 hydrologicUnitCode:
     maxlength: 16
+    valid_huc: True
 basinCode:
     maxlength: 2
 nationalAquiferCode:
     maxlength: 10
+    valid_national_aquifer_code: True
 aquiferCode:
     maxlength: 8
+    valid_aquifer_code: True
 aquiferTypeCode:
     maxlength: 1
+    valid_reference: True
 agencyUseCode:
     maxlength: 1
+    valid_reference: True
 dataReliabilityCode:
     maxlength: 1
+    valid_reference: True
 landNet:
     maxlength: 23
     valid_land_net: True
@@ -72,20 +89,28 @@ mapScale:
     valid_map_scale_chars: True
 nationalWaterUseCode:
     maxlength: 2
+    valid_national_water_use_code: True
 primaryUseOfSite:
     maxlength: 1
+    valid_reference: True
 secondaryUseOfSite:
     maxlength: 1
+    valid_reference: True
 tertiaryUseOfSiteCode:
     maxlength: 1
+    valid_reference: True
 primaryUseOfWaterCode:
     maxlength: 1
+    valid_reference: True
 secondaryUseOfWaterCode:
     maxlength: 1
+    valid_reference: True
 tertiaryUseOfWaterCode:
     maxlength: 1
+    valid_reference: True
 topographicCode:
     maxlength: 1
+    valid_reference: True
 dataTypesCode:
     maxlength: 30
     valid_data_types_chars: True
@@ -118,6 +143,7 @@ projectNumber:
 timeZoneCode:
     is_empty: False
     maxlength: 5
+    valid_reference: True
 daylightSavingsTimeFlag:
     is_empty: False
     maxlength: 1
@@ -126,5 +152,6 @@ remarks:
     maxlength: 50
 siteWebReadyCode:
     maxlength: 1
+    valid_reference: True
 gwFileCode:
     maxlength: 20
