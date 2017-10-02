@@ -1,8 +1,10 @@
 
 from flask import request
 from flask_restplus import Api, Resource, fields
+from itertools import chain
+from collections import defaultdict
 
-from app import application, sitefile_error_validator, sitefile_warning_validator
+from app import application, sitefile_single_field_validator, sitefile_warning_validator, sitefile_reference_validator
 
 api = Api(application,
           title='MLR Validator',
@@ -84,13 +86,23 @@ class Validator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(location_model)
     def post(self):
+        no_errors = True
         data = request.get_json()
-        no_errors = sitefile_error_validator.validate(data)
+        no_single_field_errors = sitefile_single_field_validator.validate(data)
+        no_reference_errors = sitefile_reference_validator.validate(data)
         no_warnings = sitefile_warning_validator.validate(data)
         status_object = {}
 
+        if not (no_reference_errors and no_single_field_errors):
+            no_errors = False
+            single_field_errors = sitefile_single_field_validator.errors
+            reference_errors = sitefile_reference_validator.errors
+            all_errors = defaultdict(list)
+            for k, v in chain(single_field_errors.items(), reference_errors.items()):
+                all_errors[k].extend(v)
+
         if not no_errors:
-            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(sitefile_error_validator.errors)
+            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(all_errors)
         if not no_warnings:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
                 sitefile_warning_validator.errors)
