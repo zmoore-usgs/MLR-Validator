@@ -39,7 +39,6 @@ class AddValidateTransactionTestCase(TestCase):
         }
 
     def test_valid_single_field_transaction(self):
-        valid_result = {'validation_passed_message': 'Validations Passed'}
         with mock.patch('mlrvalidator.services.sitefile_single_field_validator.validate', return_value=True):
             response = self.app_client.post('/validators',
                                         content_type='application/json',
@@ -60,7 +59,6 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertEqual({'fatal_error_message': "Fatal Errors: {'siteNumber': ['Mandatory Field Missing']}"}, resp_data)
 
     def test_valid_reference_transaction(self):
-        valid_result = {'validation_passed_message': 'Validations Passed'}
         with mock.patch('mlrvalidator.services.sitefile_reference_validator.validate', return_value=True):
             response = self.app_client.post('/validators',
                                         content_type='application/json',

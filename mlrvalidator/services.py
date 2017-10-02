@@ -102,7 +102,7 @@ class Validator(Resource):
                 all_errors[k].extend(v)
 
         if not no_errors:
-            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(all_errors)
+            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(all_errors))
         if not no_warnings:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
                 sitefile_warning_validator.errors)
