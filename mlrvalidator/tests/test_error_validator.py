@@ -853,3 +853,36 @@ class ValidateLandNetCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data6))
         self.assertFalse(site_validator.validate(self.bad_data7))
         self.assertFalse(site_validator.validate(self.bad_data8))
+
+
+class ValidateDaylightSavingsTimeFlagCase(TestCase):
+
+    def setUp(self):
+        self.good_data = {
+            'daylightSavingsTimeFlag': 'y'
+        }
+        self.good_data2 = {
+            'daylightSavingsTimeFlag': 'Y'
+        }
+        self.good_data3 = {
+            'daylightSavingsTimeFlag': 'n'
+        }
+        self.good_data4 = {
+            'daylightSavingsTimeFlag': 'N'
+        }
+        self.bad_data = {
+            'daylightSavingsTimeFlag': 'x'
+        }
+        self.bad_data2 = {
+            'daylightSavingsTimeFlag': 'X'
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(site_validator.validate(self.good_data))
+        self.assertTrue(site_validator.validate(self.good_data2))
+        self.assertTrue(site_validator.validate(self.good_data3))
+        self.assertTrue(site_validator.validate(self.good_data4))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(site_validator.validate(self.bad_data))
+        self.assertFalse(site_validator.validate(self.bad_data2))

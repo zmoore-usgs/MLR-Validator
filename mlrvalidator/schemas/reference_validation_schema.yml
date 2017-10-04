@@ -46,6 +46,8 @@ primaryUseOfWaterCode:
     valid_reference: True
 secondaryUseOfWaterCode:
     valid_reference: True
+sourceOfDepthCode:
+    valid_reference: True
 tertiaryUseOfWaterCode:
     valid_reference: True
 topographicCode:

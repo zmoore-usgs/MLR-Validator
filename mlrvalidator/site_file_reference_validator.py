@@ -2,7 +2,7 @@
 from cerberus import Validator
 
 from .reference import reference_lists, get_aquifers, get_national_aquifers, get_hucs, get_mcds, \
-    get_national_water_use_codes, get_county_codes, get_county_attributes, get_state_codes, get_state_attributes
+    get_national_water_use_codes, get_county_codes, get_state_codes, get_state_attributes
 
 
 class SitefileReferenceValidator(Validator):

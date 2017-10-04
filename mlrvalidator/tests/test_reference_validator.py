@@ -26,64 +26,76 @@ class ValidateReferenceCase(TestCase):
             'altitudeMethodCode': 'A'
         }
         self.good_data6 = {
-            'aquiferTypeCode': 'C'
+            'altitudeMethodCode': ' '
         }
         self.good_data7 = {
-            'coordinateDatumCode': 'ACCRA'
+            'altitudeMethodCode': ''
         }
         self.good_data8 = {
-            'coordinateMethodCode': 'C'
+            'aquiferTypeCode': 'C'
         }
         self.good_data9 = {
-            'coordinateAccuracyCode': '1'
+            'coordinateDatumCode': 'ACCRA'
         }
         self.good_data10 = {
-            'coordinateAccuracyCode': ' '
+            'coordinateMethodCode': 'C'
         }
         self.good_data11 = {
-            'coordinateAccuracyCode': ''
+            'coordinateAccuracyCode': '1'
         }
         self.good_data12 = {
-            'countryCode': 'US'
+            'coordinateAccuracyCode': ' '
         }
         self.good_data13 = {
-            'dataReliabilityCode': 'C'
+            'coordinateAccuracyCode': ''
         }
         self.good_data14 = {
-            'districtCode': '01'
+            'countryCode': 'US'
         }
         self.good_data15 = {
-            'primaryUseOfSite': 'A'
+            'dataReliabilityCode': 'C'
         }
         self.good_data16 = {
-            'primaryUseOfWaterCode': 'A'
+            'districtCode': '01'
         }
         self.good_data17 = {
-            'secondaryUseOfSite': 'A'
+            'primaryUseOfSite': 'A'
         }
         self.good_data18 = {
-            'secondaryUseOfWaterCode': 'A'
+            'primaryUseOfWaterCode': 'A'
         }
         self.good_data19 = {
-            'siteTypeCode': 'AG'
+            'secondaryUseOfSite': 'A'
         }
         self.good_data20 = {
-            'siteWebReadyCode': 'C'
+            'secondaryUseOfWaterCode': 'A'
         }
         self.good_data21 = {
-            'tertiaryUseOfSiteCode': 'A'
+            'siteTypeCode': 'AG'
         }
         self.good_data22 = {
-            'tertiaryUseOfWaterCode': 'A'
+            'siteWebReadyCode': 'C'
         }
         self.good_data23 = {
-            'timeZoneCode': 'CST'
+            'tertiaryUseOfSiteCode': 'A'
         }
         self.good_data24 = {
-            'topographicCode': 'A'
+            'tertiaryUseOfWaterCode': 'A'
         }
         self.good_data25 = {
+            'timeZoneCode': 'CST'
+        }
+        self.good_data26 = {
+            'topographicCode': 'A'
+        }
+        self.good_data27 = {
             'topographicCode': 'a'
+        }
+        self.good_data28 = {
+            'sourceOfDepthCode': 'a'
+        }
+        self.good_data29 = {
+            'sourceOfDepthCode': 'A'
         }
         self.bad_data = {
             'agencyCode': 'x'
@@ -148,6 +160,9 @@ class ValidateReferenceCase(TestCase):
         self.bad_data21 = {
             'topographicCode': 'I'
         }
+        self.bad_data22 = {
+            'sourceOfDepthCode': 'X'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data))
@@ -175,6 +190,10 @@ class ValidateReferenceCase(TestCase):
         self.assertTrue(site_validator.validate(self.good_data23))
         self.assertTrue(site_validator.validate(self.good_data24))
         self.assertTrue(site_validator.validate(self.good_data25))
+        self.assertTrue(site_validator.validate(self.good_data26))
+        self.assertTrue(site_validator.validate(self.good_data27))
+        self.assertTrue(site_validator.validate(self.good_data28))
+        self.assertTrue(site_validator.validate(self.good_data29))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data))
@@ -198,6 +217,8 @@ class ValidateReferenceCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data19))
         self.assertFalse(site_validator.validate(self.bad_data20))
         self.assertFalse(site_validator.validate(self.bad_data21))
+        self.assertFalse(site_validator.validate(self.bad_data22))
+
 
 class ValidateAquiferCode(TestCase):
 
@@ -242,7 +263,6 @@ class ValidateAquiferCode(TestCase):
             'stateFipsCode': 'XY',
             'aquiferCode': '112EVRS'
         }
-
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data))
