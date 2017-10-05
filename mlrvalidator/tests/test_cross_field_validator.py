@@ -167,7 +167,7 @@ class ValidateCrossFields(TestCase):
         }
         self.bad_data19 = {
             'primaryUseOfSite': '',
-            'secondaryUseOfSite': 'C',
+            'secondaryUseOfSite': '',
             'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data20 = {
@@ -202,7 +202,7 @@ class ValidateCrossFields(TestCase):
         }
         self.bad_data26 = {
             'primaryUseOfWaterCode': '',
-            'secondaryUseOfWaterCode': 'C',
+            'secondaryUseOfWaterCode': '',
             'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data27 = {
