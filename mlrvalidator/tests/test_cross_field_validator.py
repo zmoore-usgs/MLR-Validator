@@ -166,48 +166,53 @@ class ValidateCrossFields(TestCase):
             'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data19 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': 'A',
-            'tertiaryUseOfWaterCode': 'A'
+            'primaryUseOfSite': '',
+            'secondaryUseOfSite': 'C',
+            'tertiaryUseOfSiteCode': 'E'
         }
         self.bad_data20 = {
             'primaryUseOfWaterCode': 'A',
             'secondaryUseOfWaterCode': 'A',
-            'tertiaryUseOfWaterCode': 'C'
+            'tertiaryUseOfWaterCode': 'A'
         }
         self.bad_data21 = {
+            'primaryUseOfWaterCode': 'A',
+            'secondaryUseOfWaterCode': 'A',
+            'tertiaryUseOfWaterCode': 'C'
+        }
+        self.bad_data22 = {
             'primaryUseOfWaterCode': 'A',
             'secondaryUseOfWaterCode': 'C',
             'tertiaryUseOfWaterCode': 'A'
         }
-        self.bad_data22 = {
+        self.bad_data23 = {
             'primaryUseOfWaterCode': 'C',
             'secondaryUseOfWaterCode': 'A',
             'tertiaryUseOfWaterCode': 'A'
         }
-        self.bad_data23 = {
+        self.bad_data24 = {
             'primaryUseOfWaterCode': '',
             'secondaryUseOfWaterCode': 'C',
             'tertiaryUseOfWaterCode': 'E'
         }
-        self.bad_data24 = {
+        self.bad_data25 = {
             'primaryUseOfWaterCode': 'A',
             'secondaryUseOfWaterCode': '',
             'tertiaryUseOfWaterCode': 'E'
         }
-        self.bad_data25 = {
+        self.bad_data26 = {
             'firstConstructionDate': '20000102',
             'siteEstablishmentDate': '20000101'
         }
-        self.bad_data26 = {
+        self.bad_data27 = {
             'firstConstructionDate': '200002',
             'siteEstablishmentDate': '200001'
         }
-        self.bad_data27 = {
+        self.bad_data28 = {
             'firstConstructionDate': '2001',
             'siteEstablishmentDate': '2000'
         }
-        self.bad_data28 = {
+        self.bad_data29 = {
             'wellDepth': '11',
             'holeDepth': '10'
         }
@@ -256,4 +261,6 @@ class ValidateCrossFields(TestCase):
         self.assertFalse(cross_field_validator.validate(self.bad_data26))
         self.assertFalse(cross_field_validator.validate(self.bad_data27))
         self.assertFalse(cross_field_validator.validate(self.bad_data28))
+        self.assertFalse(cross_field_validator.validate(self.bad_data29))
+
 

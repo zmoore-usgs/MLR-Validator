@@ -10,16 +10,12 @@ class CrossFieldValidator(Validator):
         {'lat_long': True}
         """
         if valid_lat_long:
-            try:
-                if self.document['latitude']:
-                    if not self.document['longitude']:
-                        return self._error(field, "Latitude entered without longitude")
-                if self.document['longitude']:
-                    if not self.document['latitude']:
-                        return self._error(field, "Longitude entered without latitude")
-            except KeyError:
-                print("z")
-                return self._error(field, "Key not found in dictionary")
+            if self.document['latitude']:
+                if not self.document['longitude']:
+                    return self._error(field, "Latitude entered without longitude")
+            if self.document['longitude']:
+                if not self.document['latitude']:
+                    return self._error(field, "Longitude entered without latitude")
 
     def _validate_valid_coord_acy_cd(self, valid_coord_acy_cd, field, value):
         # Check if coord_acy_cd was entered, so were latitude and longitude
@@ -173,12 +169,9 @@ class CrossFieldValidator(Validator):
         {'const_inv_dts': True}
          """
         if valid_const_inv_dts:
-            try:
-                if self.document['firstConstructionDate'] and self.document['siteEstablishmentDate']:
-                    if self.document['firstConstructionDate'] > self.document['siteEstablishmentDate']:
-                        return self._error(field, "Construction date cannot be more recent than inventory date")
-            except KeyError:
-                return self._error(field, "Key not found in dictionary")
+            if self.document['firstConstructionDate'] and self.document['siteEstablishmentDate']:
+                if self.document['firstConstructionDate'] > self.document['siteEstablishmentDate']:
+                    return self._error(field, "Construction date cannot be more recent than inventory date")
 
     def _validate_valid_well_hole_depths(self, valid_well_hole_depths, field, value):
         # Check that well depth is not > hole depth
