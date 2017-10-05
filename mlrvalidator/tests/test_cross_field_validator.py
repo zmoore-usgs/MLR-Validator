@@ -201,18 +201,23 @@ class ValidateCrossFields(TestCase):
             'tertiaryUseOfWaterCode': 'E'
         }
         self.bad_data26 = {
+            'primaryUseOfWaterCode': '',
+            'secondaryUseOfWaterCode': 'C',
+            'tertiaryUseOfWaterCode': 'E'
+        }
+        self.bad_data27 = {
             'firstConstructionDate': '20000102',
             'siteEstablishmentDate': '20000101'
         }
-        self.bad_data27 = {
+        self.bad_data28 = {
             'firstConstructionDate': '200002',
             'siteEstablishmentDate': '200001'
         }
-        self.bad_data28 = {
+        self.bad_data29 = {
             'firstConstructionDate': '2001',
             'siteEstablishmentDate': '2000'
         }
-        self.bad_data29 = {
+        self.bad_data30 = {
             'wellDepth': '11',
             'holeDepth': '10'
         }
@@ -262,5 +267,7 @@ class ValidateCrossFields(TestCase):
         self.assertFalse(cross_field_validator.validate(self.bad_data27))
         self.assertFalse(cross_field_validator.validate(self.bad_data28))
         self.assertFalse(cross_field_validator.validate(self.bad_data29))
+        self.assertFalse(cross_field_validator.validate(self.bad_data30))
+
 
 
