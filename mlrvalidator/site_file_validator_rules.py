@@ -120,7 +120,7 @@ class SitefileValidator(Validator):
         {'valid_latitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
-        rstripped_value = self.document['latitude'].rstrip()
+        rstripped_value = value.rstrip()
 
         def check_100th_seconds(val):
             try:
@@ -142,13 +142,10 @@ class SitefileValidator(Validator):
                 return True
 
         if valid_latitude_dms:
-            try:
-                first_val = rstripped_value[0]
-                check_degrees = rstripped_value[1:3]
-                check_minutes = rstripped_value[3:5]
-                check_seconds = rstripped_value[5:7]
-            except IndexError:
-                return self._error(field, error_message)
+            first_val = rstripped_value[0]
+            check_degrees = rstripped_value[1:3]
+            check_minutes = rstripped_value[3:5]
+            check_seconds = rstripped_value[5:7]
 
             try:
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 90) and (
@@ -166,7 +163,7 @@ class SitefileValidator(Validator):
         {'valid_longitude_dms': True}
         """
         error_message = "Invalid Degree/Minute/Second Value"
-        rstripped_value = self.document['longitude'].rstrip()
+        rstripped_value = value.rstrip()
 
         def check_100th_seconds(val):
             try:
@@ -188,13 +185,10 @@ class SitefileValidator(Validator):
                 return True
 
         if valid_longitude_dms:
-            try:
-                first_val = rstripped_value[0]
-                check_degrees = rstripped_value[1:4]
-                check_minutes = rstripped_value[4:6]
-                check_seconds = rstripped_value[6:8]
-            except IndexError:
-                return self._error(field, error_message)
+            first_val = rstripped_value[0]
+            check_degrees = rstripped_value[1:4]
+            check_minutes = rstripped_value[4:6]
+            check_seconds = rstripped_value[6:8]
             try:
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 180) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
@@ -260,9 +254,3 @@ class SitefileValidator(Validator):
                     return self._error(field, error_message)
             except IndexError:
                 return self._error(field, error_message)
-
-
-
-
-
-
