@@ -167,7 +167,7 @@ class CrossFieldValidator(Validator):
                     print("d")
                     return self._error(field, "Water use code 3 must be null if water use code 1 is null")
             if not self.document['secondaryUseOfWaterCode']:
-                if self.document['tertiaryUseOfWaterCode']:
+                if self.document['tertiaryUseOfWaterCodea']:
                     print("e")
                     return self._error(field, "Water use code 3 must be null if water use code 2 is null")
 
