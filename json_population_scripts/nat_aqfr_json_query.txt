@@ -1,0 +1,26 @@
+begin
+
+declare
+
+
+cursor state_c is
+select distinct state_cd from nat_aqfr_state where country_cd = 'US' order by 1;
+
+cursor aqfrs(s in varchar2) is
+select '"'||nat_aqfr_cd||'"' aqfr from NAT_AQFR_STATE where country_cd = 'US' and state_cd = s order by 1;
+
+begin 
+dbms_output.put_line ('"states": [');
+for s in state_c
+loop
+     dbms_output.put_line ('{"stateFipsCode": "'||s.state_cd||'", "nationalAquiferCodes": [');
+    for aqfr in aqfrs(s.state_cd)
+    loop
+        dbms_output.put_line(aqfr.aqfr||', ');
+    end loop;
+    dbms_output.put_line(']},');
+end loop;
+dbms_output.put_line(']}');
+
+ end;
+ end;

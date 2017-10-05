@@ -1,0 +1,34 @@
+begin
+
+declare
+
+cursor country is
+select distinct country_cd from aqfr_state order by 1;
+
+cursor state_c (c in varchar2) is
+select distinct country_cd, state_cd from aqfr_state where country_cd = c order by 1, 2;
+
+cursor aqfrs(c in varchar2, s in varchar2) is
+select '"'||trim(aqfr_cd)||'"' aqfr from AQFR_STATE where country_cd = c and state_cd = s order by 1;
+
+begin 
+dbms_output.put_line('{"countries": [');
+for c in country 
+    loop
+        dbms_output.put_line ('{"countryCode": "'||c.country_cd||'",');
+        dbms_output.put_line ('"states": [');
+        for s in state_c(c.country_cd)
+        loop
+             dbms_output.put_line ('{"stateFipsCode": "'||s.state_cd||'", "aquiferCodes": [');
+            for aqfr in aqfrs(c.country_cd, s.state_cd)
+            loop
+                dbms_output.put_line(aqfr.aqfr||', ');
+            end loop;
+            dbms_output.put_line(']},');
+        end loop;
+        dbms_output.put_line(']},');
+    end loop;
+dbms_output.put_line(']}');
+
+ end;
+ end;

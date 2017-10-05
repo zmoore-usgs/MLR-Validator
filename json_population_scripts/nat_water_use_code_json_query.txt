@@ -1,0 +1,26 @@
+begin
+
+declare
+
+
+cursor site_type is
+select distinct site_tp_cd from SITE_TP_NAT_WTR_USE where nat_water_use_cd NOT IN ('RE', 'PO', 'PC') order by 1;
+
+cursor nat_water_use_cd(st in varchar2) is
+select '"'||nat_water_use_cd||'"' nat_water_use_cd from SITE_TP_NAT_WTR_USE where nat_water_use_cd NOT IN ('RE', 'PO', 'PC') and site_tp_cd = st order by 1;
+
+begin 
+dbms_output.put_line ('{"siteTypeCodes": [');
+for s in site_type
+loop
+     dbms_output.put_line ('{"siteTypeCode": "'||s.site_tp_cd||'", "nationalWaterUseCodes": [');
+    for water_use in nat_water_use_cd(s.site_tp_cd)
+    loop
+        dbms_output.put_line(water_use.nat_water_use_cd||', ');
+    end loop;
+    dbms_output.put_line(']},');
+end loop;
+dbms_output.put_line(']}');
+
+ end;
+ end;

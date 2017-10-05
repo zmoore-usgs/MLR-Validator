@@ -7,4 +7,3 @@ bind = '{0}:{1}'.format(bind_ip, bind_port)
 capture_output = True
 keyfile = None
 certfile = None
-workers = 4

@@ -1,11 +1,22 @@
 
 from cerberus import Validator
 
-from .reference import reference_lists, get_aquifers, get_national_aquifers, get_hucs, get_mcds, \
-    get_national_water_use_codes, get_county_codes, get_state_codes, get_state_attributes
+from . import aquifer_reference, huc_reference, mcd_reference, national_aquifer_reference, \
+    national_water_use_reference, reference_lists, county_reference, state_reference
 
 
 class SitefileReferenceValidator(Validator):
+
+    def _is_not_in_list(self, value, ref_list, upper_flag):
+        stripped_value = value.strip()
+        if upper_flag == 'upper':
+            stripped_value = stripped_value.upper()
+
+        if stripped_value and stripped_value not in ref_list:
+            return True
+        else:
+            return False
+
     def _validate_valid_reference(self, valid_reference, field, value):
         """
         # Check that value is the list of allowable values
@@ -14,12 +25,11 @@ class SitefileReferenceValidator(Validator):
         {'valid_reference': True}
         """
         error_message = "Value not in reference list"
-        stripped_value = value.strip()
 
         if valid_reference:
-            ref_list = reference_lists[field]
+            ref_list = reference_lists.reference_info[field]
 
-            if stripped_value and stripped_value.upper() not in ref_list:
+            if self._is_not_in_list(value, ref_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_aquifer_code(self, valid_aquifer_code, field, value):
@@ -32,14 +42,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_aquifer_code:
-            stripped_value = value.strip()
-
-            aquifer_list = get_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            aquifer_list = aquifer_reference.get_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if not aquifer_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in aquifer_list:
+            if self._is_not_in_list(value, aquifer_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_national_aquifer_code(self, valid_national_aquifer_code, field, value):
@@ -52,14 +60,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_national_aquifer_code:
-            stripped_value = value.strip()
-
-            national_aquifer_list = get_national_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            national_aquifer_list = national_aquifer_reference.get_national_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if not national_aquifer_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in national_aquifer_list:
+            if self._is_not_in_list(value, national_aquifer_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_huc(self, valid_huc, field, value):
@@ -72,14 +78,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_huc:
-            stripped_value = value.strip()
-
-            huc_list = get_hucs(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            huc_list = huc_reference.get_hucs(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if not huc_list:
                 return self._error(field, error_message + "--Hydrologic units do not exist in the HUC reference list for the entered State Code")
 
-            if stripped_value != '99999999' and stripped_value and stripped_value not in huc_list:
+            if value.strip() != '99999999' and self._is_not_in_list(value, huc_list, ''):
                 return self._error(field, error_message)
 
     def _validate_valid_mcd_code(self, valid_mcd_code, field, value):
@@ -92,14 +96,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_mcd_code:
-            stripped_value = value.strip()
-
-            mcd_list = get_mcds(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            mcd_list = mcd_reference.get_mcds(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if not mcd_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in mcd_list:
+            if self._is_not_in_list(value, mcd_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_national_water_use_code(self, valid_national_water_use_code, field, value):
@@ -112,14 +114,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_national_water_use_code:
-            stripped_value = value.strip()
-
-            national_water_use_code_list = get_national_water_use_codes(self.document['siteTypeCode'].upper())
+            national_water_use_code_list = national_water_use_reference.get_national_water_use_codes(self.document['siteTypeCode'].upper())
 
             if not national_water_use_code_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in national_water_use_code_list:
+            if self._is_not_in_list(value, national_water_use_code_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_county_code(self, valid_county_code, field, value):
@@ -132,14 +132,12 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_county_code:
-            stripped_value = value.strip()
-
-            county_list = get_county_codes(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            county_list = county_reference.get_county_codes(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if not county_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in county_list:
+            if self._is_not_in_list(value, county_list, 'upper'):
                 return self._error(field, error_message)
 
     def _validate_valid_state_code(self, valid_state_code, field, value):
@@ -152,13 +150,11 @@ class SitefileReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_state_code:
-            stripped_value = value.strip()
-
-            state_list = get_state_codes(self.document['countryCode'].upper())
+            state_list = state_reference.get_state_codes(self.document['countryCode'].upper())
 
             if not state_list:
                 return self._error(field, error_message)
 
-            if stripped_value and stripped_value.upper() not in state_list:
+            if self._is_not_in_list(value, state_list, 'upper'):
                 return self._error(field, error_message)
 

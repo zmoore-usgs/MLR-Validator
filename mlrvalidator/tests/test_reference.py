@@ -1,70 +1,78 @@
 
 from unittest import TestCase
-from mlrvalidator.reference import get_aquifers, get_national_aquifers, get_hucs, get_mcds, \
-    get_national_water_use_codes, get_county_codes, get_county_attributes, get_state_codes, get_state_attributes
+from mlrvalidator.reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
+    States
 
 
 class ValidateGetAquifersCase(TestCase):
+    def setUp(self):
+        self.aquifer = Aquifers('references/aquifer.json')
 
     def test_validate_ok(self):
         good_aquifer = ["112EVRS", "112GLCV", "112SUMS"]
-        test_aquifer = get_aquifers('CA', '96')
+        test_aquifer = self.aquifer.get_aquifers('CA', '96')
 
         self.assertEqual(test_aquifer, good_aquifer)
 
     def test_validate_not_ok(self):
         bad_aquifer = []
-        test_aquifer = get_aquifers('CA', '01')
+        test_aquifer = self.aquifer.get_aquifers('CA', '01')
 
         self.assertEqual(test_aquifer, bad_aquifer)
 
         bad_aquifer = []
-        test_aquifer = get_aquifers('XY', '96')
+        test_aquifer = self.aquifer.get_aquifers('XY', '96')
 
         self.assertEqual(test_aquifer, bad_aquifer)
 
 
 class ValidateGetNationalAquifersCase(TestCase):
+    def setUp(self):
+        self.national_aquifer = NationalAquifers('references/national_aquifer.json')
 
     def test_validate_ok(self):
         good_aquifer = ["N100AKUNCD", "N9999OTHER"]
-        test_aquifer = get_national_aquifers('US', '02')
+        test_aquifer = self.national_aquifer.get_national_aquifers('US', '02')
 
         self.assertEqual(test_aquifer, good_aquifer)
 
     def test_validate_not_ok(self):
         bad_aquifer = []
-        test_aquifer = get_national_aquifers('US', 'XY')
+        test_aquifer = self.national_aquifer.get_national_aquifers('US', 'XY')
 
         self.assertEqual(test_aquifer, bad_aquifer)
 
         bad_aquifer = []
-        test_aquifer = get_national_aquifers('XY', '01')
+        test_aquifer = self.national_aquifer.get_national_aquifers('XY', '01')
 
         self.assertEqual(test_aquifer, bad_aquifer)
 
 
 class ValidateGetHucsCase(TestCase):
+    def setUp(self):
+        self.huc = Hucs('references/huc.json')
 
     def test_validate_ok(self):
         good_huc = ["21030001"]
-        test_huc = get_hucs('PM', '61')
+        test_huc = self.huc.get_hucs('PM', '61')
 
         self.assertEqual(test_huc, good_huc)
 
     def test_validate_not_ok(self):
         bad_huc = []
-        test_huc = get_hucs('PM', 'XY')
+        test_huc = self.huc.get_hucs('PM', 'XY')
 
         self.assertEqual(test_huc, bad_huc)
 
         bad_huc = []
-        test_huc = get_hucs('XY', '61')
+        test_huc = self.huc.get_hucs('XY', '61')
 
         self.assertEqual(test_huc, bad_huc)
 
 
 class ValidateGetMcdsCase(TestCase):
+    def setUp(self):
+        self.mcd = Mcds('references/mcd.json')
 
     def test_validate_ok(self):
         good_mcd = ["90148",
@@ -94,23 +102,25 @@ class ValidateGetMcdsCase(TestCase):
             "93700",
             "93848",
             "93996"]
-        test_mcd = get_mcds('US', '10')
+        test_mcd = self.mcd.get_mcds('US', '10')
 
         self.assertEqual(test_mcd, good_mcd)
 
     def test_validate_not_ok(self):
         bad_mcd = []
-        test_mcd = get_mcds('US', 'XY')
+        test_mcd = self.mcd.get_mcds('US', 'XY')
 
         self.assertEqual(test_mcd, bad_mcd)
 
         bad_mcd = []
-        test_mcd = get_mcds('XY', '10')
+        test_mcd = self.mcd.get_mcds('XY', '10')
 
         self.assertEqual(test_mcd, bad_mcd)
 
 
 class ValidateGetNationalWaterUseCase(TestCase):
+    def setUp(self):
+        self.national_water_use = NationalWaterUseCodes('references/national_water_use.json')
 
     def test_validate_ok(self):
         good_national_water_use = [
@@ -126,38 +136,42 @@ class ValidateGetNationalWaterUseCase(TestCase):
             "TE",
             "WS"
         ]
-        test_national_water_use = get_national_water_use_codes('AS')
+        test_national_water_use = self.national_water_use.get_national_water_use_codes('AS')
 
         self.assertEqual(test_national_water_use, good_national_water_use)
 
     def test_validate_not_ok(self):
         bad_national_water_use = []
-        test_national_water_use = get_national_water_use_codes('XY')
+        test_national_water_use = self.national_water_use.get_national_water_use_codes('XY')
 
         self.assertEqual(test_national_water_use, bad_national_water_use)
 
 
 class ValidateGetCountyCodeCase(TestCase):
+    def setUp(self):
+        self.county = Counties('references/county.json')
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
-        test_county = get_county_codes('FM', '64')
+        test_county = self.county.get_county_codes('FM', '64')
 
         self.assertEqual(test_county, good_county)
 
     def test_validate_not_ok(self):
         bad_county = []
-        test_county = get_county_codes('FM', 'XY')
+        test_county = self.county.get_county_codes('FM', 'XY')
 
         self.assertEqual(test_county, bad_county)
 
         bad_county = []
-        test_county = get_county_codes('XY', '64')
+        test_county = self.county.get_county_codes('XY', '64')
 
         self.assertEqual(test_county, bad_county)
 
 
 class ValidateGetCountyAttributesCase(TestCase):
+    def setUp(self):
+        self.county = Counties('references/county.json')
 
     def test_validate_ok(self):
         good_county = {
@@ -169,43 +183,47 @@ class ValidateGetCountyAttributesCase(TestCase):
               "county_min_alt_va": "00000",
               "county_max_alt_va": "02600"
             }
-        test_county = get_county_attributes('FM', '64', '000')
+        test_county = self.county.get_county_attributes('FM', '64', '000')
 
         self.assertEqual(test_county, good_county)
 
     def test_validate_not_ok(self):
         bad_county = {}
-        test_county = get_county_attributes('FM', '64', '999')
+        test_county = self.county.get_county_attributes('FM', '64', '999')
 
         self.assertEqual(test_county, bad_county)
 
         bad_county = {}
-        test_county = get_county_attributes('XY', '64', '000')
+        test_county = self.county.get_county_attributes('XY', '64', '000')
 
         self.assertEqual(test_county, bad_county)
 
         bad_county = {}
-        test_county = get_county_attributes('FM', 'XY', '000')
+        test_county = self.county.get_county_attributes('FM', 'XY', '000')
 
         self.assertEqual(test_county, bad_county)
 
 
 class ValidateGetStateCodeCase(TestCase):
+    def setUp(self):
+        self.state = States('references/state.json')
 
     def test_validate_ok(self):
         good_state = ["00", "90", "91", "92", "93", "94", "95", "96", "97", "98"]
-        test_state = get_state_codes('CA')
+        test_state = self.state.get_state_codes('CA')
 
         self.assertEqual(test_state, good_state)
 
     def test_validate_not_ok(self):
         bad_state = []
-        test_state = get_state_codes('XY')
+        test_state = self.state.get_state_codes('XY')
 
         self.assertEqual(test_state, bad_state)
 
 
 class ValidateGetStateAttributesCase(TestCase):
+    def setUp(self):
+        self.state = States('references/state.json')
 
     def test_validate_ok(self):
         good_state = {
@@ -217,17 +235,17 @@ class ValidateGetStateAttributesCase(TestCase):
           "state_min_alt_va": "00000",
           "state_max_alt_va": "30000"
         }
-        test_state = get_state_attributes('CA', '00')
+        test_state = self.state.get_state_attributes('CA', '00')
 
         self.assertEqual(test_state, good_state)
 
     def test_validate_not_ok(self):
         bad_state = {}
-        test_state = get_state_attributes('CA', 'XY')
+        test_state = self.state.get_state_attributes('CA', 'XY')
 
         self.assertEqual(test_state, bad_state)
 
         bad_state = {}
-        test_state = get_state_attributes('XY', '00')
+        test_state = self.state.get_state_attributes('XY', '00')
 
         self.assertEqual(test_state, bad_state)

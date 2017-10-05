@@ -7,7 +7,6 @@ from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
 from mlrvalidator.site_file_reference_validator import SitefileReferenceValidator
 from mlrvalidator.schema import single_field_schema, warning_schema, reference_schema
 
-
 application = Flask(__name__)
 
 application.config.from_object('config')

@@ -1,7 +1,7 @@
 
 import re
 from cerberus import Validator
-from .reference import get_county_attributes, get_state_attributes
+from . import county_reference, state_reference
 
 
 class SitefileWarningValidator(Validator):
@@ -28,7 +28,7 @@ class SitefileWarningValidator(Validator):
 
         if valid_county_range and self.document['countryCode'].upper() == 'US':
 
-            county_attributes = get_county_attributes(self.document['countryCode'].upper(),
+            county_attributes = county_reference.get_county_attributes(self.document['countryCode'].upper(),
                                                       self.document['stateFipsCode'], value)
             if county_attributes and county_attributes['county_min_lat_va'] and county_attributes['county_max_lat_va']:
                 if not float(county_attributes['county_min_lat_va']) <= float(self.document['latitude']) <= float(county_attributes['county_max_lat_va']):
@@ -48,7 +48,7 @@ class SitefileWarningValidator(Validator):
 
         if valid_state_range and self.document['countryCode'].upper() == 'US':
 
-            state_attributes = get_state_attributes(self.document['countryCode'].upper(), value)
+            state_attributes = state_reference.get_state_attributes(self.document['countryCode'].upper(), value)
             if state_attributes and state_attributes['state_min_lat_va'] and state_attributes['state_max_lat_va']:
                 if not float(state_attributes['state_min_lat_va']) <= float(self.document['latitude']) <= float(state_attributes['state_max_lat_va']):
                     return self._error(field, "Latitude Out of Range")
@@ -67,7 +67,7 @@ class SitefileWarningValidator(Validator):
         stripped_value = value.strip()
 
         if valid_altitude_range and stripped_value:
-            state_attributes = get_state_attributes(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            state_attributes = state_reference.get_state_attributes(self.document['countryCode'].upper(), self.document['stateFipsCode'])
 
             if state_attributes and state_attributes['state_min_alt_va'] and state_attributes['state_max_alt_va']:
                 stripped_min = re.split(".(?=-)", state_attributes['state_min_alt_va'])

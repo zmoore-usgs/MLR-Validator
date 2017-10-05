@@ -98,11 +98,11 @@ class Validator(Resource):
             single_field_errors = sitefile_single_field_validator.errors
             reference_errors = sitefile_reference_validator.errors
             all_errors = defaultdict(list)
+            # This part combines all types errors for each field
             for k, v in chain(single_field_errors.items(), reference_errors.items()):
                 all_errors[k].extend(v)
-
-        if not no_errors:
             status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(all_errors))
+
         if not no_warnings:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
                 sitefile_warning_validator.errors)
