@@ -14,34 +14,26 @@ siteTypeCode:
 latitude:
     maxlength: 11
     valid_latitude_dms: True
-    lat_long: True
 longitude:
     maxlength: 12
     valid_longitude_dms: True
-    lat_long: True
 coordinateAccuracyCode:
     maxlength: 1
-    allowed_coord_acy_cd: True
 coordinateDatumCode:
     maxlength: 10
-    allowed_coord_datum_cd: True
 coordinateMethodCode:
     maxlength: 1
-    allowed_coord_meth_cd: True
 altitude:
     type: numeric
     maxlength: 8
     valid_precision: True
 altitudeDatumCode:
     maxlength: 10
-    valid_alt_datum_cd: True
 altitudeMethodCode:
     maxlength: 1
-    valid_alt_meth_cd: True
 altitudeAccuracyValue:
     type: numeric
     maxlength: 3
-    valid_alt_acy_va: True
 districtCode:
     is_empty: False
     maxlength: 3
@@ -82,22 +74,16 @@ nationalWaterUseCode:
     maxlength: 2
 primaryUseOfSite:
     maxlength: 1
-    valid_site_use_cd: True
 secondaryUseOfSite:
     maxlength: 1
-    valid_site_use_cd: True
 tertiaryUseOfSiteCode:
     maxlength: 1
-    valid_site_use_cd: True
 primaryUseOfWaterCode:
     maxlength: 1
-    valid_water_use_cd: True
 secondaryUseOfWaterCode:
     maxlength: 1
-    valid_water_use_cd: True
 tertiaryUseOfWaterCode:
     maxlength: 1
-    valid_water_use_cd: True
 topographicCode:
     maxlength: 1
 dataTypesCode:
@@ -115,20 +101,16 @@ drainageArea:
 firstConstructionDate:
     maxlength: 8
     valid_date: True
-    const_inv_dts: True
 siteEstablishmentDate:
     maxlength: 8
     valid_date: True
-    const_inv_dts: True
 holeDepth:
     type: numeric
     maxlength: 8
-    well_hole_depths: True
 wellDepth:
     type: numeric
     maxlength: 8
     valid_precision: True
-    well_hole_depths: True
 sourceOfDepthCode:
     maxlength: 1
 projectNumber:

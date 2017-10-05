@@ -382,270 +382,118 @@ class ValidateValidLatDMS(TestCase):
 
     def setUp(self):
         self.good_data = {
-            'latitude': ' 123456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 123456'
         }
         self.good_data2 = {
-            'latitude': '-123456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-123456'
         }
         self.good_data3 = {
-            'latitude': ' 023456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 023456'
         }
         self.good_data4 = {
-            'latitude': ' 003456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 003456'
         }
         self.good_data5 = {
-            'latitude': ' 000456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 000456'
         }
         self.good_data6 = {
-            'latitude': ' 000056',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 000056'
         }
         self.good_data7 = {
-            'latitude': ' 000006',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 000006'
         }
         self.good_data8 = {
-            'latitude': '-023456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-023456'
         }
         self.good_data9 = {
-            'latitude': '-003456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-003456'
         }
         self.good_data10 = {
-            'latitude': '-000456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-000456'
         }
         self.good_data11 = {
-            'latitude': '-000056',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-000056'
         }
         self.good_data12 = {
-            'latitude': '-000006',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-000006'
         }
         self.good_data13 = {
-            'latitude': '-000000',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-000000'
         }
         self.good_data14 = {
-            'latitude': ' 000000',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 000000'
         }
         self.good_data15 = {
-            'latitude': ' 900000',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000'
         }
         self.good_data16 = {
-            'latitude': ' 900000.0',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.0'
         }
         self.good_data17 = {
-            'latitude': ' 900000.93',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.93'
         }
         self.good_data18 = {
-            'latitude': ' 900000.093',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.093'
         }
         self.good_data19 = {
-            'latitude': ' 454856.27 ',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 454856.27 '
         }
         self.bad_data = {
-            'latitude': 'k',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': 'k'
         }
         self.bad_data2 = {
-            'latitude': 'fds342',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': 'fds342'
         }
         self.bad_data3 = {
-            'latitude': '3',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '3'
         }
         self.bad_data4 = {
-            'latitude': ' 127456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 127456'
         }
         self.bad_data5 = {
-            'latitude': ' 123496',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 123496'
         }
         self.bad_data6 = {
-            'latitude': ' 923426',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 923426'
         }
         self.bad_data7 = {
-            'latitude': '-923426',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-923426'
         }
         self.bad_data8 = {
-            'latitude': '-127456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-127456'
         }
         self.bad_data9 = {
-            'latitude': '-123496',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-123496'
         }
         self.bad_data10 = {
-            'latitude': '-126036',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-126036'
         }
         self.bad_data11 = {
-            'latitude': '-123060',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': '-123060'
         }
         self.bad_data12 = {
-            'latitude': ' 1.27456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 1.27456'
         }
         self.bad_data13 = {
-            'latitude': ' 12.7456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 12.7456'
         }
         self.bad_data14 = {
-            'latitude': ' 127.456',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 127.456'
         }
         self.bad_data15 = {
-            'latitude': ' 1274.56',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 1274.56'
         }
         self.bad_data16 = {
-            'latitude': ' 12745.6',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 12745.6'
         }
         self.bad_data17 = {
-            'latitude': ' 900000.',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.'
         }
         self.bad_data18 = {
-            'latitude': ' 900000.-9',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.-9'
         }
         self.bad_data19 = {
-            'latitude': ' 900000.5454',
-            'longitude': '1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'latitude': ' 900000.5454'
         }
 
     def test_validate_ok(self):
@@ -695,256 +543,112 @@ class ValidateValidLongDMS(TestCase):
 
     def setUp(self):
         self.good_data = {
-            'longitude': ' 1234556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1234556'
         }
         self.good_data2 = {
-            'longitude': '-1234556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1234556'
         }
         self.good_data3 = {
-            'longitude': ' 0234556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0234556'
         }
         self.good_data4 = {
-            'longitude': ' 0034556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0034556'
         }
         self.good_data5 = {
-            'longitude': ' 0004556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0004556'
         }
         self.good_data6 = {
-            'longitude': ' 0000556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0000556'
         }
         self.good_data7 = {
-            'longitude': ' 0000056',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0000056'
         }
         self.good_data8 = {
-            'longitude': '-0234556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0234556'
         }
         self.good_data9 = {
-            'longitude': '-0034556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0034556'
         }
         self.good_data10 = {
-            'longitude': '-0004556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0004556'
         }
         self.good_data11 = {
-            'longitude': '-0000556',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0000556'
         }
         self.good_data12 = {
-            'longitude': '-0000006',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0000006'
         }
         self.good_data13 = {
-            'longitude': '-0000000',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-0000000'
         }
         self.good_data14 = {
-            'longitude': '-1800000',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000'
         }
         self.good_data15 = {
-            'longitude': '-1800000.0',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.0'
         }
         self.good_data16 = {
-            'longitude': '-1800000.01',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.01'
         }
         self.good_data17 = {
-            'longitude': '-1800000.023',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.023'
         }
         self.good_data18 = {
-            'longitude': ' 0880452.1  ',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 0880452.1  '
         }
         self.bad_data = {
-            'longitude': 'k',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': 'k'
         }
         self.bad_data2 = {
-            'longitude': 'fds342',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': 'fds342'
         }
         self.bad_data3 = {
-            'longitude': '3',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '3'
         }
         self.bad_data4 = {
-            'longitude': ' 1237456',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1237456'
         }
         self.bad_data5 = {
-            'longitude': ' 1233496',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1233496'
         }
         self.bad_data6 = {
-            'longitude': ' 1923426',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1923426'
         }
         self.bad_data7 = {
-            'longitude': '-1923426',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1923426'
         }
         self.bad_data8 = {
-            'longitude': '-1227456',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1227456'
         }
         self.bad_data9 = {
-            'longitude': '-1223496',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1223496'
         }
         self.bad_data10 = {
-            'longitude': ' 1.227456',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1.227456'
         }
         self.bad_data11 = {
-            'longitude': ' 12.72456',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 12.72456'
         }
         self.bad_data12 = {
-            'longitude': ' 127.4546',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 127.4546'
         }
         self.bad_data13 = {
-            'longitude': ' 1274.546',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 1274.546'
         }
         self.bad_data14 = {
-            'longitude': ' 12745.64',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 12745.64'
         }
         self.bad_data15 = {
-            'longitude': ' 127246.4',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': ' 127246.4'
         }
         self.bad_data16 = {
-            'longitude': '-1800000.',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.'
         }
         self.bad_data17 = {
-            'longitude': '-1800000.0233',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.0233'
         }
         self.bad_data18 = {
-            'longitude': '-1800000.-02',
-            'latitude': '123456',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
+            'longitude': '-1800000.-02'
         }
 
 
@@ -1151,249 +855,3 @@ class ValidateLandNetCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data8))
 
 
-class ValidateCrossFields(TestCase):
-
-    def setUp(self):
-        self.good_data = {
-            'latitude': ' 123456',
-            'longitude': ' 1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
-        }
-        self.good_data2 = {
-            'altitude': '1234',
-            'altitudeDatumCode': 'ASVD02',
-            'altitudeAccuracyValue': '12'
-        }
-        self.good_data3 = {
-            'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': 'C',
-            'tertiaryUseOfSiteCode': 'E'
-        }
-        self.good_data4 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': 'C',
-            'tertiaryUseOfWaterCode': 'E'
-        }
-        self.good_data5 = {
-            #is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '20000101',
-            'siteEstablishmentDate': '20000102'
-        }
-        self.good_data6 = {
-            # is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '200001',
-            'siteEstablishmentDate': '200101'
-        }
-        self.good_data7 = {
-            # is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '2000',
-            'siteEstablishmentDate': '2001'
-        }
-        self.good_data8 = {
-            'wellDepth': '10',
-            'holeDepth': '10'
-        }
-        self.good_data9 = {
-            'wellDepth': '10',
-            'holeDepth': '11'
-        }
-        self.good_data10 = {
-            'wellDepth': '',
-            'holeDepth': '10'
-        }
-        self.good_data11 = {
-            'wellDepth': '10',
-            'holeDepth': ''
-        }
-        self.good_data12 = {
-            'wellDepth': '',
-            'holeDepth': ''
-        }
-        self.bad_data = {
-            'latitude': '',
-            'longitude': '',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
-        }
-        self.bad_data2 = {
-            'latitude': ' 123456',
-            'longitude': '',
-        }
-        self.bad_data3 = {
-            'latitude': '',
-            'longitude': ' 1234556',
-        }
-        self.bad_data4 = {
-            'latitude': ' 123456',
-            'longitude': ' 1234556',
-            'coordinateAccuracyCode': '',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': 'C'
-        }
-        self.bad_data5 = {
-            'latitude': ' 123456',
-            'longitude': ' 1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': '',
-            'coordinateMethodCode': 'C'
-        }
-        self.bad_data6 = {
-            'latitude': ' 123456',
-            'longitude': ' 1234556',
-            'coordinateAccuracyCode': '1',
-            'coordinateDatumCode': 'ABIDJAN',
-            'coordinateMethodCode': ''
-        }
-        self.bad_data7 = {
-            'latitude': ' 123456',
-            'longitude': ' 1234556',
-            'coordinateAccuracyCode': '',
-            'coordinateDatumCode': '',
-            'coordinateMethodCode': ''
-        }
-        self.bad_data8 = {
-            'altitude': '',
-            'altitudeDatumCode': 'ASVD02',
-            'altitudeAccuracyValue': '12'
-        }
-        self.bad_data9 = {
-            'altitude': '1234',
-            'altitudeDatumCode': '',
-            'altitudeAccuracyValue': '12'
-        }
-        self.bad_data10 = {
-            'altitude': '1234',
-            'altitudeDatumCode': 'ASVD02',
-            'altitudeAccuracyValue': ''
-        }
-        self.bad_data11 = {
-            'altitude': '1234',
-            'altitudeDatumCode': '',
-            'altitudeAccuracyValue': ''
-        }
-        self.bad_data12 = {
-            'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': 'A',
-            'tertiaryUseOfSiteCode': 'A'
-        }
-        self.bad_data13 = {
-            'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': 'A',
-            'tertiaryUseOfSiteCode': 'C'
-        }
-        self.bad_data14 = {
-            'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': 'C',
-            'tertiaryUseOfSiteCode': 'A'
-        }
-        self.bad_data15 = {
-            'primaryUseOfSite': 'C',
-            'secondaryUseOfSite': 'A',
-            'tertiaryUseOfSiteCode': 'A'
-        }
-        self.bad_data16 = {
-            'primaryUseOfSite': '',
-            'secondaryUseOfSite': 'C',
-            'tertiaryUseOfSiteCode': 'E'
-        }
-        self.bad_data17 = {
-            'primaryUseOfSite': 'A',
-            'secondaryUseOfSite': '',
-            'tertiaryUseOfSiteCode': 'E'
-        }
-        self.bad_data18 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': 'A',
-            'tertiaryUseOfWaterCode': 'A'
-        }
-        self.bad_data19 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': 'A',
-            'tertiaryUseOfWaterCode': 'C'
-        }
-        self.bad_data20 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': 'C',
-            'tertiaryUseOfWaterCode': 'A'
-        }
-        self.bad_data21 = {
-            'primaryUseOfWaterCode': 'C',
-            'secondaryUseOfWaterCode': 'A',
-            'tertiaryUseOfWaterCode': 'A'
-        }
-        self.bad_data22 = {
-            'primaryUseOfWaterCode': '',
-            'secondaryUseOfWaterCode': 'C',
-            'tertiaryUseOfWaterCode': 'E'
-        }
-        self.bad_data23 = {
-            'primaryUseOfWaterCode': 'A',
-            'secondaryUseOfWaterCode': '',
-            'tertiaryUseOfWaterCode': 'E'
-        }
-        self.bad_data24 = {
-            # is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '20000102',
-            'siteEstablishmentDate': '20000101'
-        }
-        self.bad_data25 = {
-            # is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '200002',
-            'siteEstablishmentDate': '200001'
-        }
-        self.bad_data26 = {
-            # is this same as construction_dt and inventory_dt?
-            'firstConstructionDate': '2001',
-            'siteEstablishmentDate': '2000'
-        }
-        self.bad_data27 = {
-            'wellDepth': '11',
-            'holeDepth': '10'
-        }
-
-    def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
-        self.assertTrue(site_validator.validate(self.good_data5))
-        self.assertTrue(site_validator.validate(self.good_data6))
-        self.assertTrue(site_validator.validate(self.good_data7))
-        self.assertTrue(site_validator.validate(self.good_data8))
-        self.assertTrue(site_validator.validate(self.good_data9))
-        self.assertTrue(site_validator.validate(self.good_data10))
-        self.assertTrue(site_validator.validate(self.good_data11))
-        self.assertTrue(site_validator.validate(self.good_data12))
-
-
-    def test_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
-        self.assertFalse(site_validator.validate(self.bad_data4))
-        self.assertFalse(site_validator.validate(self.bad_data5))
-        self.assertFalse(site_validator.validate(self.bad_data6))
-        self.assertFalse(site_validator.validate(self.bad_data7))
-        self.assertFalse(site_validator.validate(self.bad_data8))
-        self.assertFalse(site_validator.validate(self.bad_data9))
-        self.assertFalse(site_validator.validate(self.bad_data10))
-        self.assertFalse(site_validator.validate(self.bad_data11))
-        self.assertFalse(site_validator.validate(self.bad_data12))
-        self.assertFalse(site_validator.validate(self.bad_data13))
-        self.assertFalse(site_validator.validate(self.bad_data14))
-        self.assertFalse(site_validator.validate(self.bad_data15))
-        self.assertFalse(site_validator.validate(self.bad_data16))
-        self.assertFalse(site_validator.validate(self.bad_data17))
-        self.assertFalse(site_validator.validate(self.bad_data18))
-        self.assertFalse(site_validator.validate(self.bad_data19))
-        self.assertFalse(site_validator.validate(self.bad_data20))
-        self.assertFalse(site_validator.validate(self.bad_data21))
-        self.assertFalse(site_validator.validate(self.bad_data22))
-        self.assertFalse(site_validator.validate(self.bad_data23))
-        self.assertFalse(site_validator.validate(self.bad_data24))
-        self.assertFalse(site_validator.validate(self.bad_data25))
-        self.assertFalse(site_validator.validate(self.bad_data26))
-        self.assertFalse(site_validator.validate(self.bad_data27))

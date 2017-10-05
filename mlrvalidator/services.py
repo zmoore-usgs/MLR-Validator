@@ -2,7 +2,7 @@
 from flask import request
 from flask_restplus import Api, Resource, fields
 
-from app import application, sitefile_error_validator, sitefile_warning_validator
+from app import application, sitefile_error_validator, sitefile_warning_validator, sitefile_crossfield_error_validator
 
 api = Api(application,
           title='MLR Validator',
@@ -87,6 +87,7 @@ class Validator(Resource):
         data = request.get_json()
         no_errors = sitefile_error_validator.validate(data)
         no_warnings = sitefile_warning_validator.validate(data)
+        no_crossfield_errors = sitefile_crossfield_error_validator(data)
         status_object = {}
 
         if not no_errors:
@@ -94,7 +95,9 @@ class Validator(Resource):
         if not no_warnings:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
                 sitefile_warning_validator.errors)
-        if no_errors and no_warnings:
+        if not no_crossfield_errors:
+            status_object["crossfield_error_message"] = 'Cross Field Errors: {0}'.format(sitefile_crossfield_error_validator.errors)
+        if no_errors and no_warnings and no_crossfield_errors:
             status_object["validation_passed_message"] = 'Validations Passed'
 
         response, status = status_object, 200
