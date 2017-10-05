@@ -133,7 +133,7 @@ class ValidateValidPrecisionCheck(TestCase):
         self.bad_data4 = {
             'altitude': '9.6.1'
         }
-        self.bad_data4 = {
+        self.bad_data5 = {
             'altitude': '234.f8'
         }
 
@@ -153,6 +153,7 @@ class ValidateValidPrecisionCheck(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data2))
         self.assertFalse(site_validator.validate(self.bad_data3))
         self.assertFalse(site_validator.validate(self.bad_data4))
+        self.assertFalse(site_validator.validate(self.bad_data5))
 
 
 class ValidatePositiveNumericCheck(TestCase):
