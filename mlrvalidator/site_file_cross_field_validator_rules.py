@@ -150,25 +150,20 @@ class CrossFieldValidator(Validator):
         if valid_water_use_cd:
             if self.document['primaryUseOfWaterCode'] and self.document['secondaryUseOfWaterCode']:
                 if self.document['primaryUseOfWaterCode'] == self.document['secondaryUseOfWaterCode']:
-                    print("a")
                     return self._error(field,
                                        "Water use codes 1, 2, and 3 must have different values if more than one is entered")
                 if self.document['tertiaryUseOfWaterCode']:
                     if self.document['primaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode'] or self.document[
                         'secondaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']:
-                        print("b")
                         return self._error(field,
                                            "Water use codes 1, 2, and 3 must have different values if more than one is entered")
             if not self.document['primaryUseOfWaterCode']:
                 if self.document['secondaryUseOfWaterCode']:
-                    print("c")
                     return self._error(field, "Water use code 2 must be null if water use code 1 is null")
                 if self.document['tertiaryUseOfWaterCode']:
-                    print("d")
                     return self._error(field, "Water use code 3 must be null if water use code 1 is null")
             if not self.document['secondaryUseOfWaterCode']:
                 if self.document['tertiaryUseOfWaterCode']:
-                    print("e")
                     return self._error(field, "Water use code 3 must be null if water use code 2 is null")
 
     def _validate_valid_const_inv_dts(self, valid_const_inv_dts, field, value):
