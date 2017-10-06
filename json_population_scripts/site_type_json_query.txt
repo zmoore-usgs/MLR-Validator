@@ -1,0 +1,7 @@
+set pagesize 500
+set linesize 100
+select '"'||site_tp_cd||'": ['||
+listagg('"'||site_tp_transition_cd||'"',', ') within group (order by 1)||'],'
+ from SITE_TP_TRANSITION
+ group by site_tp_cd
+ order by 1

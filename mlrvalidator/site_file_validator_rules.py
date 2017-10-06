@@ -34,7 +34,7 @@ class SitefileValidator(Validator):
         # Check that precision is no more than 2 decimal places
 
         The rule's arguments are validated against this schema:
-        {'valid_valid_precision': False}
+        {'valid_precision': False}
         """
         error_message = "Invalid Value, decimal precision error"
 
