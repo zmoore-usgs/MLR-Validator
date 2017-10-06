@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from mlrvalidator.reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States
+    States, SiteTypes
 
 
 class ValidateGetAquifersCase(TestCase):
@@ -249,3 +249,28 @@ class ValidateGetStateAttributesCase(TestCase):
         test_state = self.state.get_state_attributes('XY', '00')
 
         self.assertEqual(test_state, bad_state)
+
+
+class ValidateGetSiteTypesCase(TestCase):
+    def setUp(self):
+        self.site_type = SiteTypes('references/site_type_transition.json')
+
+    def test_validate_ok(self):
+        good_new_site_type = [
+            "FA-SPS",
+            "FA-WIW",
+            "GW",
+            "GW-CR",
+            "GW-IW",
+            "GW-MW",
+            "SP"
+        ]
+        test_new_site_type = self.site_type.get_site_types('AG')
+
+        self.assertEqual(test_new_site_type, good_new_site_type)
+
+    def test_validate_not_ok(self):
+        bad_new_site_type = []
+        test_new_site_type = self.site_type.get_site_types('XY')
+
+        self.assertEqual(test_new_site_type, bad_new_site_type)

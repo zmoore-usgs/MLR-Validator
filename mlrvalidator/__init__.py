@@ -1,5 +1,5 @@
 from mlrvalidator.reference import Aquifers, Counties, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, \
-    ReferenceInfo, States
+    ReferenceInfo, States, SiteTypes
 
 aquifer_reference = Aquifers('references/aquifer.json')
 huc_reference = Hucs('references/huc.json')
@@ -9,3 +9,4 @@ national_water_use_reference = NationalWaterUseCodes('references/national_water_
 reference_lists = ReferenceInfo('references/reference_lists.json')
 county_reference = Counties('references/county.json')
 state_reference = States('references/state.json')
+site_type_transition_reference = SiteTypes('references/site_type_transition.json')

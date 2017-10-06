@@ -4,7 +4,7 @@ import json
 PROJECT_DIR = os.path.dirname(__file__)
 
 
-class ReferenceInfo():
+class ReferenceInfo:
     def __init__(self, file_name):
         fd = open(os.path.join(PROJECT_DIR, file_name))
         with fd:
@@ -16,9 +16,10 @@ class ReferenceInfo():
     def _get_reference_list(self, reference_attribute, parent_attribute, parent_value, parent_list):
         try:
             reference_object = list(filter(lambda c: c[parent_attribute] == parent_value, parent_list))[0]
-            reference_list = reference_object[reference_attribute]
         except IndexError:
             reference_list = []
+        else:
+            reference_list = reference_object[reference_attribute]
         return reference_list
 
     def get_list_by_country_state(self, attribute, country_code, state_code):
@@ -84,14 +85,14 @@ class Counties(ReferenceInfo):
 
 class States(ReferenceInfo):
     def get_state_codes(self, country_code):
-        country_list = state_json['countries']
+        country_list = self.reference_info['countries']
         state_list = self._get_reference_list('states', 'countryCode', country_code, country_list)
         state_code_list = [d['stateFipsCode'] for d in state_list]
 
         return state_code_list
 
     def get_state_attributes(self, country_code, state_code):
-        country_list = state_json['countries']
+        country_list = self.reference_info['countries']
         state_list = self._get_reference_list('states', 'countryCode', country_code, country_list)
         try:
             state_attributes = list(filter(lambda s: s['stateFipsCode'] == state_code, state_list))[0]
@@ -99,24 +100,13 @@ class States(ReferenceInfo):
             state_attributes = {}
         return state_attributes
 
-site_type_transition_file = open(os.path.join(PROJECT_DIR, 'references/site_type_transition.json'))
-with site_type_transition_file:
-    site_type_transition = json.loads(site_type_transition_file.read())
 
-state_file = open(os.path.join(PROJECT_DIR, 'references/state.json'))
-with state_file:
-    state_json = json.loads(state_file.read())
+class SiteTypes(ReferenceInfo):
+    def get_site_types(self, old_site_type_code):
+        old_site_types = self.reference_info['oldSiteTypeCodes']
+        new_site_type_list = self._get_reference_list('newSiteTypeCodes', 'oldSiteTypeCode', old_site_type_code, old_site_types)
 
-
-def get_state_codes(country_code):
-    try:
-        country_list = state_json['countries']
-        country = list(filter(lambda c: c['countryCode'] == country_code, country_list))[0]
-        state_list = country['states']
-        state_code_list = [d['stateFipsCode'] for d in state_list]
-    except IndexError:
-        state_code_list = []
-    return state_code_list
+        return new_site_type_list
 
 
 
