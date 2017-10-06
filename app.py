@@ -6,7 +6,7 @@ from mlrvalidator.site_file_validator_rules import SitefileValidator
 from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
 from mlrvalidator.site_file_reference_validator import SitefileReferenceValidator
 from mlrvalidator.site_file_cross_field_validator_rules import CrossFieldValidator
-from mlrvalidator.schema import single_field_schema, warning_schema, cross_field_schema
+from mlrvalidator.schema import single_field_schema, warning_schema, cross_field_schema, reference_schema
 
 application = Flask(__name__)
 
