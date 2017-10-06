@@ -121,7 +121,7 @@ timeZoneCode:
 daylightSavingsTimeFlag:
     is_empty: False
     maxlength: 1
-    allowed: [Y, N]
+    allowed: [Y, N, y, n]
 remarks:
     maxlength: 50
 siteWebReadyCode:
