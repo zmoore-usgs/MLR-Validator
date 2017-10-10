@@ -80,8 +80,8 @@ location_model = api.clone('LocationModel', ddot_location_model, {
 })
 
 validate_location_model = api.model('ValidateLocationModel', {
-    'ddot_location' : fields.Nested(ddot_location_model),
-    'existing_location' : fields.Nested(location_model)
+    'ddotLocation' : fields.Nested(ddot_location_model),
+    'existingLocation' : fields.Nested(location_model)
 })
 
 validation_model = api.model('SuccessModel', {'validation_passed_message': fields.String(),
@@ -96,7 +96,7 @@ class AddValidator(Resource):
     @api.expect(validate_location_model)
     def post(self):
         no_errors = True
-        data = request.get_json().get('ddot_location')
+        data = request.get_json().get('ddotLocation')
         no_single_field_errors = sitefile_single_field_validator.validate(data)
         no_reference_errors = sitefile_reference_validator.validate(data)
         no_warnings = sitefile_warning_validator.validate(data)

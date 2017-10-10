@@ -21,30 +21,30 @@ class AddValidateTransactionTestCase(TestCase):
             """
             )
         self.location = {
-            "ddot_location" : {
+            "ddotLocation" : {
                 "agencyCode": "USGS ",
                 "siteNumber": "123456789012345",
                 "stationName": "This station name "
             },
-            "existing_location" : {}
+            "existingLocation" : {}
         }
 
         self.bad_location = {
-            "ddot_location" : {
+            "ddotLocation" : {
                 "agencyCode": "USGS ",
                 "siteNumber": " ",
                 "stationName": "This station name "
             },
-            "existing_location" : {}
+            "existingLocation" : {}
         }
 
         self.warning_location = {
-            "ddot_location": {
+            "ddotLocation": {
                 "agencyCode": "USGS ",
                 "siteNumber": "123456789012345",
                 "stationName": "This station name '"
             },
-            "existing_location" : {}
+            "existingLocation" : {}
         }
 
     def test_valid_single_field_transaction(self):
