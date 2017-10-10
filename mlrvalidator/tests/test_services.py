@@ -1,8 +1,6 @@
 import json
 from unittest import TestCase, mock
 
-import yaml
-
 import app
 
 
