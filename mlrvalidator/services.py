@@ -13,7 +13,7 @@ api = Api(application,
           default_label='Validator',
           doc='/api')
 
-location_model = api.model('LocationModel', {
+ddot_location_model = api.model('DdotLocationModel', {
     "agencyCode": fields.String(),
     "agencyUseCode": fields.String(),
     "altitude": fields.String(),
@@ -34,8 +34,6 @@ location_model = api.model('LocationModel', {
     "dataReliabilityCode": fields.String(),
     "dataTypesCode": fields.String(),
     "daylightSavingsTimeFlag": fields.String(),
-    "decimalLatitude": fields.String(),
-    "decimalLongitude": fields.String(),
     "districtCode": fields.String(),
     "drainageArea": fields.String(),
     "firstConstructionDate": fields.String(),
@@ -63,7 +61,6 @@ location_model = api.model('LocationModel', {
     "siteWebReadyCode": fields.String(),
     "sourceOfDepthCode": fields.String(),
     "stateFipsCode": fields.String(),
-    "stationIx": fields.String(),
     "stationName": fields.String(),
     "tertiaryUseOfSiteCode": fields.String(),
     "tertiaryUseOfWaterCode": fields.String(),
@@ -75,19 +72,31 @@ location_model = api.model('LocationModel', {
     "transactionType": fields.String()
 })
 
+location_model = api.clone('LocationModel', ddot_location_model, {
+    "decimalLatitude" : fields.Integer(),
+    "decimalLongitude" : fields.Integer(),
+    "id": fields.Integer(),
+    "stationIx" : fields.Integer()
+})
+
+validate_location_model = api.model('ValidateLocationModel', {
+    'ddot_location' : fields.Nested(ddot_location_model),
+    'existing_location' : fields.Nested(location_model)
+})
+
 validation_model = api.model('SuccessModel', {'validation_passed_message': fields.String(),
                                               'warning_message': fields.String(),
                                               'fatal_error_message': fields.String()})
 
 
-@api.route('/validators')
-class Validator(Resource):
+@api.route('/validators/add')
+class AddValidator(Resource):
 
     @api.response(200, 'Successfully validated', validation_model)
-    @api.expect(location_model)
+    @api.expect(validate_location_model)
     def post(self):
         no_errors = True
-        data = request.get_json()
+        data = request.get_json().get('ddot_location')
         no_single_field_errors = sitefile_single_field_validator.validate(data)
         no_reference_errors = sitefile_reference_validator.validate(data)
         no_warnings = sitefile_warning_validator.validate(data)
@@ -112,3 +121,12 @@ class Validator(Resource):
         response, status = status_object, 200
 
         return response, status
+
+
+@api.route('/validators/update')
+class UpdateValidator(Resource):
+
+    @api.response(200, 'Successfully validated', validation_model)
+    @api.expect(validate_location_model)
+    def post(self):
+        return 'Not yet implemented'

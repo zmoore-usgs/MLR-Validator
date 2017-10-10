@@ -21,26 +21,35 @@ class AddValidateTransactionTestCase(TestCase):
             """
             )
         self.location = {
-            "agencyCode": "USGS ",
-            "siteNumber": "123456789012345",
-            "stationName": "This station name "
+            "ddot_location" : {
+                "agencyCode": "USGS ",
+                "siteNumber": "123456789012345",
+                "stationName": "This station name "
+            },
+            "existing_location" : {}
         }
 
         self.bad_location = {
-            "agencyCode": "USGS ",
-            "siteNumber": " ",
-            "stationName": "This station name "
+            "ddot_location" : {
+                "agencyCode": "USGS ",
+                "siteNumber": " ",
+                "stationName": "This station name "
+            },
+            "existing_location" : {}
         }
 
         self.warning_location = {
-            "agencyCode": "USGS ",
-            "siteNumber": "123456789012345",
-            "stationName": "This station name '"
+            "ddot_location": {
+                "agencyCode": "USGS ",
+                "siteNumber": "123456789012345",
+                "stationName": "This station name '"
+            },
+            "existing_location" : {}
         }
 
     def test_valid_single_field_transaction(self):
         with mock.patch('mlrvalidator.services.sitefile_single_field_validator.validate', return_value=True):
-            response = self.app_client.post('/validators',
+            response = self.app_client.post('/validators/add',
                                         content_type='application/json',
                                         data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -50,7 +59,7 @@ class AddValidateTransactionTestCase(TestCase):
 
     def test_single_field_error_transaction(self):
         with mock.patch('mlrvalidator.services.sitefile_single_field_validator.validate', return_value=False):
-            response = self.app_client.post('/validators',
+            response = self.app_client.post('/validators/add',
                                         content_type='application/json',
                                         data=json.dumps(self.bad_location))
         self.assertEqual(response.status_code, 200)
@@ -60,7 +69,7 @@ class AddValidateTransactionTestCase(TestCase):
 
     def test_valid_reference_transaction(self):
         with mock.patch('mlrvalidator.services.sitefile_reference_validator.validate', return_value=True):
-            response = self.app_client.post('/validators',
+            response = self.app_client.post('/validators/add',
                                         content_type='application/json',
                                         data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -70,7 +79,7 @@ class AddValidateTransactionTestCase(TestCase):
 
     def test_reference_error_transaction(self):
         with mock.patch('mlrvalidator.services.sitefile_reference_validator.validate', return_value=False):
-            response = self.app_client.post('/validators',
+            response = self.app_client.post('/validators/add',
                                         content_type='application/json',
                                         data=json.dumps(self.bad_location))
         self.assertEqual(response.status_code, 200)
@@ -80,7 +89,7 @@ class AddValidateTransactionTestCase(TestCase):
 
     def test_warning_transaction(self):
         with mock.patch('mlrvalidator.services.sitefile_warning_validator.validate', return_value=False):
-            response = self.app_client.post('/validators',
+            response = self.app_client.post('/validators/add',
                                         content_type='application/json',
                                         data=json.dumps(self.warning_location))
         self.assertEqual(response.status_code, 200)
