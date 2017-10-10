@@ -887,3 +887,5 @@ class ValidateDaylightSavingsTimeFlagCase(TestCase):
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data))
         self.assertFalse(site_validator.validate(self.bad_data2))
+
+
