@@ -10,16 +10,6 @@ class AddValidateTransactionTestCase(TestCase):
     def setUp(self):
         app.application.testing = True
         self.app_client = app.application.test_client()
-        self.schema = yaml.load(
-            """
-                    agencyCode:
-                        is_empty: False
-                        maxlength: 5
-                    siteNumber:
-                        maxlength: 15
-                        is_empty: False
-            """
-            )
         self.location = {
             "ddotLocation" : {
                 "agencyCode": "USGS ",
