@@ -1,5 +1,6 @@
 from cerberus import Validator
 
+
 class CrossFieldValidator(Validator):
 
     def _validate_valid_lat_long(self, valid_lat_long, field, value):
@@ -106,7 +107,6 @@ class CrossFieldValidator(Validator):
             if self.document['altitudeAccuracyValue']:
                 if not self.document['altitude']:
                     return self._error(field, "Altitude accuracy value entered without altitude")
-
 
     def _validate_valid_site_use_cd(self, valid_site_use_cd, field, value):
         # Check that site use codes 1, 2, and 3 have different values if more than one is entered
