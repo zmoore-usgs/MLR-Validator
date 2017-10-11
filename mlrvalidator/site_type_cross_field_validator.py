@@ -23,12 +23,12 @@ class SiteTypeCrossFieldValidator(Validator):
                 nn_attr_field_val = self.document[nn_attr]
                 if len(nn_attr_field_val) == 0:
                     nn_attr_field_problems.append(nn_attr)
-                    self._error(nn_attr, 'Must not be null.'.format(value))
+                    self._error(nn_attr, 'Must not be null due to specified site type.'.format(value))
             for n_attr in nullable_attrs:
                 n_attr_field_val = self.document[n_attr]
                 if len(n_attr_field_val) != 0:
                     n_attr_field_problems.append(n_attr)
-                    self._error(n_attr, 'Must be null.'.format(value))
+                    self._error(n_attr, 'Must be null due to specified site type.'.format(value))
             if len(nn_attr_field_problems) > 0 or len(n_attr_field_problems) > 0:
                 nn_attrs = ', '.join(nn_attr_field_problems)
                 n_attrs = ', '.join(n_attr_field_problems)
