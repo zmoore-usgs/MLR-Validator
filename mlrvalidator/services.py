@@ -95,15 +95,14 @@ class AddValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        no_errors = True
-        data = request.get_json().get('ddotLocation')
-        no_single_field_errors = sitefile_single_field_validator.validate(data)
-        no_reference_errors = sitefile_reference_validator.validate(data)
-        no_warnings = sitefile_warning_validator.validate(data)
-        status_object = {}
+        ddotLocation = request.get_json().get('ddotLocation')
 
+        no_single_field_errors = sitefile_single_field_validator.validate(ddotLocation)
+        no_reference_errors = sitefile_reference_validator.validate(ddotLocation)
+        no_warnings = sitefile_warning_validator.validate(ddotLocation)
+
+        status_object = {}
         if not (no_reference_errors and no_single_field_errors):
-            no_errors = False
             single_field_errors = sitefile_single_field_validator.errors
             reference_errors = sitefile_reference_validator.errors
             all_errors = defaultdict(list)
@@ -115,12 +114,11 @@ class AddValidator(Resource):
         if not no_warnings:
             status_object["warning_message"] = 'Validation Warnings: {0}'.format(
                 sitefile_warning_validator.errors)
-        if no_errors and no_warnings:
+
+        if no_single_field_errors and no_reference_errors and no_warnings:
             status_object["validation_passed_message"] = 'Validations Passed'
 
-        response, status = status_object, 200
-
-        return response, status
+        return status_object, 200
 
 
 @api.route('/validators/update')
@@ -129,4 +127,17 @@ class UpdateValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        return 'Not yet implemented'
+        ddotLocation = request.get_json().get('ddotLocation')
+        existingLocation = request.get_json().get('existingLocation')
+
+        no_single_field_errors = sitefile_single_field_validator.validate(ddotLocation, update=True)
+
+        status_object = {}
+        if not no_single_field_errors:
+            status_object['fatal_error_message'] = 'Fatal Errors: {0}'.format(sitefile_single_field_validator.errors)
+
+        if no_single_field_errors:
+            status_object['validation_passed_message'] = 'Validations Passed'
+
+        return status_object, 200
+

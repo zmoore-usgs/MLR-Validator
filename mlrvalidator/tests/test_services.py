@@ -5,7 +5,7 @@ from cerberus import Validator
 
 import app
 
-@mock.patch('app.sitefile_single_field_validator.validate', )
+@mock.patch('app.sitefile_single_field_validator.validate')
 @mock.patch('app.sitefile_warning_validator.validate')
 @mock.patch('app.sitefile_reference_validator.validate')
 class AddValidateTransactionTestCase(TestCase):
