@@ -1,0 +1,36 @@
+latitude:
+    valid_lat_long: True
+longitude:
+    valid_lat_long: True
+coordinateAccuracyCode:
+    valid_coord_acy_cd: True
+coordinateDatumCode:
+    valid_coord_datum_cd: True
+coordinateMethodCode:
+    valid_coord_meth_cd: True
+altitudeDatumCode:
+    valid_alt_datum_cd: True
+altitudeMethodCode:
+    valid_alt_meth_cd: True
+altitudeAccuracyValue:
+    valid_alt_acy_va: True
+primaryUseOfSite:
+    valid_site_use_cd: True
+secondaryUseOfSite:
+    valid_site_use_cd: True
+tertiaryUseOfSiteCode:
+    valid_site_use_cd: True
+primaryUseOfWaterCode:
+    valid_water_use_cd: True
+secondaryUseOfWaterCode:
+    valid_water_use_cd: True
+tertiaryUseOfWaterCode:
+    valid_water_use_cd: True
+firstConstructionDate:
+    valid_const_inv_dts: True
+siteEstablishmentDate:
+    valid_const_inv_dts: True
+holeDepth:
+    valid_well_hole_depths: True
+wellDepth:
+    valid_well_hole_depths: True
