@@ -32,7 +32,7 @@ class SiteTypeCrossFieldValidator(Validator):
             if len(nn_attr_field_problems) > 0 or len(n_attr_field_problems) > 0:
                 nn_attrs = ', '.join(nn_attr_field_problems)
                 n_attrs = ', '.join(n_attr_field_problems)
-                error_message = 'Field errors for siteType code: {}.'.format(value)
+                error_message = 'Field errors for siteTypeCode: {}.'.format(value)
                 if len(nn_attr_field_problems) > 0:
                     error_message += ' The following fields must not be null: {}.'.format(nn_attrs)
                 if len(n_attr_field_problems) > 0:
