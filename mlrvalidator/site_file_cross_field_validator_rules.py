@@ -122,8 +122,9 @@ class CrossFieldValidator(Validator):
                     return self._error(field,
                                        "Site use codes 1, 2, and 3 must have different values if more than one is entered")
                 if self.document['tertiaryUseOfSiteCode']:
-                    if self.document['primaryUseOfSite'] == self.document['tertiaryUseOfSiteCode'] or self.document[
-                        'secondaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']:
+                    if (self.document['primaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']
+                        or self.document['secondaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']
+                        ):
                         return self._error(field,
                                            "Site use codes 1, 2, and 3 must have different values if more than one is entered")
             if not self.document['primaryUseOfSite']:
@@ -149,8 +150,9 @@ class CrossFieldValidator(Validator):
                     return self._error(field,
                                        "Water use codes 1, 2, and 3 must have different values if more than one is entered")
                 if self.document['tertiaryUseOfWaterCode']:
-                    if self.document['primaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode'] or self.document[
-                        'secondaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']:
+                    if (self.document['primaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']
+                        or self.document['secondaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']
+                        ):
                         return self._error(field,
                                            "Water use codes 1, 2, and 3 must have different values if more than one is entered")
             if not self.document['primaryUseOfWaterCode']:
