@@ -21,3 +21,7 @@ with fd:
 fdw = open(os.path.join(PROJECT_DIR, 'schemas/warning_schema.yml'))
 with fdw:
     warning_schema = yaml.load(fdw.read())
+
+fd = open(os.path.join(PROJECT_DIR, 'schemas/site_type_cross_field_schema.yml'))
+with fd:
+    site_type_cross_field_schema = yaml.load(fd.read())

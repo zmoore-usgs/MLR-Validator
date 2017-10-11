@@ -10,7 +10,7 @@ class SiteTypeCrossFieldValidator(Validator):
         # Check that for a given site type all the not nullable fields are not null
         # and that all nullable fields are null
 
-        The rule's arguments are validated against this schema: {'valid_site_type_cross_field'}
+        The rule's arguments are validated against this schema: {'valid_site_type_cross_field': True}
 
         """
         if valid_site_type_cross_field:

@@ -4,7 +4,8 @@ from flask_restplus import Api, Resource, fields
 from itertools import chain
 from collections import defaultdict
 
-from app import application, sitefile_single_field_validator, sitefile_warning_validator, sitefile_reference_validator
+from app import (application, sitefile_single_field_validator, sitefile_warning_validator, sitefile_reference_validator,
+                 site_type_cross_field_validator)
 
 api = Api(application,
           title='MLR Validator',
