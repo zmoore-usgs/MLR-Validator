@@ -15,7 +15,7 @@ class SiteTypeCrossFieldValidator(Validator):
         """
         if valid_site_type_cross_field:
             site_type_ref = site_type_cross_field_reference.get_site_type_field_dependencies(value)
-            not_nullable_attrs = site_type_ref['notNullableAttrs']
+            not_nullable_attrs = site_type_ref['notNullAttrs']
             nullable_attrs = site_type_ref['nullAttrs']
             nn_attr_field_problems = []
             n_attr_field_problems = []

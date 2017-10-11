@@ -283,11 +283,11 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
 
     def test_real_site_type_code(self):
         result = self.site_type_cf.get_site_type_field_dependencies('SB-CV')
-        expected = {'notNullableAttrs': ['longitude',
-                                         'latitude',
-                                         'primaryUseOfSite',
-                                         'dataReliabilityCode'
-                                         ],
+        expected = {'notNullAttrs': ['longitude',
+                                     'latitude',
+                                     'primaryUseOfSite',
+                                     'dataReliabilityCode'
+                                     ],
                     'nullAttrs': ['aquiferTypeCode',
                                   'aquiferCode',
                                   'contributingDrainageArea',
