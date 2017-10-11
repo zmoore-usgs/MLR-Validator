@@ -6,6 +6,13 @@ from . import site_type_cross_field_reference
 class SiteTypeCrossFieldValidator(Validator):
 
     def _validate_valid_site_type_cross_field(self, valid_site_type_cross_field, field, value):
+        """
+        # Check that for a given site type all the not nullable fields are not null
+        # and that all nullable fields are null
+
+        The rule's arguments are validated against this schema: {'valid_site_type_cross_field'}
+
+        """
         if valid_site_type_cross_field:
             site_type_ref = site_type_cross_field_reference.get_site_type_field_dependencies(value)
             not_nullable_attrs = site_type_ref['notNullableAttrs']
