@@ -1,7 +1,6 @@
 import json
 from unittest import TestCase, mock
 
-
 import app
 @mock.patch('mlrvalidator.services.sitefile_crossfield_error_validator.validate')
 @mock.patch('mlrvalidator.services.site_type_cross_field_validator.validate')
@@ -9,14 +8,16 @@ import app
 @mock.patch('mlrvalidator.services.sitefile_warning_validator.validate')
 @mock.patch('mlrvalidator.services.sitefile_single_field_validator.validate')
 class AddValidateTransactionTestCase(TestCase):
-
     def setUp(self):
         app.application.testing = True
         self.app_client = app.application.test_client()
         self.location = {
+            "ddotLocation" : {
                 "agencyCode": "USGS ",
                 "siteNumber": "123456789012345",
                 "stationName": "This station name "
+            },
+            "existingLocation" : {}
         }
 
 
@@ -28,7 +29,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -44,7 +45,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -61,7 +62,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -78,7 +79,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
