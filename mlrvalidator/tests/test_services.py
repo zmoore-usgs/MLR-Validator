@@ -29,7 +29,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -45,7 +45,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -62,7 +62,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
@@ -79,7 +79,7 @@ class AddValidateTransactionTestCase(TestCase):
         msitetype_validate.return_value = True
         mcrossfield_validate.return_value = True
 
-        response = self.app_client.post('/validators',
+        response = self.app_client.post('/validators/add',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
