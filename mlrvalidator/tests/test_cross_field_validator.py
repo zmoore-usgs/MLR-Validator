@@ -5,6 +5,7 @@ from mlrvalidator.schema import cross_field_schema
 cross_field_validator = CrossFieldValidator(cross_field_schema)
 cross_field_validator.allow_unknown = True
 
+
 class ValidateCrossFields(TestCase):
 
     def setUp(self):
