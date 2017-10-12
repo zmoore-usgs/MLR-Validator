@@ -29,7 +29,7 @@ def read(filepath):
 requirements = read_requirements('requirements.txt')
 
 setup(name='usgs_wma_mlr_validator',
-      version='0.3.0dev',
+      version='0.3.0',
       description='MLR Validator Microservice',
       author='Mary Bucknell, Andrew Yan, Dave Steinich, Zack Moore, Kathy Schoephoester',
       author_email='mlr-devs@usgs.gov',
