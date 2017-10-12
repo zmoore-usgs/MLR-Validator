@@ -6,7 +6,9 @@ from mlrvalidator.site_file_validator_rules import SitefileValidator
 from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
 from mlrvalidator.site_file_reference_validator import SitefileReferenceValidator
 from mlrvalidator.site_file_cross_field_validator_rules import CrossFieldValidator
-from mlrvalidator.schema import single_field_schema, warning_schema, cross_field_schema, reference_schema
+from mlrvalidator.site_type_cross_field_validator import SiteTypeCrossFieldValidator
+from mlrvalidator.schema import (single_field_schema, warning_schema, cross_field_schema, reference_schema,
+                                 site_type_cross_field_schema)
 
 application = Flask(__name__)
 
@@ -27,6 +29,9 @@ sitefile_warning_validator.allow_unknown = True
 
 sitefile_crossfield_error_validator = CrossFieldValidator(cross_field_schema)
 sitefile_crossfield_error_validator.allow_unknown = True
+
+site_type_cross_field_validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema)
+site_type_cross_field_validator.allow_unknown = True
 
 from mlrvalidator.services import *
 
