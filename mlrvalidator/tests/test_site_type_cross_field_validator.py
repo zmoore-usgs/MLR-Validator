@@ -38,6 +38,15 @@ class TestValidateSiteTypeCrossFields(TestCase):
                             'secondaryUseOfSite': '',
                             'tertiaryUseOfSiteCode': ''
                             }
+        self.good_data_4 = {'siteTypeCode': ' ',
+                            'dataReliabilityCode': 'x',
+                            'aquiferTypeCode': '',
+                            'aquiferCode': '',
+                            'contributingDrainageArea': '',
+                            'nationalWaterUseCode': '',
+                            'drainageArea': '',
+                            'nationalAquiferCode': ''
+                            }
         self.bad_data_1 = {'siteTypeCode': 'FA-CI',
                            'longitude': 'F',
                            'latitude': '',
@@ -83,9 +92,11 @@ class TestValidateSiteTypeCrossFields(TestCase):
         validation_result_1 = self.validator.validate(self.good_data_1)
         validation_result_2 = self.validator.validate(self.good_data_2)
         validation_result_3 = self.validator.validate(self.good_data_3)
+        validation_result_4 = self.validator.validate(self.good_data_4)
         self.assertTrue(validation_result_1)
         self.assertTrue(validation_result_2)
         self.assertTrue(validation_result_3)
+        self.assertTrue(validation_result_4)
 
     def test_bad_data(self):
         validation_result_1 = self.validator.validate(self.bad_data_1)

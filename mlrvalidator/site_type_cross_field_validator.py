@@ -13,7 +13,8 @@ class SiteTypeCrossFieldValidator(Validator):
         The rule's arguments are validated against this schema: {'valid_site_type_cross_field': True}
 
         """
-        if valid_site_type_cross_field:
+        stripped_value = value.strip()
+        if valid_site_type_cross_field and stripped_value:
             site_type_ref = site_type_cross_field_reference.get_site_type_field_dependencies(value)
             not_nullable_attrs = site_type_ref['notNullAttrs']
             nullable_attrs = site_type_ref['nullAttrs']
