@@ -1,5 +1,6 @@
 from cerberus import Validator
 
+
 class CrossFieldValidator(Validator):
 
     def _validate_valid_lat_long(self, valid_lat_long, field, value):
@@ -107,7 +108,6 @@ class CrossFieldValidator(Validator):
                 if not self.document['altitude']:
                     return self._error(field, "Altitude accuracy value entered without altitude")
 
-
     def _validate_valid_site_use_cd(self, valid_site_use_cd, field, value):
         # Check that site use codes 1, 2, and 3 have different values if more than one is entered
         # Check that site use code 2 is null if code 1 is null
@@ -122,8 +122,9 @@ class CrossFieldValidator(Validator):
                     return self._error(field,
                                        "Site use codes 1, 2, and 3 must have different values if more than one is entered")
                 if self.document['tertiaryUseOfSiteCode']:
-                    if self.document['primaryUseOfSite'] == self.document['tertiaryUseOfSiteCode'] or self.document[
-                        'secondaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']:
+                    if (self.document['primaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']
+                        or self.document['secondaryUseOfSite'] == self.document['tertiaryUseOfSiteCode']
+                        ):
                         return self._error(field,
                                            "Site use codes 1, 2, and 3 must have different values if more than one is entered")
             if not self.document['primaryUseOfSite']:
@@ -149,8 +150,9 @@ class CrossFieldValidator(Validator):
                     return self._error(field,
                                        "Water use codes 1, 2, and 3 must have different values if more than one is entered")
                 if self.document['tertiaryUseOfWaterCode']:
-                    if self.document['primaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode'] or self.document[
-                        'secondaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']:
+                    if (self.document['primaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']
+                        or self.document['secondaryUseOfWaterCode'] == self.document['tertiaryUseOfWaterCode']
+                        ):
                         return self._error(field,
                                            "Water use codes 1, 2, and 3 must have different values if more than one is entered")
             if not self.document['primaryUseOfWaterCode']:

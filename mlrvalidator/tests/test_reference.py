@@ -1,7 +1,7 @@
 
 from unittest import TestCase
 from mlrvalidator.reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States, SiteTypes
+    States, SiteTypes, SiteTypesCrossField
 
 
 class ValidateGetAquifersCase(TestCase):
@@ -274,3 +274,33 @@ class ValidateGetSiteTypesCase(TestCase):
         test_new_site_type = self.site_type.get_site_types('XY')
 
         self.assertEqual(test_new_site_type, bad_new_site_type)
+
+
+class ValidateGetSiteTypesCrossFieldCase(TestCase):
+
+    def setUp(self):
+        self.site_type_cf = SiteTypesCrossField('references/site_type_cross_field.json')
+
+    def test_real_site_type_code(self):
+        result = self.site_type_cf.get_site_type_field_dependencies('SB-CV')
+        expected = {'notNullAttrs': ['longitude',
+                                     'latitude',
+                                     'primaryUseOfSite',
+                                     'dataReliabilityCode'
+                                     ],
+                    'nullAttrs': ['aquiferTypeCode',
+                                  'aquiferCode',
+                                  'contributingDrainageArea',
+                                  'wellDepth',
+                                  'sourceOfDepthCode',
+                                  'drainageArea',
+                                  'nationalAquiferCode',
+                                  'holeDepth'
+                                  ],
+                    'siteTypeCode': 'SB-CV'
+                    }
+        self.assertEqual(result, expected)
+
+    def test_non_existent_site_type_code(self):
+        with self.assertRaises(StopIteration):
+            self.site_type_cf.get_site_type_field_dependencies('Obi-Wan Kenobi')

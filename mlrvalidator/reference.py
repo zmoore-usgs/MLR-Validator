@@ -109,4 +109,9 @@ class SiteTypes(ReferenceInfo):
         return new_site_type_list
 
 
+class SiteTypesCrossField(ReferenceInfo):
 
+    def get_site_type_field_dependencies(self, site_type_code):
+        site_type_cross_field_refs = self.reference_info['siteTypeCodes']
+        site_type_field_ref = next((site_type_d for site_type_d in site_type_cross_field_refs if site_type_d['siteTypeCode'] == site_type_code))
+        return site_type_field_ref
