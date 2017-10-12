@@ -1,12 +1,13 @@
 
 from unittest import TestCase
-from mlrvalidator.site_file_validator_rules import SitefileValidator
+
+from ..single_field_validator import SingleFieldValidator
 
 
 class ValidateIsEmptyTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'agencyCode': {'is_empty' : False}})
+        self.validator = SingleFieldValidator(schema={'agencyCode': {'is_empty' : False}})
         self.good_data = {
             'agencyCode': 'USGS'
         }
@@ -28,7 +29,7 @@ class ValidateIsEmptyTestCase(TestCase):
 class ValidateTypeNumericCheckTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'altitude': {'type': 'numeric'}})
+        self.validator = SingleFieldValidator(schema={'altitude': {'type': 'numeric'}})
         self.good_data = {
             'altitude': '1234'
             }
@@ -94,7 +95,7 @@ class ValidateTypeNumericCheckTestCase(TestCase):
 class ValidateValidPrecisionTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'altitude': {'valid_precision' : True}})
+        self.validator = SingleFieldValidator(schema={'altitude': {'valid_precision' : True}})
         self.good_data = {
             'altitude': '1234'
             }
@@ -159,7 +160,7 @@ class ValidateValidPrecisionTestCase(TestCase):
 
 class ValidateTypePositiveNumericTestCase(TestCase):
     def setUp(self):
-        self.validator = SitefileValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}})
+        self.validator = SingleFieldValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}})
         self.good_data = {
             'contributingDrainageArea': '1234',
         }
@@ -237,7 +238,7 @@ class ValidateTypePositiveNumericTestCase(TestCase):
 class ValidateValidMapScaleCharsTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'mapScale': {'valid_map_scale_chars' : True}})
+        self.validator = SingleFieldValidator(schema={'mapScale': {'valid_map_scale_chars' : True}})
         self.good_data = {
             'mapScale': '24000'
         }
@@ -275,7 +276,7 @@ class ValidateValidMapScaleCharsTestCase(TestCase):
 class ValidateValidSpecialCharsTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'stationName': {'valid_special_chars' : True}})
+        self.validator = SingleFieldValidator(schema={'stationName': {'valid_special_chars' : True}})
         self.good_data = {
             'stationName': 'br549'
             }
@@ -344,7 +345,7 @@ class ValidateValidSpecialCharsTestCase(TestCase):
 class ValidateValidLatitutdeDMS(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'latitude': {'valid_latitude_dms': True}})
+        self.validator = SingleFieldValidator(schema={'latitude': {'valid_latitude_dms': True}})
         self.good_data = {
             'latitude': ' 123456'
         }
@@ -503,7 +504,7 @@ class ValidateValidLatitutdeDMS(TestCase):
 class ValidateValidLongitudeDMSTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'longitude': {'valid_longitude_dms': True}})
+        self.validator = SingleFieldValidator(schema={'longitude': {'valid_longitude_dms': True}})
         self.good_data = {
             'longitude': ' 1234556'
         }
@@ -654,7 +655,7 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
 class ValidateValidDateTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'firstConstructionDate' : {'valid_date': True}})
+        self.validator = SingleFieldValidator(schema={'firstConstructionDate' : {'valid_date': True}})
         self.good_data = {
             'firstConstructionDate': '20140912'
         }
@@ -760,7 +761,7 @@ class ValidateValidDateTestCase(TestCase):
 class ValidateValidLandNetTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SitefileValidator(schema={'landNet': {'valid_land_net': True}})
+        self.validator = SingleFieldValidator(schema={'landNet': {'valid_land_net': True}})
         self.good_data = {
             'landNet': 'SWSWSWS010T09832R093425'
         }

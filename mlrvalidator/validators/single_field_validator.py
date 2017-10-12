@@ -7,7 +7,7 @@ from cerberus import Validator
 from .land_net_templates import land_net_ref
 
 
-class SitefileValidator(Validator):
+class SingleFieldValidator(Validator):
     def _validate_type_numeric(self, value):
         # check for numeric value
         try:
