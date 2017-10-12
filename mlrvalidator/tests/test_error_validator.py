@@ -439,6 +439,9 @@ class ValidateValidLatDMS(TestCase):
         self.good_data19 = {
             'latitude': ' 454856.27 '
         }
+        self.good_data20 = {
+            'latitude': ' '
+        }
         self.bad_data = {
             'latitude': 'k'
         }
@@ -517,6 +520,7 @@ class ValidateValidLatDMS(TestCase):
         self.assertTrue(site_validator.validate(self.good_data17))
         self.assertTrue(site_validator.validate(self.good_data18))
         self.assertTrue(site_validator.validate(self.good_data19))
+        self.assertTrue(site_validator.validate(self.good_data20))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data))
@@ -597,6 +601,9 @@ class ValidateValidLongDMS(TestCase):
         self.good_data18 = {
             'longitude': ' 0880452.1  '
         }
+        self.good_data19 = {
+            'longitude': ' '
+        }
         self.bad_data = {
             'longitude': 'k'
         }
@@ -672,6 +679,7 @@ class ValidateValidLongDMS(TestCase):
         self.assertTrue(site_validator.validate(self.good_data16))
         self.assertTrue(site_validator.validate(self.good_data17))
         self.assertTrue(site_validator.validate(self.good_data18))
+        self.assertTrue(site_validator.validate(self.good_data19))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data))
