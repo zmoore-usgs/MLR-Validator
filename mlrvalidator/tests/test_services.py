@@ -3,10 +3,11 @@ from unittest import TestCase, mock
 
 
 import app
-
-@mock.patch('app.sitefile_single_field_validator.validate')
-@mock.patch('app.sitefile_warning_validator.validate')
-@mock.patch('app.sitefile_reference_validator.validate')
+@mock.patch('mlrvalidator.services.sitefile_crossfield_error_validator.validate')
+@mock.patch('mlrvalidator.services.site_type_cross_field_validator.validate')
+@mock.patch('mlrvalidator.services.sitefile_reference_validator.validate')
+@mock.patch('mlrvalidator.services.sitefile_warning_validator.validate')
+@mock.patch('mlrvalidator.services.sitefile_single_field_validator.validate')
 class AddValidateTransactionTestCase(TestCase):
 
     def setUp(self):
@@ -19,10 +20,13 @@ class AddValidateTransactionTestCase(TestCase):
         }
 
 
-    def test_valid_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate):
+    def test_valid_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate,
+                               msitetype_validate, mcrossfield_validate):
         msingle_field_validate.return_value = True
         mwarning_validate.return_value = True
         mreference_validate.return_value = True
+        msitetype_validate.return_value = True
+        mcrossfield_validate.return_value = True
 
         response = self.app_client.post('/validators',
                                     content_type='application/json',
@@ -32,10 +36,13 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertEqual(len(resp_data), 1)
         self.assertEqual({'validation_passed_message': 'Validations Passed'}, resp_data)
 
-    def test_single_field_error_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate):
+    def test_single_field_error_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate,
+                               msitetype_validate, mcrossfield_validate):
         msingle_field_validate.return_value = False
         mwarning_validate.return_value = True
         mreference_validate.return_value = True
+        msitetype_validate.return_value = True
+        mcrossfield_validate.return_value = True
 
         response = self.app_client.post('/validators',
                                     content_type='application/json',
@@ -46,10 +53,14 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertIn('fatal_error_message', resp_data)
 
 
-    def test_reference_error_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate):
+    def test_reference_error_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate,
+                               msitetype_validate, mcrossfield_validate):
         msingle_field_validate.return_value = True
         mwarning_validate.return_value = True
         mreference_validate.return_value = False
+        msitetype_validate.return_value = True
+        mcrossfield_validate.return_value = True
+
         response = self.app_client.post('/validators',
                                     content_type='application/json',
                                     data=json.dumps(self.location))
@@ -59,10 +70,14 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertIn('fatal_error_message', resp_data)
 
 
-    def test_warning_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate):
+    def test_warning_transaction(self, msingle_field_validate, mwarning_validate, mreference_validate,
+                               msitetype_validate, mcrossfield_validate):
         msingle_field_validate.return_value = True
         mwarning_validate.return_value = False
         mreference_validate.return_value = True
+        msitetype_validate.return_value = True
+        mcrossfield_validate.return_value = True
+
         response = self.app_client.post('/validators',
                                     content_type='application/json',
                                     data=json.dumps(self.location))

@@ -5,7 +5,7 @@ from itertools import chain
 from collections import defaultdict
 
 from app import (application, sitefile_single_field_validator, sitefile_warning_validator, sitefile_reference_validator,
-                 site_type_cross_field_validator)
+                 site_type_cross_field_validator, sitefile_crossfield_error_validator)
 
 api = Api(application,
           title='MLR Validator',
@@ -93,18 +93,21 @@ class Validator(Resource):
         no_reference_errors = sitefile_reference_validator.validate(data)
         no_warnings = sitefile_warning_validator.validate(data)
         no_site_type_cross_field_errors = site_type_cross_field_validator.validate(data)
+        no_crossfield_errors = sitefile_crossfield_error_validator.validate(data)
         status_object = {}
 
-        if not (no_reference_errors and no_single_field_errors and no_site_type_cross_field_errors):
+        if not (no_reference_errors and no_single_field_errors and no_site_type_cross_field_errors and no_crossfield_errors):
             no_errors = False
             single_field_errors = sitefile_single_field_validator.errors
             reference_errors = sitefile_reference_validator.errors
             site_type_cross_field_errors = site_type_cross_field_validator.errors
+            cross_field_errors = sitefile_crossfield_error_validator.errors
             all_errors = defaultdict(list)
             # This part combines all types errors for each field
             for k, v in chain(single_field_errors.items(),
                               reference_errors.items(),
-                              site_type_cross_field_errors.items()
+                              site_type_cross_field_errors.items(),
+                              cross_field_errors.items()
                               ):
                 all_errors[k].extend(v)
             status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(all_errors))
