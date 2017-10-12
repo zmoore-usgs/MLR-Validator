@@ -141,7 +141,7 @@ class SitefileValidator(Validator):
             except IndexError:
                 return True
 
-        if valid_latitude_dms:
+        if valid_latitude_dms and rstripped_value:
             first_val = rstripped_value[0]
             check_degrees = rstripped_value[1:3]
             check_minutes = rstripped_value[3:5]
@@ -184,7 +184,7 @@ class SitefileValidator(Validator):
             except IndexError:
                 return True
 
-        if valid_longitude_dms:
+        if valid_longitude_dms and rstripped_value:
             first_val = rstripped_value[0]
             check_degrees = rstripped_value[1:4]
             check_minutes = rstripped_value[4:6]
