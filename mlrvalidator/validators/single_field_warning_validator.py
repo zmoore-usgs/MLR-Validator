@@ -1,10 +1,13 @@
 
 import re
+
 from cerberus import Validator
+
 from . import county_reference, state_reference
 
 
-class SitefileWarningValidator(Validator):
+class SingleFieldWarningValidator(Validator):
+
     def _validate_valid_quotes(self, valid_quotes, field, value):
         """
         # Check for a single quote at the beginning at end of the incoming string

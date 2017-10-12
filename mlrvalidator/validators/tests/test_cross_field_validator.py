@@ -1,12 +1,12 @@
 from unittest import TestCase
-from mlrvalidator.site_file_cross_field_validator_rules import CrossFieldValidator
+from ..cross_field_validator import CrossFieldValidator
 from mlrvalidator.schema import cross_field_schema
 
 cross_field_validator = CrossFieldValidator(cross_field_schema)
 cross_field_validator.allow_unknown = True
 
 
-class ValidateCrossFields(TestCase):
+class ValidateCrossFieldsTestCase(TestCase):
 
     def setUp(self):
         self.good_data = {

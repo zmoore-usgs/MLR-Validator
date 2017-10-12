@@ -1,6 +1,6 @@
-
 from unittest import TestCase
-from mlrvalidator.reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
+
+from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
     States, SiteTypes, SiteTypesCrossField
 
 

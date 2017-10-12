@@ -403,6 +403,9 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.good_data19 = {
             'latitude': ' 454856.27 '
         }
+        self.good_data20 = {
+            'latitude': ' '
+        }
         self.bad_data = {
             'latitude': 'k'
         }
@@ -459,6 +462,7 @@ class ValidateValidLatitutdeDMS(TestCase):
         }
 
 
+
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.good_data))
         self.assertTrue(self.validator.validate(self.good_data2))
@@ -479,6 +483,8 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.assertTrue(self.validator.validate(self.good_data17))
         self.assertTrue(self.validator.validate(self.good_data18))
         self.assertTrue(self.validator.validate(self.good_data19))
+        self.assertTrue(self.validator.validate(self.good_data20))
+
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
@@ -499,6 +505,7 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data16))
         self.assertFalse(self.validator.validate(self.bad_data17))
         self.assertFalse(self.validator.validate(self.bad_data18))
+
 
 
 class ValidateValidLongitudeDMSTestCase(TestCase):
@@ -559,6 +566,9 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.good_data18 = {
             'longitude': ' 0880452.1  '
         }
+        self.good_data19 = {
+            'longitude': ' '
+        }
         self.bad_data = {
             'longitude': 'k'
         }
@@ -610,6 +620,9 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.bad_data17 = {
             'longitude': '-1800000.-02'
         }
+        self.bad_data18 = {
+            'longitude': '-1800000.-02'
+        }
 
 
     def test_validate_ok(self):
@@ -631,6 +644,8 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data16))
         self.assertTrue(self.validator.validate(self.good_data17))
         self.assertTrue(self.validator.validate(self.good_data18))
+        self.assertTrue(self.validator.validate(self.good_data19))
+
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
@@ -650,6 +665,8 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data15))
         self.assertFalse(self.validator.validate(self.bad_data16))
         self.assertFalse(self.validator.validate(self.bad_data17))
+        self.assertFalse(self.validator.validate(self.bad_data18))
+
 
 
 class ValidateValidDateTestCase(TestCase):
