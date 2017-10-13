@@ -87,6 +87,23 @@ validation_model = api.model('SuccessModel', {'validation_passed_message': field
                                               'warning_message': fields.String(),
                                               'fatal_error_message': fields.String()})
 
+def _validate_response(req_json, update=False):
+    if 'ddotLocation' not in req_json or 'existingLocation' not in req_json:
+        raise BadRequest
+    ddot_location = req_json.get('ddotLocation')
+    existing_location = req_json.get('existingLocation')
+    no_errors = error_validator.validate(ddot_location, existing_location, update=update)
+    no_warnings = warning_validator.validate(ddot_location, update=update)
+
+    response = {}
+    if not no_errors:
+        response["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(error_validator.errors))
+    if not no_warnings:
+        response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.errors))
+    if no_errors and no_warnings:
+        response["validation_passed_message"] = 'Validations Passed'
+
+    return response, 200
 
 @api.route('/validators/add')
 class AddValidator(Resource):
@@ -94,22 +111,7 @@ class AddValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        req = request.get_json()
-        if 'ddotLocation' not in req or 'existingLocation' not in req:
-            raise BadRequest
-        ddot_location = request.get_json().get('ddotLocation')
-        no_errors = error_validator.validate(ddot_location)
-        no_warnings = warning_validator.validate(ddot_location)
-
-        response = {}
-        if not no_errors:
-            response["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(error_validator.errors))
-        if not no_warnings:
-            response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.errors))
-        if no_errors and no_warnings:
-            response["validation_passed_message"] = 'Validations Passed'
-
-        return response, 200
+        return _validate_response(request.get_json())
 
 
 @api.route('/validators/update')
