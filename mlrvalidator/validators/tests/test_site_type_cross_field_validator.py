@@ -1,13 +1,13 @@
 from unittest import TestCase
 
 from ..site_type_cross_field_validator import SiteTypeCrossFieldValidator
-from mlrvalidator.schema import site_type_cross_field_schema
 
 
 class ValidateSiteTypeCrossFieldsTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema)
+        self.schema = {'siteTypeCode': {'valid_site_type_cross_field': True}}
+        self.validator = SiteTypeCrossFieldValidator(self.schema)
         self.validator.allow_unknown = True
         self.good_data_1 = {'siteTypeCode': 'FA-CS',
                             'dataReliabilityCode': 'x',
