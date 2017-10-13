@@ -48,6 +48,7 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
                             'nationalAquiferCode': ' '
                             }
         # tests that this is still good data if a required null field is absent
+        # absent fields are commented out
         self.good_data_5 = {'siteTypeCode': 'FA-DV',
                             'longitude': 'p',
                             'latitude': 'B',
@@ -100,6 +101,7 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
                            'holeDepth': ''
                            }
         # test that this is bad data if a required field is absent
+        # absent fields are commented out
         self.bad_data_4 = {'siteTypeCode': 'SB-GWD',
                            'longitude': 'Z',
                            'latitude': 'F',
