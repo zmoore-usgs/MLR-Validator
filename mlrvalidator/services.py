@@ -29,8 +29,6 @@ ddot_location_model = api.model('DdotLocationModel', {
     "coordinateMethodCode": fields.String(),
     "countryCode": fields.String(),
     "countyCode": fields.String(),
-    "created": fields.String(),
-    "createdBy": fields.String(),
     "dataReliabilityCode": fields.String(),
     "dataTypesCode": fields.String(),
     "daylightSavingsTimeFlag": fields.String(),
@@ -66,17 +64,19 @@ ddot_location_model = api.model('DdotLocationModel', {
     "tertiaryUseOfWaterCode": fields.String(),
     "timeZoneCode": fields.String(),
     "topographicCode": fields.String(),
-    "updated": fields.String(),
-    "updatedBy": fields.String(),
     "wellDepth": fields.String(),
     "transactionType": fields.String()
 })
 
 location_model = api.clone('LocationModel', ddot_location_model, {
+    "created": fields.String(),
+    "createdBy": fields.String(),
     "decimalLatitude" : fields.Integer(),
     "decimalLongitude" : fields.Integer(),
     "id": fields.Integer(),
-    "stationIx" : fields.Integer()
+    "stationIx" : fields.Integer(),
+    "updated": fields.String(),
+    "updatedBy": fields.String(),
 })
 
 validate_location_model = api.model('ValidateLocationModel', {
