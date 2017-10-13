@@ -30,6 +30,8 @@ class AddValidateTransactionTestCase(TestCase):
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
+        merror_validator.validate.assert_called_with(self.location.get('ddotLocation'))
+        mwarning_validator.validate.assert_called_with(self.location.get('ddotLocation'))
         resp_data = json.loads(response.data)
         self.assertEqual(len(resp_data), 1)
         self.assertEqual({'validation_passed_message': 'Validations Passed'}, resp_data)

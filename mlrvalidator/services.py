@@ -95,7 +95,7 @@ class AddValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        ddot_location = request.get_json().get('ddot_location')
+        ddot_location = request.get_json().get('ddotLocation')
         no_errors = error_validator.validate(ddot_location)
         no_warnings = warning_validator.validate(ddot_location)
 
