@@ -24,7 +24,8 @@ class SiteTypeCrossFieldValidator(Validator):
                 try:
                     nn_attr_field_val = self.document[nn_attr].strip()
                 except KeyError:
-                    self._errors(field, 'Specified site type requires the {} field.'.format(nn_attr))
+                    self._error(field, 'Specified site type requires the {} field be present.'.format(nn_attr))
+                    nn_attr_field_problems.append(nn_attr)
                 else:
                     if len(nn_attr_field_val) == 0:
                         nn_attr_field_problems.append(nn_attr)
