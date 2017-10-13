@@ -45,7 +45,7 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
                             'contributingDrainageArea': '',
                             'nationalWaterUseCode': '',
                             'drainageArea': '',
-                            'nationalAquiferCode': ' '
+                            'nationalAquiferCode': '    '
                             }
         # tests that this is still good data if a required null field is absent
         # absent fields are commented out
