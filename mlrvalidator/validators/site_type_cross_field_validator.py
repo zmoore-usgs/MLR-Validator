@@ -16,17 +16,17 @@ class SiteTypeCrossFieldValidator(Validator):
         stripped_value = value.strip()
         if valid_site_type_cross_field and stripped_value:
             site_type_ref = site_type_cross_field_reference.get_site_type_field_dependencies(value)
-            not_nullable_attrs = site_type_ref['notNullAttrs']
-            nullable_attrs = site_type_ref['nullAttrs']
+            not_null_attrs = site_type_ref['notNullAttrs']
+            null_attrs = site_type_ref['nullAttrs']
             nn_attr_field_problems = []
             n_attr_field_problems = []
-            for nn_attr in not_nullable_attrs:
-                nn_attr_field_val = self.document[nn_attr]
+            for nn_attr in not_null_attrs:
+                nn_attr_field_val = self.document[nn_attr].strip()
                 if len(nn_attr_field_val) == 0:
                     nn_attr_field_problems.append(nn_attr)
                     self._error(nn_attr, 'Must not be null due to specified site type.'.format(value))
-            for n_attr in nullable_attrs:
-                n_attr_field_val = self.document[n_attr]
+            for n_attr in null_attrs:
+                n_attr_field_val = self.document[n_attr].strip()
                 if len(n_attr_field_val) != 0:
                     n_attr_field_problems.append(n_attr)
                     self._error(n_attr, 'Must be null due to specified site type.'.format(value))

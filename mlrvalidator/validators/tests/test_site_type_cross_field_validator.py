@@ -45,7 +45,7 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
                             'contributingDrainageArea': '',
                             'nationalWaterUseCode': '',
                             'drainageArea': '',
-                            'nationalAquiferCode': ''
+                            'nationalAquiferCode': ' '
                             }
         self.bad_data_1 = {'siteTypeCode': 'FA-CI',
                            'longitude': 'F',
