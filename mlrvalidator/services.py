@@ -1,8 +1,7 @@
 
 from flask import request
 from flask_restplus import Api, Resource, fields
-from itertools import chain
-from collections import defaultdict
+from werkzeug.exceptions import BadRequest
 
 from app import application, error_validator, warning_validator
 
@@ -95,6 +94,9 @@ class AddValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
+        req = request.get_json()
+        if 'ddotLocation' not in req or 'existingLocation' not in req:
+            raise BadRequest
         ddot_location = request.get_json().get('ddotLocation')
         no_errors = error_validator.validate(ddot_location)
         no_warnings = warning_validator.validate(ddot_location)
