@@ -7,7 +7,7 @@ from cerberus import Validator
 from .land_net_templates import land_net_ref
 
 
-class SitefileValidator(Validator):
+class SingleFieldValidator(Validator):
     def _validate_type_numeric(self, value):
         # check for numeric value
         try:
@@ -39,7 +39,7 @@ class SitefileValidator(Validator):
         error_message = "Invalid Value, decimal precision error"
 
         stripped_value = value.strip()
-        test_split = stripped_value.split(".")
+        test_split = stripped_value.split(".", 1)
         # there is a decimal, so need to check what's after it
         if len(test_split) > 1:
             if test_split[1] == "":
@@ -63,7 +63,7 @@ class SitefileValidator(Validator):
         stripped_value = value.strip()
         if not is_empty:
             if not stripped_value:
-                self._error(field, "Mandatory Field Missing")
+                self._error(field, "Field must contain non whitespace characters")
 
     def _validate_valid_special_chars(self, valid_special_chars, field, value):
         """

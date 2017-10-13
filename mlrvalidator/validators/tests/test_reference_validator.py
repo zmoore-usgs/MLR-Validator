@@ -1,9 +1,9 @@
 
 from unittest import TestCase
-from mlrvalidator.site_file_reference_validator import SitefileReferenceValidator
+from ..reference_validator import ReferenceValidator
 from mlrvalidator.schema import reference_schema
 
-site_validator = SitefileReferenceValidator(reference_schema)
+site_validator = ReferenceValidator(reference_schema)
 site_validator.allow_unknown = True
 
 

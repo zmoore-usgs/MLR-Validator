@@ -1,13 +1,14 @@
 
 from unittest import TestCase
-from mlrvalidator.site_file_validator_warnings import SitefileWarningValidator
+
+from ..single_field_warning_validator import SingleFieldWarningValidator
 from mlrvalidator.schema import warning_schema
 
-site_validator = SitefileWarningValidator(warning_schema)
+site_validator = SingleFieldWarningValidator(warning_schema)
 site_validator.allow_unknown = True
 
 
-class ValidateWarningsCase(TestCase):
+class ValidateWarningsCaseTestCase(TestCase):
     def setUp(self):
         self.good_data = {
             'stationName': '12345'
@@ -23,7 +24,7 @@ class ValidateWarningsCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data))
 
 
-class ValidateValidCountyRange(TestCase):
+class ValidateValidCountyRangeTestCase(TestCase):
 
     def setUp(self):
         self.good_not_us_country = {
@@ -152,7 +153,7 @@ class ValidateValidCountyRange(TestCase):
         self.assertFalse(site_validator.validate(self.good_max_lat_bad_max_long))
 
 
-class ValidateValidStateRange(TestCase):
+class ValidateValidStateRangeTestCase(TestCase):
 
     def setUp(self):
         self.good_not_us_country = {
@@ -301,7 +302,7 @@ class ValidateValidStateRange(TestCase):
         self.assertFalse(site_validator.validate(self.bad_max_lat_max_long_edges))
 
 
-class ValidateValidAltitudeRange(TestCase):
+class ValidateValidAltitudeRangeTestCase(TestCase):
 
     def setUp(self):
         self.good_no_attributes = {

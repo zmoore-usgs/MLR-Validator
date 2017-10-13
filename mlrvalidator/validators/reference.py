@@ -22,6 +22,8 @@ class ReferenceInfo:
             reference_list = reference_object[reference_attribute]
         return reference_list
 
+class CountryStateReference(ReferenceInfo):
+
     def get_list_by_country_state(self, attribute, country_code, state_code):
         country_list = self.reference_info['countries']
         state_list = self._get_reference_list('states', 'countryCode', country_code, country_list)
@@ -30,28 +32,28 @@ class ReferenceInfo:
         return attribute_list
 
 
-class Aquifers(ReferenceInfo):
+class Aquifers(CountryStateReference):
     def get_aquifers(self, country_code, state_code):
         aquifer_list = self.get_list_by_country_state('aquiferCodes', country_code, state_code)
 
         return aquifer_list
 
 
-class Hucs(ReferenceInfo):
+class Hucs(CountryStateReference):
     def get_hucs(self, country_code, state_code):
         huc_list = self.get_list_by_country_state('hydrologicUnitCodes', country_code, state_code)
 
         return huc_list
 
 
-class Mcds(ReferenceInfo):
+class Mcds(CountryStateReference):
     def get_mcds(self, country_code, state_code):
         mcd_list = self.get_list_by_country_state('minorCivilDivisionCodes', country_code, state_code)
 
         return mcd_list
 
 
-class NationalAquifers(ReferenceInfo):
+class NationalAquifers(CountryStateReference):
     def get_national_aquifers(self, country_code, state_code):
         national_aquifers_list = self.get_list_by_country_state('nationalAquiferCodes', country_code, state_code)
 
@@ -66,7 +68,7 @@ class NationalWaterUseCodes(ReferenceInfo):
         return national_water_use_code_list
 
 
-class Counties(ReferenceInfo):
+class Counties(CountryStateReference):
     def get_county_codes(self, country_code, state_code):
         county_list = self.get_list_by_country_state('counties', country_code, state_code)
         county_code_list = [d['countyCode'] for d in county_list]

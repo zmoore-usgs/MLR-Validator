@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from mlrvalidator.site_type_cross_field_validator import SiteTypeCrossFieldValidator
+from ..site_type_cross_field_validator import SiteTypeCrossFieldValidator
 from mlrvalidator.schema import site_type_cross_field_schema
 
 
-class TestValidateSiteTypeCrossFields(TestCase):
+class ValidateSiteTypeCrossFieldsTestCase(TestCase):
 
     def setUp(self):
         self.validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema)

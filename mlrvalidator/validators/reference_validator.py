@@ -5,7 +5,7 @@ from . import aquifer_reference, huc_reference, mcd_reference, national_aquifer_
     national_water_use_reference, reference_lists, county_reference, state_reference
 
 
-class SitefileReferenceValidator(Validator):
+class ReferenceValidator(Validator):
 
     def _is_not_in_list(self, value, ref_list, upper_flag):
         stripped_value = value.strip()
