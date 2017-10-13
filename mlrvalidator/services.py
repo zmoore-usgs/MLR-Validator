@@ -4,8 +4,7 @@ from flask_restplus import Api, Resource, fields
 from itertools import chain
 from collections import defaultdict
 
-from app import (application, sitefile_single_field_validator, sitefile_warning_validator, sitefile_reference_validator,
-                 site_type_cross_field_validator, sitefile_crossfield_error_validator)
+from app import application, error_validator, warning_validator
 
 api = Api(application,
           title='MLR Validator',
@@ -96,38 +95,19 @@ class AddValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        no_errors = True
-        data = request.get_json()
-        no_single_field_errors = sitefile_single_field_validator.validate(data)
-        no_reference_errors = sitefile_reference_validator.validate(data)
-        no_warnings = sitefile_warning_validator.validate(data)
-        no_site_type_cross_field_errors = site_type_cross_field_validator.validate(data)
-        no_crossfield_errors = sitefile_crossfield_error_validator.validate(data)
-        status_object = {}
+        ddot_location = request.get_json().get('ddot_location')
+        no_errors = error_validator.validate(ddot_location)
+        no_warnings = warning_validator.validate(ddot_location)
 
-        if not (no_reference_errors and no_single_field_errors and no_site_type_cross_field_errors and no_crossfield_errors):
-            no_errors = False
-            single_field_errors = sitefile_single_field_validator.errors
-            reference_errors = sitefile_reference_validator.errors
-            site_type_cross_field_errors = site_type_cross_field_validator.errors
-            cross_field_errors = sitefile_crossfield_error_validator.errors
-            all_errors = defaultdict(list)
-            # This part combines all types errors for each field
-            for k, v in chain(single_field_errors.items(),
-                              reference_errors.items(),
-                              site_type_cross_field_errors.items(),
-                              cross_field_errors.items()
-                              ):
-                all_errors[k].extend(v)
-            status_object["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(all_errors))
-
+        response = {}
+        if not no_errors:
+            response["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(error_validator.errors))
         if not no_warnings:
-            status_object["warning_message"] = 'Validation Warnings: {0}'.format(
-                sitefile_warning_validator.errors)
+            response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.errors))
         if no_errors and no_warnings:
-            status_object["validation_passed_message"] = 'Validations Passed'
+            response["validation_passed_message"] = 'Validations Passed'
 
-        response, status = status_object, 200
+        return response, 200
 
 
 @api.route('/validators/update')
@@ -136,17 +116,5 @@ class UpdateValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        ddotLocation = request.get_json().get('ddotLocation')
-        existingLocation = request.get_json().get('existingLocation')
-
-        no_single_field_errors = sitefile_single_field_validator.validate(ddotLocation, update=True)
-
-        status_object = {}
-        if not no_single_field_errors:
-            status_object['fatal_error_message'] = 'Fatal Errors: {0}'.format(sitefile_single_field_validator.errors)
-
-        if no_single_field_errors:
-            status_object['validation_passed_message'] = 'Validations Passed'
-
-        return status_object, 200
+        return 'Not yet implemented'
 

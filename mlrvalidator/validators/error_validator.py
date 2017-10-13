@@ -13,10 +13,10 @@ from .reference_validator import ReferenceValidator
 class ErrorValidator:
 
     def __init__(self):
-        self.single_field_validator = SingleFieldValidator(single_field_schema)
-        self.reference_validator = ReferenceValidator(reference_schema)
-        self.site_type_cross_field_validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema)
-        self.cross_field_validator = CrossFieldValidator(cross_field_schema)
+        self.single_field_validator = SingleFieldValidator(single_field_schema, allow_unknown=True)
+        self.reference_validator = ReferenceValidator(reference_schema, allow_unknown=True)
+        self.site_type_cross_field_validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema, allow_unknown=True)
+        self.cross_field_validator = CrossFieldValidator(cross_field_schema, allow_unknown=True)
         self._errors = defaultdict(list)
 
     def validate(self, document, update=False):
