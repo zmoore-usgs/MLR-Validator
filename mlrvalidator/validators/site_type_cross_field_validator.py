@@ -16,20 +16,29 @@ class SiteTypeCrossFieldValidator(Validator):
         stripped_value = value.strip()
         if valid_site_type_cross_field and stripped_value:
             site_type_ref = site_type_cross_field_reference.get_site_type_field_dependencies(value)
-            not_nullable_attrs = site_type_ref['notNullAttrs']
-            nullable_attrs = site_type_ref['nullAttrs']
+            not_null_attrs = site_type_ref['notNullAttrs']
+            null_attrs = site_type_ref['nullAttrs']
             nn_attr_field_problems = []
             n_attr_field_problems = []
-            for nn_attr in not_nullable_attrs:
-                nn_attr_field_val = self.document[nn_attr]
-                if len(nn_attr_field_val) == 0:
+            for nn_attr in not_null_attrs:
+                try:
+                    nn_attr_field_val = self.document[nn_attr].strip()
+                except KeyError:
+                    self._error(field, 'Specified site type requires the {} field be present.'.format(nn_attr))
                     nn_attr_field_problems.append(nn_attr)
-                    self._error(nn_attr, 'Must not be null due to specified site type.'.format(value))
-            for n_attr in nullable_attrs:
-                n_attr_field_val = self.document[n_attr]
-                if len(n_attr_field_val) != 0:
-                    n_attr_field_problems.append(n_attr)
-                    self._error(n_attr, 'Must be null due to specified site type.'.format(value))
+                else:
+                    if len(nn_attr_field_val) == 0:
+                        nn_attr_field_problems.append(nn_attr)
+                        self._error(nn_attr, 'Must not be null due to specified site type.'.format(value))
+            for n_attr in null_attrs:
+                try:
+                    n_attr_field_val = self.document[n_attr].strip()
+                except KeyError:
+                    continue
+                else:
+                    if len(n_attr_field_val) != 0:
+                        n_attr_field_problems.append(n_attr)
+                        self._error(n_attr, 'Must be null due to specified site type.'.format(value))
             if len(nn_attr_field_problems) > 0 or len(n_attr_field_problems) > 0:
                 nn_attrs = ', '.join(nn_attr_field_problems)
                 n_attrs = ', '.join(n_attr_field_problems)

@@ -301,6 +301,28 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
                     }
         self.assertEqual(result, expected)
 
+    def test_site_type_code_with_padding(self):
+        result = self.site_type_cf.get_site_type_field_dependencies('   SB-CV  ')
+        expected = {'notNullAttrs': ['longitude',
+                                     'latitude',
+                                     'primaryUseOfSite',
+                                     'dataReliabilityCode'
+                                     ],
+                    'nullAttrs': ['aquiferTypeCode',
+                                  'aquiferCode',
+                                  'contributingDrainageArea',
+                                  'wellDepth',
+                                  'sourceOfDepthCode',
+                                  'drainageArea',
+                                  'nationalAquiferCode',
+                                  'holeDepth'
+                                  ],
+                    'siteTypeCode': 'SB-CV'
+                    }
+        self.assertEqual(result, expected)
+
     def test_non_existent_site_type_code(self):
-        with self.assertRaises(StopIteration):
-            self.site_type_cf.get_site_type_field_dependencies('Obi-Wan Kenobi')
+        site_type_cd = 'Obi-Wan Kenobi'
+        result = self.site_type_cf.get_site_type_field_dependencies('Obi-Wan Kenobi')
+        expected = {'siteTypeCode': site_type_cd, 'notNullAttrs': [], 'nullAttrs': []}
+        self.assertEqual(result, expected)
