@@ -54,7 +54,7 @@ class CrossFieldValidatorReciprocalDependencyTestCase(TestCase):
 
 
     def test_update_valid_field_dependency(self):
-        self.assertTrue(self.validator.validate({'field1': '11111', 'field2': '22222'}, {'field3': 'B'}, update=True))
+        self.assertTrue(self.validator.validate({'field1': '11111', 'field2': '2222'}, {'field2': '    ', 'field3': 'B'}, update=True))
         self.assertTrue(self.validator.validate({'field1': '11111', 'field3': '22222'}, {'field2' : 'A'}, update=True))
 
 
