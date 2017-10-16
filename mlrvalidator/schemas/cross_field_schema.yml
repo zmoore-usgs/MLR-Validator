@@ -1,19 +1,21 @@
 latitude:
-    valid_lat_long: True
+    reciprocal_dependency: [longitude, coordinateAccuracyCode, coordinateDatumCode, coordinateMethodCode]
 longitude:
-    valid_lat_long: True
+    reciprocal_dependency: [latitude, coordinateAccuracyCode, coordinateDatumCode, coordinateMethodCode]
 coordinateAccuracyCode:
-    valid_coord_acy_cd: True
+    reciprocal_dependency: [latitude, longitude]
 coordinateDatumCode:
-    valid_coord_datum_cd: True
+    reciprocal_dependency: [latitude, longitude]
 coordinateMethodCode:
-    valid_coord_meth_cd: True
+    reciprocal_dependency: [latitude, longitude]
+altitude:
+    reciprocal_dependency: [altitudeDatumCode, altitudeMethodCode, altitudeAccuracyValue]
 altitudeDatumCode:
-    valid_alt_datum_cd: True
+    reciprocal_dependency: [altitude]
 altitudeMethodCode:
-    valid_alt_meth_cd: True
+    reciprocal_dependency: [altitude]
 altitudeAccuracyValue:
-    valid_alt_acy_va: True
+    reciprocal_dependency: [altitude]
 primaryUseOfSite:
     valid_site_use_cd: True
 secondaryUseOfSite:

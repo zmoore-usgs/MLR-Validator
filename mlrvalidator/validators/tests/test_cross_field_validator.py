@@ -5,6 +5,83 @@ from mlrvalidator.schema import cross_field_schema
 cross_field_validator = CrossFieldValidator(cross_field_schema)
 cross_field_validator.allow_unknown = True
 
+class CrossFieldValidatorReciprocalDependencyTestCase(TestCase):
+    def setUp(self):
+        self.validator = CrossFieldValidator(allow_unknown=True, schema={'field1': {'reciprocal_dependency': ['field2', 'field3']}})
+
+    def test_missing_field_dependency(self):
+        self.assertFalse(self.validator.validate({'field1': ' 1000000'}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 2)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000', 'field2': 'B'}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000', 'field3': 'B'}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+
+    def test_null_field_dependency(self):
+        self.assertFalse(self.validator.validate({'field1' : '11111', 'field2': '      ', 'field3' : 'B'}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1' : '11111', 'field2': 'B', 'field3' : '    '}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1' : '11111', 'field2' : '    ', 'field3' : '  '}, {}))
+        self.assertEqual(len(self.validator.errors.get('field1')), 2)
+
+
+    def test_valid_field_dependency(self):
+        self.assertTrue(self.validator.validate({'field1': '11111', 'field2': '22222', 'field3': 'B'}, {}))
+
+    def test_update_missing_field_dependency(self):
+        self.assertFalse(self.validator.validate({'field1': ' 1000000'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 2)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000', }, {'field2': 'A'}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000'}, {'field3': 'A'}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+    def test_update_null_field_dependency(self):
+        self.assertFalse(self.validator.validate({'field1': ' 1000000', 'field2': '      '}, {'field3': 'B'}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000'}, {'field2': '      ', 'field3': 'B'}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 1)
+
+        self.assertFalse(self.validator.validate({'field1': ' 1000000'}, {'field2': '      ', 'field3': ' '}, update=True))
+        self.assertEqual(len(self.validator.errors.get('field1')), 2)
+
+
+    def test_update_valid_field_dependency(self):
+        self.assertTrue(self.validator.validate({'field1': '11111', 'field2': '22222'}, {'field3': 'B'}, update=True))
+        self.assertTrue(self.validator.validate({'field1': '11111', 'field3': '22222'}, {'field2' : 'A'}, update=True))
+
+
+class CrossFieldValidatorUniqueUseTestCase(TestCase):
+    def setUp(self):
+        self.validator = CrossFieldValidator(allow_unknown=True, schema={'field1': {'unique_use_value': 'field2'}})
+
+    def test_valid_unique_use(self):
+        self.assertTrue(self.validator.validate({'field1': 'A', 'field2': 'B'}, {}))
+        self.assertTrue(self.validator.validate({'field1': 'A', 'field2': ' '}, {}))
+        self.assertTrue(self.validator.validate({'field1': ' ', 'field2': 'B'}, {}))
+        self.assertTrue(self.validator.validate({'field1': ' '}, {}))
+
+    def test_not_unique_use(self):
+        self.assertFalse(self.validator.validate({'field1': 'A', 'field2': 'A'}, {}))
+
+    def test_valid_unique_use_on_update(self):
+        self.assertTrue(self.validator.validate({'field1': 'A'}, {'field2': 'B'}, update=True))
+        self.assertTrue(self.validator.validate({'field1': ' '}, {'field2': 'B'}, update=True))
+        self.assertTrue(self.validator.validate({'field1': ' '}, {'field2': ' '}, update=True))
+
+    def test_not_unique_use_on_update(self):
+        self.assertFalse(self.validator.validate({'field1': 'A'}, {'field2': 'A'}, update=True))
+
+
 
 class ValidateCrossFieldsTestCase(TestCase):
 
@@ -19,6 +96,7 @@ class ValidateCrossFieldsTestCase(TestCase):
         self.good_data2 = {
             'altitude': '1234',
             'altitudeDatumCode': 'ASVD02',
+            'altitudeMethodCode': 'A',
             'altitudeAccuracyValue': '12'
         }
         self.good_data3 = {
@@ -224,51 +302,50 @@ class ValidateCrossFieldsTestCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(cross_field_validator.validate(self.good_data))
-        self.assertTrue(cross_field_validator.validate(self.good_data2))
-        self.assertTrue(cross_field_validator.validate(self.good_data3))
-        self.assertTrue(cross_field_validator.validate(self.good_data4))
-        self.assertTrue(cross_field_validator.validate(self.good_data5))
-        self.assertTrue(cross_field_validator.validate(self.good_data6))
-        self.assertTrue(cross_field_validator.validate(self.good_data7))
-        self.assertTrue(cross_field_validator.validate(self.good_data8))
-        self.assertTrue(cross_field_validator.validate(self.good_data9))
-        self.assertTrue(cross_field_validator.validate(self.good_data10))
-        self.assertTrue(cross_field_validator.validate(self.good_data11))
-        self.assertTrue(cross_field_validator.validate(self.good_data12))
+        self.assertTrue(cross_field_validator.validate(self.good_data, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data2, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data3, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data4, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data5, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data6, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data7, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data8, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data9, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data10, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data11, {}))
+        self.assertTrue(cross_field_validator.validate(self.good_data12, {}))
 
 
     def test_validate_not_ok(self):
-        self.assertFalse(cross_field_validator.validate(self.bad_data))
-        self.assertFalse(cross_field_validator.validate(self.bad_data2))
-        self.assertFalse(cross_field_validator.validate(self.bad_data3))
-        self.assertFalse(cross_field_validator.validate(self.bad_data4))
-        self.assertFalse(cross_field_validator.validate(self.bad_data5))
-        self.assertFalse(cross_field_validator.validate(self.bad_data6))
-        self.assertFalse(cross_field_validator.validate(self.bad_data7))
-        self.assertFalse(cross_field_validator.validate(self.bad_data8))
-        self.assertFalse(cross_field_validator.validate(self.bad_data9))
-        self.assertFalse(cross_field_validator.validate(self.bad_data10))
-        self.assertFalse(cross_field_validator.validate(self.bad_data11))
-        self.assertFalse(cross_field_validator.validate(self.bad_data12))
-        self.assertFalse(cross_field_validator.validate(self.bad_data13))
-        self.assertFalse(cross_field_validator.validate(self.bad_data14))
-        self.assertFalse(cross_field_validator.validate(self.bad_data15))
-        self.assertFalse(cross_field_validator.validate(self.bad_data16))
-        self.assertFalse(cross_field_validator.validate(self.bad_data17))
-        self.assertFalse(cross_field_validator.validate(self.bad_data18))
-        self.assertFalse(cross_field_validator.validate(self.bad_data19))
-        self.assertFalse(cross_field_validator.validate(self.bad_data20))
-        self.assertFalse(cross_field_validator.validate(self.bad_data21))
-        self.assertFalse(cross_field_validator.validate(self.bad_data22))
-        self.assertFalse(cross_field_validator.validate(self.bad_data23))
-        self.assertFalse(cross_field_validator.validate(self.bad_data24))
-        self.assertFalse(cross_field_validator.validate(self.bad_data25))
-        self.assertFalse(cross_field_validator.validate(self.bad_data26))
-        self.assertFalse(cross_field_validator.validate(self.bad_data27))
-        self.assertFalse(cross_field_validator.validate(self.bad_data28))
-        self.assertFalse(cross_field_validator.validate(self.bad_data29))
-        self.assertFalse(cross_field_validator.validate(self.bad_data30))
-
+        self.assertFalse(cross_field_validator.validate(self.bad_data, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data2, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data3, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data4, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data5, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data6, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data7, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data8, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data9, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data10, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data11, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data12, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data13, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data14, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data15, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data16, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data17, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data18, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data19, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data20, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data21, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data22, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data23, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data24, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data25, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data26, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data27, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data28, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data29, {}))
+        self.assertFalse(cross_field_validator.validate(self.bad_data30, {}))
 
 

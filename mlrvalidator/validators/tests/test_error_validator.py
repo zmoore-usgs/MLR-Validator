@@ -136,6 +136,12 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 2)
 
 
+class ErrorValidatorLatitudeTestCase(TestCase):
+
+    def latitude_without_longitude_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 0400000'}, {}))
+
+
 
 
 

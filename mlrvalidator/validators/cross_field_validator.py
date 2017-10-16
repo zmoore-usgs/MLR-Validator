@@ -3,110 +3,44 @@ from cerberus import Validator
 
 class CrossFieldValidator(Validator):
 
-    def _validate_valid_lat_long(self, valid_lat_long, field, value):
-        # Check that if latitude was entered, so was longitude, and vice versa
+    def validate(self, document, existing_document, schema=None, update=False, normalize=True):
+        self.merged_document = existing_document.copy()
+        self.merged_document.update(document)
+
+        return Validator.validate(self, document, schema=schema, update=update, normalize=normalize)
+
+
+    def _validate_reciprocal_dependency(self, dependent_list, field, value):
 
         """
+        Validates if value exists and all values for fields in dependent_list exist or if value is empty and
+        all values for fields in dependent_list are empty
+
         The rule's arguments are validated against this schema:
-        {'lat_long': True}
+        {'type': 'list', schema: {'type': 'string'}
         """
-        if valid_lat_long:
-            if self.document['latitude']:
-                if not self.document['longitude']:
-                    return self._error(field, "Latitude entered without longitude")
-            if self.document['longitude']:
-                if not self.document['latitude']:
-                    return self._error(field, "Longitude entered without latitude")
+        for dependent_field in dependent_list:
+            dependent_value = self.merged_document.get(dependent_field, '')
+            value_is_empty = not value.strip()
+            dependent_value_is_empty = not dependent_value.strip()
+            if value_is_empty and not dependent_value_is_empty:
+                self._error(field, '{0} can not be null when {1} is not null'.format(field, dependent_field))
+            elif not value_is_empty and dependent_value_is_empty:
+                self._error(field, '{0} can not have a value when {1} is null'.format(field, dependent_field))
 
-    def _validate_valid_coord_acy_cd(self, valid_coord_acy_cd, field, value):
-        # Check if coord_acy_cd was entered, so were latitude and longitude
 
+    def _validate_unique_use_value(self, field_to_check, field, value):
         """
+        Validates if value is empty or if not empty is different from field_to_check's value
+
         The rule's arguments are validated against this schema:
-        {'allowed_coord_acy_cd': True}
+        {'type': 'string'}
         """
-        if valid_coord_acy_cd:
-            if self.document['latitude'] and self.document['longitude']:
-                if not self.document['coordinateAccuracyCode']:
-                    return self._error(field, "Coordinate accuracy code required if latitude and longitude are entered")
-            if self.document['coordinateAccuracyCode']:
-                if not self.document['latitude'] or not self.document['longitude']:
-                    return self._error(field, "Coordinate accuracy code entered without latitude and longitude")
+        field_value = value.strip()
+        field_to_check_value = self.merged_document.get(field_to_check, '').strip()
+        if field_value and (field_value == field_to_check_value):
+            self._error(field, '{0} must not have the same value as {1}'.format(field, field_to_check))
 
-    def _validate_valid_coord_datum_cd(self, valid_coord_datum_cd, field, value):
-        # Check if coord_datum_cd was entered, so were latitude and longitude
-
-        """
-        The rule's arguments are validated against this schema:
-        {'allowed_coord_datum_cd': True}
-        """
-        if valid_coord_datum_cd:
-            if self.document['latitude'] and self.document['longitude']:
-                if not self.document['coordinateDatumCode']:
-                    return self._error(field, "Coordinate datum code required if latitude and longitude are entered")
-            if self.document['coordinateDatumCode']:
-                if not self.document['latitude'] or not self.document['longitude']:
-                    return self._error(field, "Coordinate datum code entered without latitude and longitude")
-
-    def _validate_valid_coord_meth_cd(self, valid_coord_meth_cd, field, value):
-        # Check if coord_meth_cd was entered, so were latitude and longitude
-
-        """
-        The rule's arguments are validated against this schema:
-        {'allowed_coord_meth_cd': True}
-        """
-        if valid_coord_meth_cd:
-            if self.document['latitude'] and self.document['longitude']:
-                if not self.document['coordinateMethodCode']:
-                    return self._error(field, "Coordinate method code required if latitude and longitude are entered")
-            if self.document['coordinateMethodCode']:
-                if not self.document['latitude'] or not self.document['longitude']:
-                    return self._error(field, "Coordinate method code entered without latitude and longitude")
-
-    def _validate_valid_alt_datum_cd(self, valid_alt_datum_cd, field, value):
-        # Check if altitude was entered, so was altitude datum code
-
-        """
-        The rule's arguments are validated against this schema:
-        {'valid_alt_datum_cd': True}
-        """
-        if valid_alt_datum_cd:
-            if self.document['altitude']:
-                if not self.document['altitudeDatumCode']:
-                    return self._error(field, "Altitude entered without altitude datum code")
-            if self.document['altitudeDatumCode']:
-                if not self.document['altitude']:
-                    return self._error(field, "Altitude datum code entered without altitude")
-
-    def _validate_valid_alt_meth_cd(self, valid_alt_meth_cd, field, value):
-        # Check if altitude was entered, so was altitude method code
-
-        """
-        The rule's arguments are validated against this schema:
-        {'valid_alt_meth_cd': True}
-        """
-        if valid_alt_meth_cd:
-            if self.document['altitude']:
-                if not self.document['altitudeMethodCode']:
-                    return self._error(field, "Altitude entered without altitude method code")
-            if self.document['altitudeMethodCode']:
-                if not self.document['altitude']:
-                    return self._error(field, "Altitude method code entered without altitude")
-
-    def _validate_valid_alt_acy_va(self, valid_alt_acy_va, field, value):
-        # Check if altitude was entered, so was altitude accuracy value
-
-        """
-        The rule's arguments are validated against this schema:
-        {'valid_alt_acy_va': True}
-        """
-        if valid_alt_acy_va:
-            if self.document['altitude']:
-                if not self.document['altitudeAccuracyValue']:
-                    return self._error(field, "Altitude entered without altitude accuracy value")
-            if self.document['altitudeAccuracyValue']:
-                if not self.document['altitude']:
-                    return self._error(field, "Altitude accuracy value entered without altitude")
 
     def _validate_valid_site_use_cd(self, valid_site_use_cd, field, value):
         # Check that site use codes 1, 2, and 3 have different values if more than one is entered
