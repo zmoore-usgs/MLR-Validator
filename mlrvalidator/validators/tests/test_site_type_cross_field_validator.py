@@ -60,6 +60,19 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
                             'drainageArea': '',
                             'nationalAquiferCode': ''
                             }
+        # test neutral data (i.e. a totally wrong site type code)
+        # validations of site type code value are out of scope for the site type cross field validator
+        self.neutral_data = {'siteTypeCode': 'Darth Vader',
+                             'longitude': 'F',
+                             'latitude': '',
+                             'dataReliabilityCode':'j',
+                             'aquiferTypeCode': '',
+                             'aquiferCode': '',
+                             'contributingDrainageArea': '',
+                             'nationalWaterUseCode': '',
+                             'drainageArea': '',
+                             'nationalAquiferCode': ''
+                             }
         self.bad_data_1 = {'siteTypeCode': 'FA-CI',
                            'longitude': 'F',
                            'latitude': '',
@@ -129,6 +142,10 @@ class ValidateSiteTypeCrossFieldsTestCase(TestCase):
         self.assertTrue(validation_result_3)
         self.assertTrue(validation_result_4)
         self.assertTrue(validation_result_5)
+
+    def test_neutral_data(self):
+        validation_result = self.validator.validate(self.neutral_data)
+        self.assertTrue(validation_result)
 
     def test_bad_data(self):
         validation_result_1 = self.validator.validate(self.bad_data_1)
