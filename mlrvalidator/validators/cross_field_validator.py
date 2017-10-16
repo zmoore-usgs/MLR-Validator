@@ -1,5 +1,5 @@
-from cerberus import Validator
 
+from cerberus import Validator
 
 class CrossFieldValidator(Validator):
 
@@ -90,3 +90,4 @@ class CrossFieldValidator(Validator):
             else:
                 if (hole_depth and well_depth) and (well_depth > hole_depth):
                     return self._error(field, "wellDepth cannot be greater than holeDepth")
+
