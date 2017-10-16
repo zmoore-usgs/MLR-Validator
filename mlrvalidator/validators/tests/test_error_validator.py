@@ -25,7 +25,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {}
 
         validator = ErrorValidator()
-        result = validator.validate({'A' : 'This', 'B' : 'That'})
+        result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
 
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -46,7 +46,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {}
 
         validator = ErrorValidator()
-        result = validator.validate({'A': 'This', 'B': 'That'})
+        result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -67,7 +67,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {}
 
         validator = ErrorValidator()
-        result = validator.validate({'A': 'This', 'B': 'That'})
+        result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -88,7 +88,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {}
 
         validator = ErrorValidator()
-        result = validator.validate({'A': 'This', 'B': 'That'})
+        result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -109,7 +109,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {'A': ['Bad']}
 
         validator = ErrorValidator()
-        result = validator.validate({'A': 'This', 'B': 'That'})
+        result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -130,10 +130,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcrossfield.errors = {'A': ['Invalid']}
 
         validator = ErrorValidator()
-        result = validator.validate({'A': 'This', 'B': 'That'})
+        result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 2)
+
 
 
 

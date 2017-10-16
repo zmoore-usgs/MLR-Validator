@@ -19,11 +19,11 @@ class ErrorValidator:
         self.cross_field_validator = CrossFieldValidator(cross_field_schema, allow_unknown=True)
         self._errors = defaultdict(list)
 
-    def validate(self, document, update=False):
-        valid_single_field = self.single_field_validator.validate(document, update=update)
-        valid_reference = self.reference_validator.validate(document, update=update)
-        valid_site_type = self.site_type_cross_field_validator.validate(document, update=update)
-        valid_cross_field = self.cross_field_validator.validate(document, update=update)
+    def validate(self, ddot_location, existing_location, update=False):
+        valid_single_field = self.single_field_validator.validate(ddot_location, update=update)
+        valid_reference = self.reference_validator.validate(ddot_location, update=update)
+        valid_site_type = self.site_type_cross_field_validator.validate(ddot_location, update=update)
+        valid_cross_field = self.cross_field_validator.validate(ddot_location, existing_location, update=update)
 
         self._errors = defaultdict(list)
         all_errors = chain(self.single_field_validator.errors.items(),

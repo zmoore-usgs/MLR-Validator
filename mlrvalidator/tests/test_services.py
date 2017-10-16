@@ -30,8 +30,8 @@ class AddValidateTransactionTestCase(TestCase):
                                     content_type='application/json',
                                     data=json.dumps(self.location))
         self.assertEqual(response.status_code, 200)
-        merror_validator.validate.assert_called_with(self.location.get('ddotLocation'))
-        mwarning_validator.validate.assert_called_with(self.location.get('ddotLocation'))
+        merror_validator.validate.assert_called_with(self.location.get('ddotLocation'), {}, update=False)
+        mwarning_validator.validate.assert_called_with(self.location.get('ddotLocation'), update=False)
         resp_data = json.loads(response.data)
         self.assertEqual(len(resp_data), 1)
         self.assertEqual({'validation_passed_message': 'Validations Passed'}, resp_data)
@@ -79,3 +79,14 @@ class AddValidateTransactionTestCase(TestCase):
         self.assertEqual(len(resp_data), 2)
         self.assertIn('warning_message', resp_data)
         self.assertIn('fatal_error_message', resp_data)
+
+    def test_transaction_with_missing_keys(self, merror_validator, mwarning_validator):
+        response = self.app_client.post('/validators/add',
+                                        content_type='application/json',
+                                        data=json.dumps({'ddotLocation': {}})
+                                        )
+        self.assertEqual(response.status_code, 400)
+        response = self.app_client.post('/validators/add',
+                                        content_type='application/json',
+                                        data=json.dumps({'existingLocation': {}})
+                                        )
