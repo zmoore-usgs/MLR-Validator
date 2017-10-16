@@ -23,7 +23,7 @@ class ErrorValidator:
         valid_single_field = self.single_field_validator.validate(ddot_location, update=update)
         valid_reference = self.reference_validator.validate(ddot_location, update=update)
         valid_site_type = self.site_type_cross_field_validator.validate(ddot_location, update=update)
-        valid_cross_field = self.cross_field_validator.validate(ddot_location, update=update)
+        valid_cross_field = self.cross_field_validator.validate(ddot_location, existing_location, update=update)
 
         self._errors = defaultdict(list)
         all_errors = chain(self.single_field_validator.errors.items(),

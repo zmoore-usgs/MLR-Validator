@@ -17,22 +17,26 @@ altitudeMethodCode:
 altitudeAccuracyValue:
     reciprocal_dependency: [altitude]
 primaryUseOfSite:
-    valid_site_use_cd: True
+    unique_use_value: [secondaryUseOfSite, tertiaryUseOfSiteCode]
 secondaryUseOfSite:
-    valid_site_use_cd: True
+    unique_use_value: [primaryUseOfSite, tertiaryUseOfSiteCode]
+    not_empty_dependency: [primaryUseOfSite]
 tertiaryUseOfSiteCode:
-    valid_site_use_cd: True
+    unique_use_value: [primaryUseOfSite, secondaryUseOfSite]
+    not_empty_dependency: [primaryUseOfSite, secondaryUseOfSite]
 primaryUseOfWaterCode:
-    valid_water_use_cd: True
+    unique_use_value: [secondaryUseOfWaterCode, tertiaryUseOfWaterCode]
 secondaryUseOfWaterCode:
-    valid_water_use_cd: True
+    unique_use_value: [primaryUseOfWaterCode, tertiaryUseOfWaterCode]
+    not_empty_dependency: [primaryUseOfWaterCode]
 tertiaryUseOfWaterCode:
-    valid_water_use_cd: True
+    unique_use_value: [primaryUseOfWaterCode, secondaryUseOfWaterCode]
+    not_empty_dependency: [primaryUseOfWaterCode, secondaryUseOfWaterCode]
 firstConstructionDate:
-    valid_const_inv_dts: True
+    construction_before_inventory: True
 siteEstablishmentDate:
-    valid_const_inv_dts: True
+    construction_before_inventory: True
 holeDepth:
-    valid_well_hole_depths: True
+    check_well_hole_depths: True
 wellDepth:
-    valid_well_hole_depths: True
+    check_well_hole_depths: True
