@@ -3,6 +3,12 @@ from unittest import TestCase
 
 from ..error_validator import ErrorValidator
 
+class ErrorValidatorLatitudeTestCase(TestCase):
+    #TODO: fill in with additional tests for latitude. Ideally each field that has validations would have a separate test case.
+
+    def latitude_without_longitude_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 0400000'}, {}))
+
 class ValidateCrossFieldsTestCase(TestCase):
 
     #TODO: Break this up so that a test case tests a fields validation rules. Below is the cross field validation schema tests
