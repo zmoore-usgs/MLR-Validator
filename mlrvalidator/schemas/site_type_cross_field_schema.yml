@@ -1,2 +1,32 @@
+aquiferCode:
+    validator: site_type_field
+aquiferTypeCode:
+    validator: site_type_field
+contributingDrainageArea:
+    validator: site_type_field
+dataReliabilityCode:
+    validator: site_type_field
+drainageArea:
+    validator: site_type_field
+holeDepth:
+    validator: site_type_field
+latitude:
+    validator: site_type_field
+longitude:
+    validator: site_type_field
+nationalAquiferCode:
+    validator: site_type_field
+nationalWaterUseCode:
+    validator: site_type_field
+primaryUseOfSite:
+    validator: site_type_field
+secondaryUseOfSite:
+    validator: site_type_field
 siteTypeCode:
-    valid_site_type_cross_field: True
+    validator: all_site_type_fields
+sourceOfDepthCode:
+    validator: site_type_field
+tertiaryUseOfSiteCode:
+    validator: site_type_field
+wellDepth:
+    validator: site_type_field
