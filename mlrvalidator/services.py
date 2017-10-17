@@ -119,5 +119,5 @@ class UpdateValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        return 'Not yet implemented'
+        return _validate_response(request.get_json(), update=True)
 
