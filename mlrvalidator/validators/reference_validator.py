@@ -1,11 +1,10 @@
 
-from cerberus import Validator
-
 from . import aquifer_reference, huc_reference, mcd_reference, national_aquifer_reference, \
     national_water_use_reference, reference_lists, county_reference, state_reference
+from .base_cross_field_validator import BaseCrossFieldValidator
 
 
-class ReferenceValidator(Validator):
+class ReferenceValidator(BaseCrossFieldValidator):
 
     def _is_not_in_list(self, value, ref_list, upper_flag):
         stripped_value = value.strip()
@@ -42,7 +41,10 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_aquifer_code:
-            aquifer_list = aquifer_reference.get_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            aquifer_list = aquifer_reference.get_aquifers(
+                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('stateFipsCode', '')
+            )
 
             if not aquifer_list:
                 return self._error(field, error_message)
@@ -60,7 +62,10 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_national_aquifer_code:
-            national_aquifer_list = national_aquifer_reference.get_national_aquifers(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            national_aquifer_list = national_aquifer_reference.get_national_aquifers(
+                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('stateFipsCode', '')
+            )
 
             if not national_aquifer_list:
                 return self._error(field, error_message)
@@ -78,7 +83,10 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_huc:
-            huc_list = huc_reference.get_hucs(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            huc_list = huc_reference.get_hucs(
+                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('stateFipsCode', '')
+            )
 
             if not huc_list:
                 return self._error(field, error_message + "--Hydrologic units do not exist in the HUC reference list for the entered State Code")
@@ -96,7 +104,10 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_mcd_code:
-            mcd_list = mcd_reference.get_mcds(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            mcd_list = mcd_reference.get_mcds(
+                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('stateFipsCode', '')
+            )
 
             if not mcd_list:
                 return self._error(field, error_message)
@@ -114,7 +125,9 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_national_water_use_code:
-            national_water_use_code_list = national_water_use_reference.get_national_water_use_codes(self.document['siteTypeCode'].upper())
+            national_water_use_code_list = national_water_use_reference.get_national_water_use_codes(
+                self.merged_document.get('siteTypeCode', '').upper()
+            )
 
             if not national_water_use_code_list:
                 return self._error(field, error_message)
@@ -132,7 +145,10 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_county_code:
-            county_list = county_reference.get_county_codes(self.document['countryCode'].upper(), self.document['stateFipsCode'])
+            county_list = county_reference.get_county_codes(
+                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('stateFipsCode', '')
+            )
 
             if not county_list:
                 return self._error(field, error_message)
@@ -150,7 +166,9 @@ class ReferenceValidator(Validator):
         error_message = "Value not in reference list"
 
         if valid_state_code:
-            state_list = state_reference.get_state_codes(self.document['countryCode'].upper())
+            state_list = state_reference.get_state_codes(
+                self.merged_document.get('countryCode','').upper()
+            )
 
             if not state_list:
                 return self._error(field, error_message)

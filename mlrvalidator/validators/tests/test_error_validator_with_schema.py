@@ -13,6 +13,7 @@ class ValidateCrossFieldsTestCase(TestCase):
 
     #TODO: Break this up so that a test case tests a fields validation rules. Below is the cross field validation schema tests
     #TODO: Add needed tests for all validations not just cross field.
+    #TODO: Add tests with an existing document
     def setUp(self):
         self.validator = ErrorValidator()
         self.good_data = {
@@ -279,3 +280,156 @@ class ValidateCrossFieldsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data30, {}, update=True))
 
 
+class SiteTypeCrossFieldValidationWithSchema(TestCase):
+    #TODO: Break this up so that a field's validation tests are in a single test case
+    #TODO: Add tests with an existing document
+
+    def setUp(self):
+        self.validator = ErrorValidator()
+        self.good_data_1 = {'siteTypeCode': 'FA-CS',
+                            'dataReliabilityCode': 'x',
+                            'aquiferTypeCode': '',
+                            'aquiferCode': '',
+                            'contributingDrainageArea': '',
+                            'nationalWaterUseCode': '',
+                            'drainageArea': '',
+                            'nationalAquiferCode': ''
+                            }
+        self.good_data_2 = {'siteTypeCode': 'ES',
+                            'longitude': 'O',
+                            'latitude': 'j',
+                            'dataReliabilityCode': 'E',
+                            'aquiferTypeCode': '',
+                            'secondaryUseOfSite': '',
+                            'aquiferCode': '',
+                            'wellDepth': '',
+                            'sourceOfDepthCode': '',
+                            'nationalAquiferCode': '',
+                            'tertiaryUseOfSiteCode': '',
+                            'holeDepth': ''
+                            }
+        self.good_data_3 = {'siteTypeCode': 'ST-CA',
+                            'longitude': 'R',
+                            'latitude': 'D',
+                            'dataReliabilityCode': 'm',
+                            'secondaryUseOfSite': '',
+                            'tertiaryUseOfSiteCode': ''
+                            }
+        self.good_data_4 = {'siteTypeCode': ' ',
+                            'dataReliabilityCode': 'x',
+                            'aquiferTypeCode': '',
+                            'aquiferCode': '',
+                            'contributingDrainageArea': '',
+                            'nationalWaterUseCode': '',
+                            'drainageArea': '',
+                            'nationalAquiferCode': '    '
+                            }
+        # tests that this is still good data if a required null field is absent
+        # absent fields are commented out
+        self.good_data_5 = {'siteTypeCode': 'FA-DV',
+                            'longitude': 'p',
+                            'latitude': 'B',
+                            'dataReliabilityCode': 'z',
+                            'aquiferTypeCode': '',
+                            'aquiferCode': '',
+                            # 'contributingDrainageArea': '',
+                            # 'nationalWaterUseCode': '',
+                            'drainageArea': '',
+                            'nationalAquiferCode': ''
+                            }
+        # test neutral data (i.e. a totally wrong site type code)
+        # validations of site type code value are out of scope for the site type cross field validator
+        self.neutral_data = {'siteTypeCode': 'Darth Vader',
+                             'longitude': 'F',
+                             'latitude': '',
+                             'dataReliabilityCode': 'j',
+                             'aquiferTypeCode': '',
+                             'aquiferCode': '',
+                             'contributingDrainageArea': '',
+                             'nationalWaterUseCode': '',
+                             'drainageArea': '',
+                             'nationalAquiferCode': ''
+                             }
+        self.bad_data_1 = {'siteTypeCode': 'FA-CI',
+                           'longitude': 'F',
+                           'latitude': '',
+                           'dataReliabilityCode': 'j',
+                           'aquiferTypeCode': '',
+                           'aquiferCode': '',
+                           'contributingDrainageArea': '',
+                           'nationalWaterUseCode': '',
+                           'drainageArea': '',
+                           'nationalAquiferCode': ''
+                           }
+        self.bad_data_2 = {'siteTypeCode': 'GW-HZ',
+                           'longitude': 'f',
+                           'latitude': 'W',
+                           'primaryUseOfSite': 'b',
+                           'dataReliabilityCode': 'F',
+                           'aquiferTypeCode': '',
+                           'aquiferCode': '',
+                           'contributingDrainageArea': '',
+                           'wellDepth': '',
+                           'nationalWaterUseCode': '',
+                           'sourceOfDepthCode': '',
+                           'drainageArea': 'J',
+                           'nationalAquiferCode': '',
+                           'holeDepth': 'K'
+                           }
+        self.bad_data_3 = {'siteTypeCode': 'FA-WIW',
+                           'longitude': '',
+                           'latitude': 'f',
+                           'dataReliabilityCode': 'w',
+                           'aquiferTypeCode': '',
+                           'aquiferCode': '',
+                           'contributingDrainageArea': 'C',
+                           'wellDepth': '',
+                           'nationalWaterUseCode': '',
+                           'sourceOfDepthCode': '',
+                           'drainageArea': 'N',
+                           'nationalAquiferCode': '',
+                           'holeDepth': ''
+                           }
+        # test that this is bad data if a required field is absent
+        # absent fields are commented out
+        self.bad_data_4 = {'siteTypeCode': 'SB-GWD',
+                           'longitude': 'Z',
+                           'latitude': 'F',
+                           # 'primaryUseOfSite': 'W',
+                           'dataReliabilityCode': 'F',
+                           'aquiferTypeCode': '',
+                           'aquiferCode': '',
+                           'contributingDrainageArea': '',
+                           'wellDepth': '',
+                           'nationalWaterUseCode': '',
+                           'sourceOfDepthCode': '',
+                           'drainageArea': '',
+                           'nationalAquiferCode': '',
+                           'holeDepth': ''
+                           }
+
+    def test_good_data(self):
+        validation_result_1 = self.validator.validate(self.good_data_1, {}, update=True)
+        validation_result_2 = self.validator.validate(self.good_data_2, {}, update=True)
+        validation_result_3 = self.validator.validate(self.good_data_3, {}, update=True)
+        validation_result_4 = self.validator.validate(self.good_data_4, {}, update=True)
+        validation_result_5 = self.validator.validate(self.good_data_5, {}, update=True)
+        self.assertTrue(validation_result_1)
+        self.assertTrue(validation_result_2)
+        self.assertTrue(validation_result_3)
+        self.assertTrue(validation_result_4)
+        self.assertTrue(validation_result_5)
+
+    def test_neutral_data(self):
+        validation_result = self.validator.validate(self.neutral_data, {}, update=True)
+        self.assertTrue(validation_result)
+
+    def test_bad_data(self):
+        validation_result_1 = self.validator.validate(self.bad_data_1,{}, update=True)
+        validation_result_2 = self.validator.validate(self.bad_data_2, {}, update=True)
+        validation_result_3 = self.validator.validate(self.bad_data_3, {}, update=True)
+        validation_result_4 = self.validator.validate(self.bad_data_4, {}, update=True)
+        self.assertFalse(validation_result_1)
+        self.assertFalse(validation_result_2)
+        self.assertFalse(validation_result_3)
+        self.assertFalse(validation_result_4)

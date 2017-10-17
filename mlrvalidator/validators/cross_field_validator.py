@@ -1,14 +1,7 @@
 
-from cerberus import Validator
+from .base_cross_field_validator import BaseCrossFieldValidator
 
-class CrossFieldValidator(Validator):
-
-    def validate(self, document, existing_document, schema=None, update=False, normalize=True):
-        self.merged_document = existing_document.copy()
-        self.merged_document.update(document)
-
-        return Validator.validate(self, document, schema=schema, update=update, normalize=normalize)
-
+class CrossFieldValidator(BaseCrossFieldValidator):
 
     def _validate_reciprocal_dependency(self, dependent_list, field, value):
 
