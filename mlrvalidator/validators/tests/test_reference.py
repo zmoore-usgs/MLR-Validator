@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States, SiteTypes, SiteTypesCrossField
+    States, SiteTypeTransitions, SiteTypesCrossField
 
 
 class ValidateGetAquifersCase(TestCase):
@@ -251,9 +251,9 @@ class ValidateGetStateAttributesCase(TestCase):
         self.assertEqual(test_state, bad_state)
 
 
-class ValidateGetSiteTypesCase(TestCase):
+class ValidateGetSiteTypeTransitionsCase(TestCase):
     def setUp(self):
-        self.site_type = SiteTypes('references/site_type_transition.json')
+        self.site_type = SiteTypeTransitions('references/site_type_transition.json')
 
     def test_validate_ok(self):
         good_new_site_type = [

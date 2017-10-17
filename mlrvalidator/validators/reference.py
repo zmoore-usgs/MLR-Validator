@@ -103,7 +103,7 @@ class States(ReferenceInfo):
         return state_attributes
 
 
-class SiteTypes(ReferenceInfo):
+class SiteTypeTransitions(ReferenceInfo):
     def get_site_types(self, old_site_type_code):
         old_site_types = self.reference_info['oldSiteTypeCodes']
         new_site_type_list = self._get_reference_list('newSiteTypeCodes', 'oldSiteTypeCode', old_site_type_code, old_site_types)
