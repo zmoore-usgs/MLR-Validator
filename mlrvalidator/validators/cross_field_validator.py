@@ -1,5 +1,6 @@
 
 from .base_cross_field_validator import BaseCrossFieldValidator
+from . import site_type_transition_reference
 
 class CrossFieldValidator(BaseCrossFieldValidator):
 
@@ -65,7 +66,7 @@ class CrossFieldValidator(BaseCrossFieldValidator):
             construction_date = self.merged_document.get('firstConstructionDate', '').strip()
             inventory_date = self.merged_document.get('siteEstablishmentDate', '').strip()
             if (construction_date and inventory_date) and (construction_date > inventory_date):
-                return self._error(field, "firstConstructionDate cannot be more recent than siteEstablishmnetDate")
+                self._error(field, "firstConstructionDate cannot be more recent than siteEstablishmnetDate")
 
     def _validate_check_well_hole_depths(self, check_well_hole_depths, field, value):
         """
@@ -82,5 +83,22 @@ class CrossFieldValidator(BaseCrossFieldValidator):
                 pass
             else:
                 if (hole_depth and well_depth) and (well_depth > hole_depth):
-                    return self._error(field, "wellDepth cannot be greater than holeDepth")
+                    self._error(field, "wellDepth cannot be greater than holeDepth")
+
+
+    def _validate_check_valid_site_type_update(self, check_valid_update, field, value):
+        """
+        Check that if the field is changing from an existing site that it is in the allowed transitions
+
+        The rule's arguments are validated against this schema
+        {'type': 'boolean'}
+
+        """
+        if check_valid_update and self.update:
+            stripped_value = value.strip()
+            existing_value = self.existing_document.get(field, '')
+            if stripped_value and existing_value:
+                transitions = site_type_transition_reference.get_allowed_transitions(existing_value)
+                if transitions and transitions.count(stripped_value) == 0:
+                    self._error(field, 'Can not change a siteType with existing value {0} to {1}'.format(existing_value, stripped_value))
 

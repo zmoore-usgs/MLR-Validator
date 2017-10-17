@@ -7,7 +7,8 @@ class BaseCrossFieldValidator(Validator):
     '''
 
     def validate(self, document, existing_document, schema=None, update=False, normalize=True):
+        self.existing_document = existing_document
         self.merged_document = existing_document.copy()
         self.merged_document.update(document)
 
-        return Validator.validate(self, document, schema=schema, update=update, normalize=normalize)
+        return super().validate(document, schema=schema, update=update, normalize=normalize)

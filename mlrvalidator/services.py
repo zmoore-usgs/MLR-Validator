@@ -64,7 +64,6 @@ ddot_location_model = api.model('DdotLocationModel', {
     "timeZoneCode": fields.String(),
     "topographicCode": fields.String(),
     "wellDepth": fields.String(),
-    "transactionType": fields.String()
 })
 
 location_model = api.clone('LocationModel', ddot_location_model, {
