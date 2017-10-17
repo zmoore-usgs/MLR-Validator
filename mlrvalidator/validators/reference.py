@@ -14,6 +14,14 @@ class ReferenceInfo:
         return self.reference_info
 
     def _get_reference_list(self, reference_attribute, parent_attribute, parent_value, parent_list):
+        '''
+
+        :param reference_attribute:
+        :param parent_attribute:
+        :param parent_value:
+        :param parent_list:
+        :return:
+        '''
         try:
             reference_object = list(filter(lambda c: c[parent_attribute] == parent_value, parent_list))[0]
         except IndexError:
@@ -103,12 +111,14 @@ class States(ReferenceInfo):
         return state_attributes
 
 
-class SiteTypeTransitions(ReferenceInfo):
-    def get_site_types(self, old_site_type_code):
-        old_site_types = self.reference_info['oldSiteTypeCodes']
-        new_site_type_list = self._get_reference_list('newSiteTypeCodes', 'oldSiteTypeCode', old_site_type_code, old_site_types)
-
-        return new_site_type_list
+class FieldTransitions(ReferenceInfo):
+    def get_allowed_transitions(self, existing_field_value):
+        '''
+        :return list of allowed new values. If the list is empty any transition is allowed
+        :param string existing_field_value:
+        :return:
+        '''
+        return  self._get_reference_list('newFields', 'existingField', existing_field_value, self.get_reference_info())
 
 
 class SiteTypesCrossField(ReferenceInfo):

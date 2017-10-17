@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States, SiteTypeTransitions, SiteTypesCrossField
+    States, FieldTransitions, SiteTypesCrossField
 
 
 class ValidateGetAquifersCase(TestCase):
@@ -251,9 +251,9 @@ class ValidateGetStateAttributesCase(TestCase):
         self.assertEqual(test_state, bad_state)
 
 
-class ValidateGetSiteTypeTransitionsCase(TestCase):
+class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):
-        self.site_type = SiteTypeTransitions('references/site_type_transition.json')
+        self.site_type = FieldTransitions('references/site_type_transition.json')
 
     def test_validate_ok(self):
         good_new_site_type = [
@@ -265,13 +265,14 @@ class ValidateGetSiteTypeTransitionsCase(TestCase):
             "GW-MW",
             "SP"
         ]
-        test_new_site_type = self.site_type.get_site_types('AG')
+        test_new_site_type = self.site_type.get_allowed_transitions('AG')
 
         self.assertEqual(test_new_site_type, good_new_site_type)
 
+
     def test_validate_not_ok(self):
         bad_new_site_type = []
-        test_new_site_type = self.site_type.get_site_types('XY')
+        test_new_site_type = self.site_type.get_allowed_transitions('XY')
 
         self.assertEqual(test_new_site_type, bad_new_site_type)
 
