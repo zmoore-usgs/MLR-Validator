@@ -13,6 +13,7 @@ class ValidateCrossFieldsTestCase(TestCase):
 
     #TODO: Break this up so that a test case tests a fields validation rules. Below is the cross field validation schema tests
     #TODO: Add needed tests for all validations not just cross field.
+    #TODO: Add tests with an existing document
     def setUp(self):
         self.validator = ErrorValidator()
         self.good_data = {

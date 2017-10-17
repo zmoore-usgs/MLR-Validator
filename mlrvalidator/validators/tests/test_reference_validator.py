@@ -8,6 +8,8 @@ site_validator.allow_unknown = True
 
 
 class ValidateReferenceCase(TestCase):
+    #TODO: Turn these into true unit tests by specifying the schema in the test case and mocking the reference lists
+    #TODO: Add some tests that use an existing document.
 
     def setUp(self):
         self.good_data = {
@@ -165,59 +167,59 @@ class ValidateReferenceCase(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
-        self.assertTrue(site_validator.validate(self.good_data5))
-        self.assertTrue(site_validator.validate(self.good_data6))
-        self.assertTrue(site_validator.validate(self.good_data7))
-        self.assertTrue(site_validator.validate(self.good_data8))
-        self.assertTrue(site_validator.validate(self.good_data9))
-        self.assertTrue(site_validator.validate(self.good_data10))
-        self.assertTrue(site_validator.validate(self.good_data11))
-        self.assertTrue(site_validator.validate(self.good_data12))
-        self.assertTrue(site_validator.validate(self.good_data13))
-        self.assertTrue(site_validator.validate(self.good_data14))
-        self.assertTrue(site_validator.validate(self.good_data15))
-        self.assertTrue(site_validator.validate(self.good_data16))
-        self.assertTrue(site_validator.validate(self.good_data17))
-        self.assertTrue(site_validator.validate(self.good_data18))
-        self.assertTrue(site_validator.validate(self.good_data19))
-        self.assertTrue(site_validator.validate(self.good_data20))
-        self.assertTrue(site_validator.validate(self.good_data21))
-        self.assertTrue(site_validator.validate(self.good_data22))
-        self.assertTrue(site_validator.validate(self.good_data23))
-        self.assertTrue(site_validator.validate(self.good_data24))
-        self.assertTrue(site_validator.validate(self.good_data25))
-        self.assertTrue(site_validator.validate(self.good_data26))
-        self.assertTrue(site_validator.validate(self.good_data27))
-        self.assertTrue(site_validator.validate(self.good_data28))
-        self.assertTrue(site_validator.validate(self.good_data29))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
+        self.assertTrue(site_validator.validate(self.good_data5, {}))
+        self.assertTrue(site_validator.validate(self.good_data6, {}))
+        self.assertTrue(site_validator.validate(self.good_data7, {}))
+        self.assertTrue(site_validator.validate(self.good_data8, {}))
+        self.assertTrue(site_validator.validate(self.good_data9, {}))
+        self.assertTrue(site_validator.validate(self.good_data10, {}))
+        self.assertTrue(site_validator.validate(self.good_data11, {}))
+        self.assertTrue(site_validator.validate(self.good_data12, {}))
+        self.assertTrue(site_validator.validate(self.good_data13, {}))
+        self.assertTrue(site_validator.validate(self.good_data14, {}))
+        self.assertTrue(site_validator.validate(self.good_data15, {}))
+        self.assertTrue(site_validator.validate(self.good_data16, {}))
+        self.assertTrue(site_validator.validate(self.good_data17, {}))
+        self.assertTrue(site_validator.validate(self.good_data18, {}))
+        self.assertTrue(site_validator.validate(self.good_data19, {}))
+        self.assertTrue(site_validator.validate(self.good_data20, {}))
+        self.assertTrue(site_validator.validate(self.good_data21, {}))
+        self.assertTrue(site_validator.validate(self.good_data22, {}))
+        self.assertTrue(site_validator.validate(self.good_data23, {}))
+        self.assertTrue(site_validator.validate(self.good_data24, {}))
+        self.assertTrue(site_validator.validate(self.good_data25, {}))
+        self.assertTrue(site_validator.validate(self.good_data26, {}))
+        self.assertTrue(site_validator.validate(self.good_data27, {}))
+        self.assertTrue(site_validator.validate(self.good_data28, {}))
+        self.assertTrue(site_validator.validate(self.good_data29, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
-        self.assertFalse(site_validator.validate(self.bad_data4))
-        self.assertFalse(site_validator.validate(self.bad_data5))
-        self.assertFalse(site_validator.validate(self.bad_data6))
-        self.assertFalse(site_validator.validate(self.bad_data7))
-        self.assertFalse(site_validator.validate(self.bad_data8))
-        self.assertFalse(site_validator.validate(self.bad_data9))
-        self.assertFalse(site_validator.validate(self.bad_data10))
-        self.assertFalse(site_validator.validate(self.bad_data11))
-        self.assertFalse(site_validator.validate(self.bad_data12))
-        self.assertFalse(site_validator.validate(self.bad_data13))
-        self.assertFalse(site_validator.validate(self.bad_data14))
-        self.assertFalse(site_validator.validate(self.bad_data15))
-        self.assertFalse(site_validator.validate(self.bad_data16))
-        self.assertFalse(site_validator.validate(self.bad_data17))
-        self.assertFalse(site_validator.validate(self.bad_data18))
-        self.assertFalse(site_validator.validate(self.bad_data19))
-        self.assertFalse(site_validator.validate(self.bad_data20))
-        self.assertFalse(site_validator.validate(self.bad_data21))
-        self.assertFalse(site_validator.validate(self.bad_data22))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
+        self.assertFalse(site_validator.validate(self.bad_data4, {}))
+        self.assertFalse(site_validator.validate(self.bad_data5, {}))
+        self.assertFalse(site_validator.validate(self.bad_data6, {}))
+        self.assertFalse(site_validator.validate(self.bad_data7, {}))
+        self.assertFalse(site_validator.validate(self.bad_data8, {}))
+        self.assertFalse(site_validator.validate(self.bad_data9, {}))
+        self.assertFalse(site_validator.validate(self.bad_data10, {}))
+        self.assertFalse(site_validator.validate(self.bad_data11, {}))
+        self.assertFalse(site_validator.validate(self.bad_data12, {}))
+        self.assertFalse(site_validator.validate(self.bad_data13, {}))
+        self.assertFalse(site_validator.validate(self.bad_data14, {}))
+        self.assertFalse(site_validator.validate(self.bad_data15, {}))
+        self.assertFalse(site_validator.validate(self.bad_data16, {}))
+        self.assertFalse(site_validator.validate(self.bad_data17, {}))
+        self.assertFalse(site_validator.validate(self.bad_data18, {}))
+        self.assertFalse(site_validator.validate(self.bad_data19, {}))
+        self.assertFalse(site_validator.validate(self.bad_data20, {}))
+        self.assertFalse(site_validator.validate(self.bad_data21, {}))
+        self.assertFalse(site_validator.validate(self.bad_data22, {}))
 
 
 class ValidateAquiferCode(TestCase):
@@ -265,16 +267,16 @@ class ValidateAquiferCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
-        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
+        self.assertTrue(site_validator.validate(self.good_data5, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
 class ValidateNationalAquiferCode(TestCase):
@@ -322,16 +324,16 @@ class ValidateNationalAquiferCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
-        self.assertTrue(site_validator.validate(self.good_data5))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
+        self.assertTrue(site_validator.validate(self.good_data5, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
 class ValidateHydrologicUnitCode(TestCase):
@@ -404,21 +406,21 @@ class ValidateHydrologicUnitCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
-        self.assertTrue(site_validator.validate(self.good_data5))
-        self.assertTrue(site_validator.validate(self.good_data6))
-        self.assertTrue(site_validator.validate(self.good_data7))
-        self.assertTrue(site_validator.validate(self.good_data8))
-        self.assertTrue(site_validator.validate(self.good_data9))
-        self.assertTrue(site_validator.validate(self.good_data10))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
+        self.assertTrue(site_validator.validate(self.good_data5, {}))
+        self.assertTrue(site_validator.validate(self.good_data6, {}))
+        self.assertTrue(site_validator.validate(self.good_data7, {}))
+        self.assertTrue(site_validator.validate(self.good_data8, {}))
+        self.assertTrue(site_validator.validate(self.good_data9, {}))
+        self.assertTrue(site_validator.validate(self.good_data10, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
 class ValidateMinorCivilDivisionCode(TestCase):
@@ -461,15 +463,15 @@ class ValidateMinorCivilDivisionCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
 class ValidateNationalWaterUseCode(TestCase):
@@ -501,14 +503,14 @@ class ValidateNationalWaterUseCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
 
 
 class ValidateCountyCode(TestCase):
@@ -551,15 +553,15 @@ class ValidateCountyCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
-        self.assertFalse(site_validator.validate(self.bad_data3))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
 class ValidateStateCode(TestCase):
@@ -591,11 +593,11 @@ class ValidateStateCode(TestCase):
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data))
-        self.assertTrue(site_validator.validate(self.good_data2))
-        self.assertTrue(site_validator.validate(self.good_data3))
-        self.assertTrue(site_validator.validate(self.good_data4))
+        self.assertTrue(site_validator.validate(self.good_data, {}))
+        self.assertTrue(site_validator.validate(self.good_data2, {}))
+        self.assertTrue(site_validator.validate(self.good_data3, {}))
+        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data))
-        self.assertFalse(site_validator.validate(self.bad_data2))
+        self.assertFalse(site_validator.validate(self.bad_data, {}))
+        self.assertFalse(site_validator.validate(self.bad_data2, {}))
