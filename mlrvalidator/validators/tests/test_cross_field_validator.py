@@ -194,4 +194,21 @@ class CrossFieldValidatorCheckWellHoleDepthTestCase(TestCase):
         self.assertFalse(self.validator.validate({'holeDepth': '9'}, {'wellDepth': '10'}))
 
 
+class CrossFieldValidatorCheckValidSiteTypeUpdate(TestCase):
 
+    def setUp(self):
+        self.validator = CrossFieldValidator(allow_unknown=True,
+                                             schema={'siteTypeCode': {'check_valid_site_type_update': True}}
+                                             )
+
+    def test_valid_site_type_on_update(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AG'}, {}, update=True))
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-SPS'}, {'siteTypeCode': 'AG'}, update=True))
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AG'}, {'siteTypeCode': 'ZZZ'}, update=True))
+
+    def test_site_type_update_false(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AG'}, {}))
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-SPS'}, {'siteTypeCode': 'GW-MW'}))
+
+    def test_invalid_site_type_on_update(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-SPS'}, {'siteTypeCode': 'GW-MW'}, update=True))

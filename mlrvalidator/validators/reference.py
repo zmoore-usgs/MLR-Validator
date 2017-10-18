@@ -103,12 +103,13 @@ class States(ReferenceInfo):
         return state_attributes
 
 
-class SiteTypes(ReferenceInfo):
-    def get_site_types(self, old_site_type_code):
-        old_site_types = self.reference_info['oldSiteTypeCodes']
-        new_site_type_list = self._get_reference_list('newSiteTypeCodes', 'oldSiteTypeCode', old_site_type_code, old_site_types)
-
-        return new_site_type_list
+class FieldTransitions(ReferenceInfo):
+    def get_allowed_transitions(self, existing_field_value):
+        '''
+        :return list of allowed new values. Return an empty list if the existing_field_value isn't in the reference list.
+        :param string existing_field_value:
+        '''
+        return  self._get_reference_list('newFields', 'existingField', existing_field_value, self.get_reference_info())
 
 
 class SiteTypesCrossField(ReferenceInfo):

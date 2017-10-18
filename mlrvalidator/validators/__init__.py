@@ -1,5 +1,5 @@
 from .reference import CountryStateReference, Aquifers, Counties, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, \
-    ReferenceInfo, States, SiteTypes, SiteTypesCrossField
+    ReferenceInfo, States, FieldTransitions, SiteTypesCrossField
 
 aquifer_reference = Aquifers('references/aquifer.json')
 huc_reference = Hucs('references/huc.json')
@@ -9,5 +9,5 @@ national_water_use_reference = NationalWaterUseCodes('references/national_water_
 reference_lists = ReferenceInfo('references/reference_lists.json')
 county_reference = Counties('references/county.json')
 state_reference = States('references/state.json')
-site_type_transition_reference = SiteTypes('references/site_type_transition.json')
+site_type_transition_reference = FieldTransitions('references/site_type_transition.json')
 site_type_cross_field_reference = SiteTypesCrossField('references/site_type_cross_field.json')
