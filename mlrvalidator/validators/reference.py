@@ -106,9 +106,8 @@ class States(ReferenceInfo):
 class FieldTransitions(ReferenceInfo):
     def get_allowed_transitions(self, existing_field_value):
         '''
-        :return list of allowed new values. If the list is empty any transition is allowed
+        :return list of allowed new values. Return an empty list if the existing_field_value isn't in the reference list.
         :param string existing_field_value:
-        :return:
         '''
         return  self._get_reference_list('newFields', 'existingField', existing_field_value, self.get_reference_info())
 
