@@ -14,14 +14,6 @@ class ReferenceInfo:
         return self.reference_info
 
     def _get_reference_list(self, reference_attribute, parent_attribute, parent_value, parent_list):
-        '''
-
-        :param reference_attribute:
-        :param parent_attribute:
-        :param parent_value:
-        :param parent_list:
-        :return:
-        '''
         try:
             reference_object = list(filter(lambda c: c[parent_attribute] == parent_value, parent_list))[0]
         except IndexError:
