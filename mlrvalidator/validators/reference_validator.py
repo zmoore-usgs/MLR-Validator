@@ -6,10 +6,8 @@ from .base_cross_field_validator import BaseCrossFieldValidator
 
 class ReferenceValidator(BaseCrossFieldValidator):
 
-    def _is_not_in_list(self, value, ref_list, upper_flag):
+    def _is_not_in_list(self, value, ref_list):
         stripped_value = value.strip()
-        if upper_flag == 'upper':
-            stripped_value = stripped_value.upper()
 
         if stripped_value and stripped_value not in ref_list:
             return True
@@ -28,7 +26,7 @@ class ReferenceValidator(BaseCrossFieldValidator):
         if valid_reference:
             ref_list = reference_lists.reference_info[field]
 
-            if self._is_not_in_list(value, ref_list, 'upper'):
+            if self._is_not_in_list(value, ref_list):
                 return self._error(field, error_message)
 
     def _validate_valid_aquifer_code(self, valid_aquifer_code, field, value):
@@ -42,14 +40,14 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_aquifer_code:
             aquifer_list = aquifer_reference.get_aquifers(
-                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('countryCode', ''),
                 self.merged_document.get('stateFipsCode', '')
             )
 
             if not aquifer_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, aquifer_list, 'upper'):
+            if self._is_not_in_list(value, aquifer_list):
                 return self._error(field, error_message)
 
     def _validate_valid_national_aquifer_code(self, valid_national_aquifer_code, field, value):
@@ -63,14 +61,14 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_national_aquifer_code:
             national_aquifer_list = national_aquifer_reference.get_national_aquifers(
-                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('countryCode', ''),
                 self.merged_document.get('stateFipsCode', '')
             )
 
             if not national_aquifer_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, national_aquifer_list, 'upper'):
+            if self._is_not_in_list(value, national_aquifer_list):
                 return self._error(field, error_message)
 
     def _validate_valid_huc(self, valid_huc, field, value):
@@ -84,7 +82,7 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_huc:
             huc_list = huc_reference.get_hucs(
-                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('countryCode', ''),
                 self.merged_document.get('stateFipsCode', '')
             )
 
@@ -105,14 +103,14 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_mcd_code:
             mcd_list = mcd_reference.get_mcds(
-                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('countryCode', ''),
                 self.merged_document.get('stateFipsCode', '')
             )
 
             if not mcd_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, mcd_list, 'upper'):
+            if self._is_not_in_list(value, mcd_list):
                 return self._error(field, error_message)
 
     def _validate_valid_national_water_use_code(self, valid_national_water_use_code, field, value):
@@ -126,13 +124,13 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_national_water_use_code:
             national_water_use_code_list = national_water_use_reference.get_national_water_use_codes(
-                self.merged_document.get('siteTypeCode', '').upper()
+                self.merged_document.get('siteTypeCode', '')
             )
 
             if not national_water_use_code_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, national_water_use_code_list, 'upper'):
+            if self._is_not_in_list(value, national_water_use_code_list):
                 return self._error(field, error_message)
 
     def _validate_valid_county_code(self, valid_county_code, field, value):
@@ -146,14 +144,14 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_county_code:
             county_list = county_reference.get_county_codes(
-                self.merged_document.get('countryCode', '').upper(),
+                self.merged_document.get('countryCode', ''),
                 self.merged_document.get('stateFipsCode', '')
             )
 
             if not county_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, county_list, 'upper'):
+            if self._is_not_in_list(value, county_list):
                 return self._error(field, error_message)
 
     def _validate_valid_state_code(self, valid_state_code, field, value):
@@ -167,12 +165,12 @@ class ReferenceValidator(BaseCrossFieldValidator):
 
         if valid_state_code:
             state_list = state_reference.get_state_codes(
-                self.merged_document.get('countryCode','').upper()
+                self.merged_document.get('countryCode','')
             )
 
             if not state_list:
                 return self._error(field, error_message)
 
-            if self._is_not_in_list(value, state_list, 'upper'):
+            if self._is_not_in_list(value, state_list):
                 return self._error(field, error_message)
 

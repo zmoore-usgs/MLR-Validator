@@ -3,6 +3,49 @@ from unittest import TestCase
 
 from ..error_validator import ErrorValidator
 
+class ErrorValidatorAgencyCodeTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = ErrorValidator()
+
+    def test_agency_code_no_padding_is_valid(self):
+        self.assertTrue(self.validator.validate({'agencyCode': 'USGS'}, {}, update=True))
+
+    def test_agency_code_padding_is_valid(self):
+        self.assertTrue(self.validator.validate({'agencyCode': 'USGS '}, {}, update=True))
+
+    def test_agency_code_lower_padding_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'usgs   '}, {}, update=True))
+
+    def test_agency_code_lower_no_padding_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'usgs'}, {}, update=True))
+
+    def test_agency_code_not_in_ref_list_padding_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'XYZ   '}, {}, update=True))
+
+    def test_agency_code_not_in_ref_list_no_padding_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'XYZ'}, {}, update=True))
+
+    def test_agency_code_not_in_ref_list_padding_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'XYZ     '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 2)
+
+    def test_agency_code_in_ref_list_padding_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'USGS      '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
+
+    def test_agency_code_null_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
+
+    def test_agency_code_null_padding_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': ' '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
+
+    def test_agency_code_padding_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': '           '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 2)
+
 class ErrorValidatorLatitudeTestCase(TestCase):
     #TODO: fill in with additional tests for latitude. Ideally each field that has validations would have a separate test case.
 

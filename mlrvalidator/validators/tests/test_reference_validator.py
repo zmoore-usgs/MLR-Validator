@@ -225,25 +225,20 @@ class ValidateReferenceCase(TestCase):
 class ValidateAquiferCode(TestCase):
 
     def setUp(self):
-        self.good_data = {
+        self.all_good_fields_is_valid = {
             'countryCode': 'CA',
             'stateFipsCode': '96',
             'aquiferCode': '112EVRS'
         }
-        self.good_data2 = {
+        self.good_country_state_null_pad_aquifer_id_valid = {
             'countryCode': 'CA',
             'stateFipsCode': '96',
             'aquiferCode': ' '
         }
-        self.good_data3 = {
+        self.good_country_state_null_pad_aquifer_id_valid = {
             'countryCode': 'CA',
             'stateFipsCode': '96',
             'aquiferCode': ''
-        }
-        self.good_data4 = {
-            'countryCode': 'ca',
-            'stateFipsCode': '96',
-            'aquiferCode': '112EVRS'
         }
         self.good_data5 = {
             'countryCode': 'CA',
@@ -263,6 +258,11 @@ class ValidateAquiferCode(TestCase):
         self.bad_data3 = {
             'countryCode': 'CA',
             'stateFipsCode': 'XY',
+            'aquiferCode': '112EVRS'
+        }
+        self.bad_data4 = {
+            'countryCode': 'ca',
+            'stateFipsCode': '96',
             'aquiferCode': '112EVRS'
         }
 
