@@ -1,12 +1,15 @@
+import os
 from unittest import TestCase
 
+from app import application
 from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
     States, FieldTransitions, SiteTypesCrossField
 
 
 class ValidateGetAquifersCase(TestCase):
     def setUp(self):
-        self.aquifer = Aquifers('references/aquifer.json')
+
+        self.aquifer = Aquifers(os.path.join(application.config['REFERENCE_FILE_DIR'], 'aquifer.json'))
 
     def test_validate_ok(self):
         good_aquifer = ["112EVRS", "112GLCV", "112SUMS"]
@@ -28,7 +31,7 @@ class ValidateGetAquifersCase(TestCase):
 
 class ValidateGetNationalAquifersCase(TestCase):
     def setUp(self):
-        self.national_aquifer = NationalAquifers('references/national_aquifer.json')
+        self.national_aquifer = NationalAquifers(os.path.join(application.config['REFERENCE_FILE_DIR'], 'national_aquifer.json'))
 
     def test_validate_ok(self):
         good_aquifer = ["N100AKUNCD", "N9999OTHER"]
@@ -49,8 +52,9 @@ class ValidateGetNationalAquifersCase(TestCase):
 
 
 class ValidateGetHucsCase(TestCase):
+
     def setUp(self):
-        self.huc = Hucs('references/huc.json')
+        self.huc = Hucs(os.path.join(application.config['REFERENCE_FILE_DIR'], 'huc.json'))
 
     def test_validate_ok(self):
         good_huc = ["21030001"]
@@ -72,7 +76,7 @@ class ValidateGetHucsCase(TestCase):
 
 class ValidateGetMcdsCase(TestCase):
     def setUp(self):
-        self.mcd = Mcds('references/mcd.json')
+        self.mcd = Mcds(os.path.join(application.config['REFERENCE_FILE_DIR'], 'mcd.json'))
 
     def test_validate_ok(self):
         good_mcd = ["90148",
@@ -120,7 +124,7 @@ class ValidateGetMcdsCase(TestCase):
 
 class ValidateGetNationalWaterUseCase(TestCase):
     def setUp(self):
-        self.national_water_use = NationalWaterUseCodes('references/national_water_use.json')
+        self.national_water_use = NationalWaterUseCodes(os.path.join(application.config['REFERENCE_FILE_DIR'], 'national_water_use.json'))
 
     def test_validate_ok(self):
         good_national_water_use = [
@@ -149,7 +153,7 @@ class ValidateGetNationalWaterUseCase(TestCase):
 
 class ValidateGetCountyCodeCase(TestCase):
     def setUp(self):
-        self.county = Counties('references/county.json')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
@@ -171,7 +175,7 @@ class ValidateGetCountyCodeCase(TestCase):
 
 class ValidateGetCountyAttributesCase(TestCase):
     def setUp(self):
-        self.county = Counties('references/county.json')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
 
     def test_validate_ok(self):
         good_county = {
@@ -206,7 +210,7 @@ class ValidateGetCountyAttributesCase(TestCase):
 
 class ValidateGetStateCodeCase(TestCase):
     def setUp(self):
-        self.state = States('references/state.json')
+        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
 
     def test_validate_ok(self):
         good_state = ["00", "90", "91", "92", "93", "94", "95", "96", "97", "98"]
@@ -223,7 +227,7 @@ class ValidateGetStateCodeCase(TestCase):
 
 class ValidateGetStateAttributesCase(TestCase):
     def setUp(self):
-        self.state = States('references/state.json')
+        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
 
     def test_validate_ok(self):
         good_state = {
@@ -253,7 +257,7 @@ class ValidateGetStateAttributesCase(TestCase):
 
 class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):
-        self.site_type = FieldTransitions('references/site_type_transition.json')
+        self.site_type = FieldTransitions(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_transition.json'))
 
     def test_validate_ok(self):
         good_new_site_type = [
@@ -280,7 +284,7 @@ class ValidateGetFieldTransitionsCase(TestCase):
 class ValidateGetSiteTypesCrossFieldCase(TestCase):
 
     def setUp(self):
-        self.site_type_cf = SiteTypesCrossField('references/site_type_cross_field.json')
+        self.site_type_cf = SiteTypesCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_cross_field.json'))
 
     def test_real_site_type_code(self):
         result = self.site_type_cf.get_site_type_field_dependencies('SB-CV')

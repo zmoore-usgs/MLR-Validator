@@ -85,7 +85,7 @@ class ValidateReferenceCase(TestCase):
             'tertiaryUseOfWaterCode': 'A'
         }
         self.good_data25 = {
-            'timeZoneCode': 'CST'
+             'timeZoneCode': 'CST'
         }
         self.good_data26 = {
             'topographicCode': 'A'
