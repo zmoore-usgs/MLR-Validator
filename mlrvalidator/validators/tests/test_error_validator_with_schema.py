@@ -164,12 +164,484 @@ class ErrorValidatorStationNameTestCase(TestCase):
         self.assertEqual(len(self.validator.errors.get('stationName')), 2)
 
 
-
 class ErrorValidatorLatitudeTestCase(TestCase):
-    #TODO: fill in with additional tests for latitude. Ideally each field that has validations would have a separate test case.
 
-    def latitude_without_longitude_is_invalid(self):
-        self.assertFalse(self.validator.validate({'latitude': ' 0400000'}, {}))
+    def setUp(self):
+        self.validator = ErrorValidator()
+
+    def test_null_no_pad_latitude_empty_string_dependencies_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '', 'longitude': '',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                 'coordinateMethodCode': ''}, {}, update=True))
+
+    def test_null_no_pad_latitude_dependencies_missing_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ''}, {}, update=True))
+
+    def test_null_pad_latitude_dependencies_missing_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' '}, {}, update=True))
+
+    def test_null_pad_latitude_pad_dependencies_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' ', 'longitude': ' ',
+                                                 'coordinateAccuracyCode': ' ', 'coordinateDatumCode': ' ',
+                                                 'coordinateMethodCode': ' '}, {}, update=True))
+
+    def test_positive_dms_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_single_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 023456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_with_ms_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 003456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_single_digit_minutes_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 000456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_with_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 000056', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_single_digit_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 000006', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_zero_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 000000', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_max_degrees_max_minutes_max_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 905959', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_10ths_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 900000.0', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_100ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'latitude': ' 900000.93', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_1000ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'latitude': ' 900000.093', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-123456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_single_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-023456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_with_ms_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-003456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_single_digit_minutes_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-000456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_with_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-000056', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_single_digit_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-000006', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_zero_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-000000', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_max_degrees_max_minutes_max_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-905959', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_10ths_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'latitude': '-900000.0', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_100ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'latitude': '-900000.93', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_1000ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'latitude': '-900000.093', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_missing_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 9020', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_missing_minutes_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 90', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_degrees_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 990000', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_minutes_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 207500', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 200066', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_too_many_seconds_decimals_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 200023.9234', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_dangling_decimal_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 200023.', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 20003234', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_longer_than_maxlength_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 203300203234', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 2)
+
+    def test_longer_than_maxlength_spaces_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': '             ', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 5)
+
+    def test_latitude_without_longitude_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 040000',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_good_latitude_null_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': '',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 4)
+
+    def test_good_latitude_non_exist_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 123456'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 4)
+
+    def test_good_latitude_good_longitude_null_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 3)
+
+    def test_good_latitude_good_longitude_null_2_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 2)
+
+    def test_good_latitude_good_longitude_null_1_dependency_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_first_char_not_space_or_negative_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': '200023', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_non_digit_is_invalid(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 200u23', 'longitude': ' 1234556',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+
+class ErrorValidatorLongitudeTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = ErrorValidator()
+
+    def test_null_no_pad_longitude_empty_string_dependencies_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '', 'latitude': '',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                 'coordinateMethodCode': ''}, {}, update=True))
+
+    def test_null_no_pad_longitude_dependencies_missing_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ''}, {}, update=True))
+
+    def test_null_pad_longitude_dependencies_missing_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' '}, {}, update=True))
+
+    def test_null_pad_longitude_pad_dependencies_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' ', 'latitude': ' ',
+                                                 'coordinateAccuracyCode': ' ', 'coordinateDatumCode': ' ',
+                                                 'coordinateMethodCode': ' '}, {}, update=True))
+
+    def test_positive_dms_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_double_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_single_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0034556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_with_ms_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0004556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_single_digit_minutes_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0000556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_with_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0000056', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_single_digit_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0000006', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_zero_degrees_zero_minutes_zero_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0000000', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_max_degrees_max_minutes_max_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 1805959', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_10ths_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 1234556.2', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_100ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'longitude': ' 1234556.23', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_positive_dms_with_1000ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'longitude': ' 1234556.326', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_double_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_single_digit_degrees_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0034556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_with_ms_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0004556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_single_digit_minutes_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0000556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_with_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0000056', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_single_digit_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0000006', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_zero_degrees_zero_minutes_zero_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-0000000', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_max_degrees_max_minutes_max_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-1805959', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_10ths_seconds_is_valid(self):
+        self.assertTrue(self.validator.validate({'longitude': '-1234556.2', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                 'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_100ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'longitude': '-1234556.23', 'latitude': ' 123456',
+                                     'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                     'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_negative_dms_with_1000ths_seconds_is_valid(self):
+        self.assertTrue(
+            self.validator.validate({'longitude': '-1234556.326', 'latitude': ' 123456',
+                                     'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                     'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_missing_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 12345', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_missing_minutes_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 123', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_degrees_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1934556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_minutes_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1238556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_over_max_seconds_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234576', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_too_many_seconds_decimals_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234556.2689', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+
+    def test_dangling_decimal_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234556.', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+
+    def test_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 12345566', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+
+    def test_longer_than_maxlength_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 12345561232112', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 2)
+
+    def test_longer_than_maxlength_spaces_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': '               ', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 5)
+
+    def test_longitude_without_latitude_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 0400000',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+
+    def test_good_longitude_null_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 0123456', 'latitude': '',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 4)
+
+    def test_good_longitude_non_exist_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 0123456'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('longitude')), 4)
+
+    def test_good_longitude_good_latitude_null_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 3)
+
+    def test_good_longitude_good_latitude_null_2_dependencies_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': '',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 2)
+
+    def test_good_longitude_good_latitude_null_1_dependency_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+
+    def test_first_char_not_space_or_negative_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': '1234556', 'latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
+
+    def test_non_digit_is_invalid(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 123h556','latitude': ' 123456',
+                                                 'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
+                                                  'coordinateMethodCode': 'C'}, {}, update=True))
 
 class ValidateCrossFieldsTestCase(TestCase):
 

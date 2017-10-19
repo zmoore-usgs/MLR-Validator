@@ -137,20 +137,22 @@ class SingleFieldValidator(Validator):
 
         def check_100th_seconds(val):
             try:
-                val[7] in ["."]
-                test_split = val.split(".")
-                # There is a decimal, but have to check if anything was split from it
-                if test_split[1] == "":
-                    return False
-                else:
-                    # Check that only digits 0-9 exist after the decimal
-                    test_field = re.search('[^0-9]+', test_split[1])
-                    if test_field is None:
-                        # There are only digits 0-9 after the decimal
-                        return True
-                    else:
-                        # There is something besides digits 0-9 after the decimal
+                if val[7] in ["."]:
+                    test_split = val.split(".")
+                    # There is a decimal, but have to check if anything was split from it
+                    if test_split[1] == "":
                         return False
+                    else:
+                        # Check that only digits 0-9 exist after the decimal
+                        test_field = re.search('[^0-9]+', test_split[1])
+                        if test_field is None:
+                            # There are only digits 0-9 after the decimal
+                            return True
+                        else:
+                            # There is something besides digits 0-9 after the decimal
+                            return False
+                else:
+                    return False
             except IndexError:
                 return True
 
@@ -180,20 +182,22 @@ class SingleFieldValidator(Validator):
 
         def check_100th_seconds(val):
             try:
-                val[8] in ["."]
-                test_split = val.split(".")
-                # There is a decimal, but have to check if anything was split from it
-                if test_split[1] == "":
-                    return False
-                else:
-                    # Check that only digits 0-9 exist after the decimal
-                    test_field = re.search('[^0-9]+', test_split[1])
-                    if test_field is None:
-                        # There are only digits 0-9 after the decimal
-                        return True
-                    else:
-                        # There is something besides digits 0-9 after the decimal
+                if val[8] in ["."]:
+                    test_split = val.split(".")
+                    # There is a decimal, but have to check if anything was split from it
+                    if test_split[1] == "":
                         return False
+                    else:
+                        # Check that only digits 0-9 exist after the decimal
+                        test_field = re.search('[^0-9]+', test_split[1])
+                        if test_field is None:
+                            # There are only digits 0-9 after the decimal
+                            return True
+                        else:
+                            # There is something besides digits 0-9 after the decimal
+                            return False
+                else:
+                    return False
             except IndexError:
                 return True
 
