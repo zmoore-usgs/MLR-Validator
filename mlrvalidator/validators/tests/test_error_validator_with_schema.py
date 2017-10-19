@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from ..error_validator import ErrorValidator
 
+
 class ErrorValidatorAgencyCodeTestCase(TestCase):
 
     def setUp(self):
@@ -45,6 +46,45 @@ class ErrorValidatorAgencyCodeTestCase(TestCase):
     def test_agency_code_padding_too_long_is_invalid(self):
         self.assertFalse(self.validator.validate({'agencyCode': '           '}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('agencyCode')), 2)
+
+
+class ErrorValidatorSiteNumberTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = ErrorValidator()
+
+    def test_only_digits_is_valid(self):
+        self.assertTrue(self.validator.validate({'siteNumber': '01234'}, {}, update=True))
+
+    def test_only_digits_right_pad_is_valid(self):
+        self.assertTrue(self.validator.validate({'siteNumber': '01234   '}, {}, update=True))
+
+    def test_null_value_no_pad_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': ''}, {}, update=True))
+
+    def test_null_value_pad_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': ' '}, {}, update=True))
+
+    def test_non_digit_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': 'a6'}, {}, update=True))
+
+    def test_non_digit_special_char_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '$'}, {}, update=True))
+
+    def test_only_digits_blank_space_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '32   4'}, {}, update=True))
+
+    def test_only_digits_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '0126954826512369548'}, {}, update=True))
+
+    def test_invalid_chars_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '01269d82g651y23e69s548'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('siteNumber')), 2)
+
+    def test_only_spaces_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '                    '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('siteNumber')), 2)
+
 
 class ErrorValidatorLatitudeTestCase(TestCase):
     #TODO: fill in with additional tests for latitude. Ideally each field that has validations would have a separate test case.

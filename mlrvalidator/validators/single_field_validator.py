@@ -65,6 +65,19 @@ class SingleFieldValidator(Validator):
             if not stripped_value:
                 self._error(field, "Field must contain non whitespace characters")
 
+    def _validate_valid_site_number(self, valid_site_number, field, value):
+        """
+        # We are not validation format as specified in http://nwis.usgs.gov/nwisdocs4_3/gw/gwcoding_Sect2-1.pdf,
+        however, need to ensure that the site number consists of only digits
+
+        The rule's arguments are validated against this schema:
+        {'valid_site_number': True}
+        """
+        stripped_value = value.strip()
+        if valid_site_number and stripped_value:
+            if not stripped_value.isdigit():
+                self._error(field, "Site Number can only have digits 0-9")
+
     def _validate_valid_special_chars(self, valid_special_chars, field, value):
         """
         # Check that tab, #, *, \, ", ^, _, and $ do not exist in field

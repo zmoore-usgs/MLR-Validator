@@ -26,6 +26,40 @@ class ValidateIsEmptyTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data2))
 
 
+class ValidateValidSiteNumberTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}})
+        self.only_digits_is_valid = {
+            'siteNumber': '01234'
+        }
+        self.null_value_no_pad_is_valid = {
+            'siteNumber': ''
+        }
+        self.null_value_pad_is_valid = {
+            'siteNumber': ' '
+        }
+        self.non_digit_is_invalid = {
+            'siteNumber': 'a3'
+        }
+        self.non_digit_special_char_is_invalid = {
+            'siteNumber': '$'
+        }
+        self.only_digits_blank_space_is_invalid = {
+            'siteNumber': '32   4'
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(self.validator.validate(self.only_digits_is_valid))
+        self.assertTrue(self.validator.validate(self.null_value_no_pad_is_valid))
+        self.assertTrue(self.validator.validate(self.null_value_pad_is_valid))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(self.validator.validate(self.non_digit_is_invalid))
+        self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
+        self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
+
+
 class ValidateTypeNumericCheckTestCase(TestCase):
 
     def setUp(self):

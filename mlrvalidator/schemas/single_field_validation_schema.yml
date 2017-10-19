@@ -6,6 +6,7 @@ siteNumber:
     required: True
     maxlength: 15
     is_empty: False
+    valid_site_number: True
 stationName:
     required: True
     maxlength: 50

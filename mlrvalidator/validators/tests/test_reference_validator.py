@@ -90,12 +90,7 @@ class ValidateReferenceCase(TestCase):
         self.good_data26 = {
             'topographicCode': 'A'
         }
-        self.good_data27 = {
-            'topographicCode': 'a'
-        }
-        self.good_data28 = {
-            'sourceOfDepthCode': 'a'
-        }
+
         self.good_data29 = {
             'sourceOfDepthCode': 'A'
         }
@@ -165,6 +160,13 @@ class ValidateReferenceCase(TestCase):
         self.bad_data22 = {
             'sourceOfDepthCode': 'X'
         }
+        self.bad_data23 = {
+            'topographicCode': 'a'
+        }
+
+        self.bad_data24 = {
+            'sourceOfDepthCode': 'a'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data, {}))
@@ -193,8 +195,6 @@ class ValidateReferenceCase(TestCase):
         self.assertTrue(site_validator.validate(self.good_data24, {}))
         self.assertTrue(site_validator.validate(self.good_data25, {}))
         self.assertTrue(site_validator.validate(self.good_data26, {}))
-        self.assertTrue(site_validator.validate(self.good_data27, {}))
-        self.assertTrue(site_validator.validate(self.good_data28, {}))
         self.assertTrue(site_validator.validate(self.good_data29, {}))
 
     def test_with_validate_not_ok(self):
@@ -220,6 +220,10 @@ class ValidateReferenceCase(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data20, {}))
         self.assertFalse(site_validator.validate(self.bad_data21, {}))
         self.assertFalse(site_validator.validate(self.bad_data22, {}))
+        self.assertFalse(site_validator.validate(self.bad_data23, {}))
+        self.assertFalse(site_validator.validate(self.bad_data24, {}))
+
+
 
 
 class ValidateAquiferCode(TestCase):
@@ -235,48 +239,50 @@ class ValidateAquiferCode(TestCase):
             'stateFipsCode': '96',
             'aquiferCode': ' '
         }
-        self.good_country_state_null_pad_aquifer_id_valid = {
+        self.good_country_state_no_pad_aquifer_id_valid = {
             'countryCode': 'CA',
             'stateFipsCode': '96',
             'aquiferCode': ''
         }
-        self.good_data5 = {
-            'countryCode': 'CA',
-            'stateFipsCode': '96',
-            'aquiferCode': '112evrs'
-        }
-        self.bad_data = {
+        self.aquifer_not_in_list_is_invalid = {
             'countryCode': 'CA',
             'stateFipsCode': '96',
             'aquiferCode': '112EVS'
         }
-        self.bad_data2 = {
+        self.country_not_in_list_is_invalid = {
             'countryCode': 'XY',
             'stateFipsCode': '96',
             'aquiferCode': '112EVRS'
         }
-        self.bad_data3 = {
+        self.state_not_in_list_is_invalid = {
             'countryCode': 'CA',
             'stateFipsCode': 'XY',
             'aquiferCode': '112EVRS'
         }
-        self.bad_data4 = {
+        self.lower_country_is_invalid = {
             'countryCode': 'ca',
             'stateFipsCode': '96',
             'aquiferCode': '112EVRS'
         }
+        self.good_county_state_lower_aquifer_is_invalid = {
+            'countryCode': 'CA',
+            'stateFipsCode': '96',
+            'aquiferCode': '112evrs'
+        }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, {}))
-        self.assertTrue(site_validator.validate(self.good_data2, {}))
-        self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
-        self.assertTrue(site_validator.validate(self.good_data5, {}))
+        self.assertTrue(site_validator.validate(self.all_good_fields_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.good_country_state_null_pad_aquifer_id_valid, {}))
+        self.assertTrue(site_validator.validate(self.good_country_state_no_pad_aquifer_id_valid, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, {}))
-        self.assertFalse(site_validator.validate(self.bad_data2, {}))
-        self.assertFalse(site_validator.validate(self.bad_data3, {}))
+        self.assertFalse(site_validator.validate(self.aquifer_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.country_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.state_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.lower_country_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.good_county_state_lower_aquifer_is_invalid, {}))
+
+
 
 
 class ValidateNationalAquiferCode(TestCase):
@@ -297,16 +303,7 @@ class ValidateNationalAquiferCode(TestCase):
             'stateFipsCode': '01',
             'nationalAquiferCode': ''
         }
-        self.good_data4 = {
-            'countryCode': 'us',
-            'stateFipsCode': '01',
-            'nationalAquiferCode': 'S100MSEMBM'
-        }
-        self.good_data5 = {
-            'countryCode': 'us',
-            'stateFipsCode': '01',
-            'nationalAquiferCode': 's100msembm'
-        }
+
         self.bad_data = {
             'countryCode': 'US',
             'stateFipsCode': '01',
@@ -322,105 +319,115 @@ class ValidateNationalAquiferCode(TestCase):
             'stateFipsCode': 'XY',
             'nationalAquiferCode': 'S100MSEMBM'
         }
+        self.bad_data4 = {
+            'countryCode': 'us',
+            'stateFipsCode': '01',
+            'nationalAquiferCode': 'S100MSEMBM'
+        }
+        self.bad_data5 = {
+            'countryCode': 'us',
+            'stateFipsCode': '01',
+            'nationalAquiferCode': 's100msembm'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data, {}))
         self.assertTrue(site_validator.validate(self.good_data2, {}))
         self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
-        self.assertTrue(site_validator.validate(self.good_data5, {}))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data, {}))
         self.assertFalse(site_validator.validate(self.bad_data2, {}))
         self.assertFalse(site_validator.validate(self.bad_data3, {}))
+        self.assertFalse(site_validator.validate(self.bad_data4, {}))
+        self.assertFalse(site_validator.validate(self.bad_data5, {}))
 
 
 class ValidateHydrologicUnitCode(TestCase):
 
     def setUp(self):
-        self.good_data = {
+        self.two_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '03'
         }
-        self.good_data2 = {
+        self.four_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '0313'
         }
-        self.good_data3 = {
+        self.six_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '031300'
         }
-        self.good_data4 = {
+        self.eight_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '03130002'
         }
-        self.good_data5 = {
+        self.ten_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '0313000206'
         }
-        self.good_data6 = {
+        self.twelve_digit_huc_in_list_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '031300020601'
         }
-        self.good_data7 = {
+        self.null_padding_huc_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': ' '
         }
-        self.good_data8 = {
+        self.null_no_padding_huc_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': ''
         }
-        self.good_data9 = {
+        self.filler_99999999_huc_is_valid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '99999999'
         }
-        self.good_data10 = {
+        self.lower_country_is_invalid = {
             'countryCode': 'us',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '03'
         }
-        self.bad_data = {
+        self.huc_not_in_list_is_invalid = {
             'countryCode': 'US',
             'stateFipsCode': '01',
-            'hydrologicUnitCode': 'xyz'
+            'hydrologicUnitCode': '031'
         }
-        self.bad_data2 = {
+        self.country_not_in_list_is_invalid = {
             'countryCode': 'XY',
             'stateFipsCode': '01',
             'hydrologicUnitCode': '031300020601'
         }
-        self.bad_data3 = {
+        self.state_not_in_list_is_invalid = {
             'countryCode': 'US',
             'stateFipsCode': 'XY',
             'hydrologicUnitCode': '031300020601'
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, {}))
-        self.assertTrue(site_validator.validate(self.good_data2, {}))
-        self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
-        self.assertTrue(site_validator.validate(self.good_data5, {}))
-        self.assertTrue(site_validator.validate(self.good_data6, {}))
-        self.assertTrue(site_validator.validate(self.good_data7, {}))
-        self.assertTrue(site_validator.validate(self.good_data8, {}))
-        self.assertTrue(site_validator.validate(self.good_data9, {}))
-        self.assertTrue(site_validator.validate(self.good_data10, {}))
+        self.assertTrue(site_validator.validate(self.two_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.four_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.six_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.eight_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.ten_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.twelve_digit_huc_in_list_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.null_padding_huc_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.null_no_padding_huc_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.filler_99999999_huc_is_valid, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, {}))
-        self.assertFalse(site_validator.validate(self.bad_data2, {}))
-        self.assertFalse(site_validator.validate(self.bad_data3, {}))
+        self.assertFalse(site_validator.validate(self.lower_country_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.huc_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.country_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.state_not_in_list_is_invalid, {}))
 
 
 class ValidateMinorCivilDivisionCode(TestCase):
@@ -441,11 +448,7 @@ class ValidateMinorCivilDivisionCode(TestCase):
             'stateFipsCode': '01',
             'minorCivilDivisionCode': ''
         }
-        self.good_data4 = {
-            'countryCode': 'us',
-            'stateFipsCode': '10',
-            'minorCivilDivisionCode': '92664'
-        }
+
         self.bad_data = {
             'countryCode': 'US',
             'stateFipsCode': '10',
@@ -461,17 +464,22 @@ class ValidateMinorCivilDivisionCode(TestCase):
             'stateFipsCode': 'XY',
             'minorCivilDivisionCode': '92664'
         }
+        self.bad_data4 = {
+            'countryCode': 'us',
+            'stateFipsCode': '10',
+            'minorCivilDivisionCode': '92664'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data, {}))
         self.assertTrue(site_validator.validate(self.good_data2, {}))
         self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data, {}))
         self.assertFalse(site_validator.validate(self.bad_data2, {}))
         self.assertFalse(site_validator.validate(self.bad_data3, {}))
+        self.assertFalse(site_validator.validate(self.bad_data4, {}))
 
 
 class ValidateNationalWaterUseCode(TestCase):
@@ -489,10 +497,6 @@ class ValidateNationalWaterUseCode(TestCase):
             'siteTypeCode': 'AS',
             'nationalWaterUseCode': ''
         }
-        self.good_data4 = {
-            'siteTypeCode': 'as',
-            'nationalWaterUseCode': 'aq'
-        }
         self.bad_data = {
             'siteTypeCode': 'XY',
             'nationalWaterUseCode': 'AQ'
@@ -501,62 +505,15 @@ class ValidateNationalWaterUseCode(TestCase):
             'siteTypeCode': 'AS',
             'nationalWaterUseCode': 'XY'
         }
-
-    def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, {}))
-        self.assertTrue(site_validator.validate(self.good_data2, {}))
-        self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
-
-    def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, {}))
-        self.assertFalse(site_validator.validate(self.bad_data2, {}))
-
-
-class ValidateCountyCode(TestCase):
-
-    def setUp(self):
-        self.good_data = {
-            'countryCode': 'FM',
-            'stateFipsCode': '64',
-            'countyCode': '050'
-        }
-        self.good_data2 = {
-            'countryCode': 'FM',
-            'stateFipsCode': '64',
-            'countyCode': ' '
-        }
-        self.good_data3 = {
-            'countryCode': 'FM',
-            'stateFipsCode': '64',
-            'countyCode': ''
-        }
-        self.good_data4 = {
-            'countryCode': 'fm',
-            'stateFipsCode': '64',
-            'countyCode': '050'
-        }
-        self.bad_data = {
-            'countryCode': 'FM',
-            'stateFipsCode': '64',
-            'countyCode': 'XYZ'
-        }
-        self.bad_data2 = {
-            'countryCode': 'XY',
-            'stateFipsCode': '64',
-            'countyCode': '050'
-        }
         self.bad_data3 = {
-            'countryCode': 'FM',
-            'stateFipsCode': 'XY',
-            'countyCode': '050'
+            'siteTypeCode': 'as',
+            'nationalWaterUseCode': 'aq'
         }
 
     def test_validate_ok(self):
         self.assertTrue(site_validator.validate(self.good_data, {}))
         self.assertTrue(site_validator.validate(self.good_data2, {}))
         self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(site_validator.validate(self.bad_data, {}))
@@ -564,40 +521,91 @@ class ValidateCountyCode(TestCase):
         self.assertFalse(site_validator.validate(self.bad_data3, {}))
 
 
+class ValidateCountyCode(TestCase):
+
+    def setUp(self):
+        self.all_good_fields_is_valid = {
+            'countryCode': 'FM',
+            'stateFipsCode': '64',
+            'countyCode': '050'
+        }
+        self.good_country_state_null_pad_county_is_valid = {
+            'countryCode': 'FM',
+            'stateFipsCode': '64',
+            'countyCode': ' '
+        }
+        self.good_country_state_no_pad_county_is_valid = {
+            'countryCode': 'FM',
+            'stateFipsCode': '64',
+            'countyCode': ''
+        }
+        self.county_not_in_list_is_invalid = {
+            'countryCode': 'FM',
+            'stateFipsCode': '64',
+            'countyCode': 'XYZ'
+        }
+        self.country_not_in_list_is_invalid = {
+            'countryCode': 'XY',
+            'stateFipsCode': '64',
+            'countyCode': '050'
+        }
+        self.state_not_in_list_is_invalid = {
+            'countryCode': 'FM',
+            'stateFipsCode': 'XY',
+            'countyCode': '050'
+        }
+        self.lower_country_code_is_invalid = {
+            'countryCode': 'fm',
+            'stateFipsCode': '64',
+            'countyCode': '050'
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(site_validator.validate(self.all_good_fields_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.good_country_state_null_pad_county_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.good_country_state_no_pad_county_is_valid, {}))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(site_validator.validate(self.county_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.country_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.state_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.lower_country_code_is_invalid, {}))
+
+
 class ValidateStateCode(TestCase):
 
     def setUp(self):
-        self.good_data = {
+        self.all_fields_good_is_valid = {
             'countryCode': 'FM',
             'stateFipsCode': '64',
         }
-        self.good_data2 = {
+        self.null_padding_state_is_valid = {
             'countryCode': 'FM',
             'stateFipsCode': ' ',
         }
-        self.good_data3 = {
+        self.null_no_padding_state_is_valid = {
             'countryCode': 'FM',
             'stateFipsCode': '',
         }
-        self.good_data4 = {
+        self.lower_country_is_invalid = {
             'countryCode': 'fm',
             'stateFipsCode': '64',
         }
-        self.bad_data = {
+        self.country_not_in_list_is_invalid = {
             'countryCode': 'XY',
             'stateFipsCode': '64',
         }
-        self.bad_data2 = {
+        self.state_not_in_list_is_invalid = {
             'countryCode': 'FM',
             'stateFipsCode': 'XY',
         }
 
     def test_validate_ok(self):
-        self.assertTrue(site_validator.validate(self.good_data, {}))
-        self.assertTrue(site_validator.validate(self.good_data2, {}))
-        self.assertTrue(site_validator.validate(self.good_data3, {}))
-        self.assertTrue(site_validator.validate(self.good_data4, {}))
+        self.assertTrue(site_validator.validate(self.all_fields_good_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.null_padding_state_is_valid, {}))
+        self.assertTrue(site_validator.validate(self.null_no_padding_state_is_valid, {}))
 
     def test_with_validate_not_ok(self):
-        self.assertFalse(site_validator.validate(self.bad_data, {}))
-        self.assertFalse(site_validator.validate(self.bad_data2, {}))
+        self.assertFalse(site_validator.validate(self.lower_country_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.country_not_in_list_is_invalid, {}))
+        self.assertFalse(site_validator.validate(self.state_not_in_list_is_invalid, {}))

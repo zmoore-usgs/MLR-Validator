@@ -89,7 +89,7 @@ class ReferenceValidator(BaseCrossFieldValidator):
             if not huc_list:
                 return self._error(field, error_message + "--Hydrologic units do not exist in the HUC reference list for the entered State Code")
 
-            if value.strip() != '99999999' and self._is_not_in_list(value, huc_list, ''):
+            if value.strip() != '99999999' and self._is_not_in_list(value, huc_list):
                 return self._error(field, error_message)
 
     def _validate_valid_mcd_code(self, valid_mcd_code, field, value):
