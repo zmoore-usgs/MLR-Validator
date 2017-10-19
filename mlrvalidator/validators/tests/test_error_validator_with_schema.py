@@ -35,6 +35,10 @@ class ErrorValidatorAgencyCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'agencyCode': 'USGS      '}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
 
+    def test_agency_code_not_in_ref_list_padding_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'agencyCode': 'USGS234    '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('agencyCode')), 2)
+
     def test_agency_code_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'agencyCode': ''}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
@@ -56,14 +60,16 @@ class ErrorValidatorSiteNumberTestCase(TestCase):
     def test_only_digits_is_valid(self):
         self.assertTrue(self.validator.validate({'siteNumber': '01234'}, {}, update=True))
 
-    def test_only_digits_right_pad_is_valid(self):
+    def test_only_digits_trailing_space_is_valid(self):
         self.assertTrue(self.validator.validate({'siteNumber': '01234   '}, {}, update=True))
 
     def test_null_value_no_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('siteNumber')), 1)
 
     def test_null_value_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': ' '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('siteNumber')), 1)
 
     def test_non_digit_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': 'a6'}, {}, update=True))
@@ -76,6 +82,7 @@ class ErrorValidatorSiteNumberTestCase(TestCase):
 
     def test_only_digits_too_long_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': '0126954826512369548'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('siteNumber')), 1)
 
     def test_invalid_chars_too_long_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': '01269d82g651y23e69s548'}, {}, update=True))
@@ -84,6 +91,78 @@ class ErrorValidatorSiteNumberTestCase(TestCase):
     def test_only_spaces_too_long_is_invalid(self):
         self.assertFalse(self.validator.validate({'siteNumber': '                    '}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('siteNumber')), 2)
+
+
+class ErrorValidatorStationNameTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = ErrorValidator()
+
+    def test_valid_chars_all_lower_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'br549'}, {}, update=True))
+
+    def test_valid_chars_mix_upper_lower_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'YYyyNnNN'}, {}, update=True))
+
+    def test_valid_chars_all_upper_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'ABCD'}, {}, update=True))
+
+    def test_valid_chars_space_in_middle_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'br 549'}, {}, update=True))
+
+    def test_allowed_special_chars_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'a-b'}, {}, update=True))
+
+    def test_leading_space_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': '   BR549'}, {}, update=True))
+
+    def test_trailing_space_is_valid(self):
+        self.assertTrue(self.validator.validate({'stationName': 'BR549   '}, {}, update=True))
+
+    def test_null_value_no_pad_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': ''}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('stationName')), 1)
+
+    def test_null_value_pad_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': ' '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('stationName')), 1)
+
+    def test_bad_special_char_pound_sign_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br5#49'}, {}, update=True))
+
+    def test_bad_special_char_tab_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br\t549'}, {}, update=True))
+
+    def test_bad_special_char_backslash_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br\\549'}, {}, update=True))
+
+    def test_bad_special_char_dollar_sign_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': '$br549'}, {}, update=True))
+
+    def test_bad_special_char_caret_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'b^r549'}, {}, update=True))
+
+    def test_bad_special_char_asterisk_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br5*49'}, {}, update=True))
+
+    def test_bad_special_char_double_quotes_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br54"9'}, {}, update=True))
+
+    def test_bad_special_char_underscore_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': 'br549_'}, {}, update=True))
+
+    def test_valid_chars_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': '0126954826512369548fesgdrs0126954826512369548fesgdrs'}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('stationName')), 1)
+
+    def test_invalid_chars_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': '01269d8#**2g65\\1y23e69s548                         '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('stationName')), 2)
+
+    def test_only_spaces_too_long_is_invalid(self):
+        self.assertFalse(self.validator.validate({'stationName': '                                                            '}, {}, update=True))
+        self.assertEqual(len(self.validator.errors.get('stationName')), 2)
+
 
 
 class ErrorValidatorLatitudeTestCase(TestCase):

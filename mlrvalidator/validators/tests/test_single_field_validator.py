@@ -315,7 +315,7 @@ class ValidateValidSpecialCharsTestCase(TestCase):
             'stationName': 'br549'
             }
         self.good_data2 = {
-            'stationName': 'YYYYNNNN'
+            'stationName': 'YYyyNnNN'
         }
         self.good_data3 = {
             'stationName': 'NNNNYYYY'
