@@ -15,32 +15,21 @@ class ReferenceInfo:
 
 class CountryStateReference(ReferenceInfo):
 
-    def get_list_by_country_state(self, attribute, country_code, state_code):
+    def __init__(self, path_to_file, ref_list_key):
+        '''
+        The json in the files is assumed to have the following form:
+        {"countries": [{"countryCode: "BG", "states": [{"stateFipsCode": "01", "ref_list_key": ["A", "B"]}]}]}'
+        :param str path_to_file:
+        :param str ref_list_key: Key of the list to return when searching by country and state.
+        '''
+        self.ref_list_key = ref_list_key
+        super().__init__(path_to_file)
+
+    def get_list_by_country_state(self, country_code, state_code):
         country_list = self.reference_info['countries']
         state_list = get_dict(country_list, 'countryCode', country_code).get('states', [])
 
-        return get_dict(state_list, 'stateFipsCode', state_code).get(attribute, [])
-
-
-
-class Aquifers(CountryStateReference):
-    def get_aquifers(self, country_code, state_code):
-        return self.get_list_by_country_state('aquiferCodes', country_code, state_code)
-
-
-class Hucs(CountryStateReference):
-    def get_hucs(self, country_code, state_code):
-        return self.get_list_by_country_state('hydrologicUnitCodes', country_code, state_code)
-
-
-class Mcds(CountryStateReference):
-    def get_mcds(self, country_code, state_code):
-        return  self.get_list_by_country_state('minorCivilDivisionCodes', country_code, state_code)
-
-
-class NationalAquifers(CountryStateReference):
-    def get_national_aquifers(self, country_code, state_code):
-        return self.get_list_by_country_state('nationalAquiferCodes', country_code, state_code)
+        return get_dict(state_list, 'stateFipsCode', state_code).get(self.ref_list_key, [])
 
 
 class NationalWaterUseCodes(ReferenceInfo):
@@ -49,17 +38,7 @@ class NationalWaterUseCodes(ReferenceInfo):
         return get_dict(site_type_list, 'siteTypeCode', site_type_code).get('nationalWaterUseCodes', [])
 
 
-class Counties(CountryStateReference):
-    def get_county_codes(self, country_code, state_code):
-        county_list = self.get_list_by_country_state('counties', country_code, state_code)
-        return [d.get('countyCode', '') for d in county_list]
-
-    def get_county_attributes(self, country_code, state_code, county_code):
-        country_list = self.get_list_by_country_state('counties', country_code, state_code)
-        return get_dict(country_list, 'countyCode', county_code)
-
-
-class States(CountryStateReference):
+class States(ReferenceInfo):
 
     def get_state_codes(self, country_code):
         country_list = self.reference_info['countries']

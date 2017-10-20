@@ -1,11 +1,59 @@
+import json
 import os
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from app import application
-from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States, FieldTransitions, SiteTypesCrossField
+from ..reference import CountryStateReference, NationalWaterUseCodes, FieldTransitions, SiteTypesCrossField
 
 
+class CountryStateReferenceTestCase(TestCase):
+    def setUp(self):
+        ref_list = {
+            "countries": [
+                {
+                    "countryCode": "BG",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "aquiferCodes": [
+                                "200CRSL"
+                            ]
+                        }
+                    ]
+                }, {
+                    "countryCode": "US",
+                    "states": [
+                        {
+                            "stateFipsCode": "01",
+                            "aquiferCodes": [
+                                "100CNZC",
+                                "110QRNR"
+                            ]
+                        }, {
+
+                            "stateFipsCode": "02",
+                            "aquiferCodes": [
+                                "000MCRL",
+                                "000SELS"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        with mock.patch('mlrvalidator.validators.reference.open', mock.mock_open(read_data=json.dumps(ref_list)), create=True):
+            self.aquifer_ref = CountryStateReference('fake_file', 'aquiferCodes')
+
+    def test_list_that_exists(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('US', '02'), ['000MCRL', '000SELS'])
+
+    def test_missing_country(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('CN', '02'), [])
+
+    def test_missing_state(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('US', '03'), [])
+
+'''
 class ValidateGetAquifersCase(TestCase):
     def setUp(self):
 
@@ -120,7 +168,7 @@ class ValidateGetMcdsCase(TestCase):
         test_mcd = self.mcd.get_mcds('XY', '10')
 
         self.assertEqual(test_mcd, bad_mcd)
-
+'''
 
 class ValidateGetNationalWaterUseCase(TestCase):
     def setUp(self):
@@ -150,7 +198,7 @@ class ValidateGetNationalWaterUseCase(TestCase):
 
         self.assertEqual(test_national_water_use, bad_national_water_use)
 
-
+'''
 class ValidateGetCountyCodeCase(TestCase):
     def setUp(self):
         self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
@@ -253,7 +301,7 @@ class ValidateGetStateAttributesCase(TestCase):
         test_state = self.state.get_state_attributes('XY', '00')
 
         self.assertEqual(test_state, bad_state)
-
+'''
 
 class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):

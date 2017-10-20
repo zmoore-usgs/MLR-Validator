@@ -1,130 +1,65 @@
-import re
 
-from .base_cross_field_validator import BaseCrossFieldValidator
-from . import site_type_transition_reference
-from .land_net_templates import land_net_ref
+from collections import defaultdict
+import os
 
-class CrossFieldValidator(BaseCrossFieldValidator):
+from .country_state_reference_validator import CountryStateReferenceValidator
+from .reference import States
 
-    def _validate_reciprocal_dependency(self, dependent_list, field, value):
+class CrossFieldValidator:
 
-        """
-        Validates if value exists and all values for fields in dependent_list exist or if value is empty and
-        all values for fields in dependent_list are empty
+    def __init__(self, reference_dir):
+        self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes, aquiferCode')
+        self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
+        self.mcd_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'mcd.json'), 'minorCivilDivsionCodes', 'minorCivilDivisionCode')
+        self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
+        self.counties_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'county.json'), 'counties', 'countyCode')
 
-        The rule's arguments are validated against this schema:
-        {'type': 'list'}
-        """
-        for dependent_field in dependent_list:
-            dependent_value = self.merged_document.get(dependent_field, '')
-            value_is_empty = not value.strip()
-            dependent_value_is_empty = not dependent_value.strip()
-            if value_is_empty and not dependent_value_is_empty:
-                self._error(field, '{0} can not be null when {1} is not null'.format(field, dependent_field))
-            elif not value_is_empty and dependent_value_is_empty:
-                self._error(field, '{0} can not have a value when {1} is null'.format(field, dependent_field))
+        self.states_ref = States(os.path.join(reference_dir, 'state.json'))
 
+        self._errors = []
 
-    def _validate_unique_use_value(self, dependent_list, field, value):
-        """
-        Validates if value is empty or if not empty is different from field_to_check's value
+    def _validate_states(self):
+        '''
+        :return: boolean
+        '''
 
-        The rule's arguments are validated against this schema:
-        {'type': 'list'}
-        """
-        field_value = value.strip()
-        for dependent_field in dependent_list:
-            field_to_check_value = self.merged_document.get(dependent_field, '').strip()
-            if field_value and (field_value == field_to_check_value):
-                self._error(field, '{0} must not have the same value as {1}'.format(field, dependent_field))
+        country = self.merged_document.get('countryCode', '').strip()
+        state = self.merged_document.get('stateFipsCode', '').strip()
 
-    def _validate_not_empty_dependency(self, dependent_list, field, value):
-        """
-        Validates if value is empty or if value is not empty then validates if field values for fields in
-        dependent_list are not empty.
-
-        The rule's arguments are validated against this schema:
-        {'type': 'list'}
-        """
-        field_value = value.strip()
-        if field_value:
-            for dependent_field in dependent_list:
-                if not self.merged_document.get(dependent_field, '').strip():
-                    self._error(field, '{0} can\'t have a value if {1} is empty'.format(field, dependent_field))
+        valid = True
+        if country and state:
+            valid = self.state_ref.get_state_attributes(country, state) != {}
+            if not valid:
+                self._errors.append({'stateFipsCode': '{0} is not in the reference list for country {1}.'.format(state, country)})
 
 
-    def _validate_construction_before_inventory(self, check_const_inv_dts, field, value):
-        """
-        Check that construction_dt is not > inventory_dt if both exist.
-        Note that since dates can be partial, it is assumed that partial construction dates start on first of the
-        year or first of the month. Inventory dates are assumed to be on the last day of the year or month.
-        In practice, we don't see partial inventory dates. We are doing just a string compare rather than
-        translating to actual dates which works as long as the dates are valid.
+        return valid
 
-        The rule's arguments are validated against this schema:
-        {'type': 'boolean'}
-         """
-        if check_const_inv_dts:
-            construction_date = self.merged_document.get('firstConstructionDate', '').strip()
-            inventory_date = self.merged_document.get('siteEstablishmentDate', '').strip()
-            if (construction_date and inventory_date) and (construction_date > inventory_date):
-                self._error(field, "firstConstructionDate cannot be more recent than siteEstablishmnetDate")
+    def validate(self, document, existing_document):
+        '''
+        :param dict document:
+        :param dict existing_document:
+        :return: boolean
+        '''
+        self._errors = defaultdict(list)
+        self.merged_document = existing_document.copy()
+        self.merged_document.update(document)
 
-    def _validate_check_well_hole_depths(self, check_well_hole_depths, field, value):
-        """
-        Check that well depth is not > hole depth when both are not empty
+        valid_aquifer = self.aquifer_ref_validator.validate(document, existing_document)
+        valid_huc = self.huc_ref_validator.validate(document, existing_document)
+        valid_mcd = self.mcd_ref_validator.validate(document, existing_document)
+        valid_national_aquifer = self.national_aquifer_ref_validator.validate(document, existing_document)
+        valid_counties = self.counties_ref_validator.validate(document, existing_document)
 
-        The rule's arguments are validated against this schema:
-        {'type': 'boolean'}
-         """
-        if check_well_hole_depths:
-            try:
-                hole_depth = float(self.merged_document.get('holeDepth', '').strip())
-                well_depth = float(self.merged_document.get('wellDepth', '').strip())
-            except ValueError:
-                pass
-            else:
-                if (hole_depth and well_depth) and (well_depth > hole_depth):
-                    self._error(field, "wellDepth cannot be greater than holeDepth")
+        valid_states = self._validate_states()
 
+        self._errors.extend([self.aquifer_ref_validator.errors,
+                             self.huc_ref_validator.errors,
+                             self.mcd_ref_validator.errors,
+                             self.national_aquifer_ref_validator.errors,
+                             self.counties_ref_validator.errors,
+                             ])
 
-    def _validate_check_valid_site_type_update(self, check_valid_update, field, value):
-        """
-        Check that if the field is changing from an existing site that it is in the allowed transitions
-
-        The rule's arguments are validated against this schema
-        {'type': 'boolean'}
-
-        """
-        if check_valid_update and self.update:
-            stripped_value = value.strip()
-            existing_value = self.existing_document.get(field, '')
-            if stripped_value and existing_value:
-                transitions = site_type_transition_reference.get_allowed_transitions(existing_value)
-                if transitions and transitions.count(stripped_value) == 0:
-                    self._error(field, 'Can not change a siteType with existing value {0} to {1}'.format(existing_value, stripped_value))
-
-    def _validate_valid_land_net(self, valid_land_net, field, value):
-        # Check that the land net description field follows the correct template
-
-        """
-        The rule's arguments are validated against this schema:
-        {'type': 'boolean'}
-        """
-        error_message = "Invalid format - Land Net does not fit template"
-
-        if valid_land_net:
-            land_net_template = land_net_ref.get(self.document.districtCode, '')
-            if land_net_template:
-                value_end = len(value) - 1
-                section = land_net_template.index("S")
-                township = land_net_template.index("T")
-                range = land_net_template.index("R")
-                try:
-                    if not (value[section] == "S" and value[township] == "T" and value[range] == "R"):
-                        self._error(field, error_message)
-                    test_match = re.search('[^a-zA-Z0-9 ]', value[section:value_end])
-                    if test_match is not None:
-                        self._error(field, error_message)
-                except IndexError:
-                    self._error(field, error_message)
+    @property
+    def error(self):
+        return self._errors
