@@ -1,6 +1,8 @@
+import re
 
 from .base_cross_field_validator import BaseCrossFieldValidator
 from . import site_type_transition_reference
+from .land_net_templates import land_net_ref
 
 class CrossFieldValidator(BaseCrossFieldValidator):
 
@@ -102,3 +104,27 @@ class CrossFieldValidator(BaseCrossFieldValidator):
                 if transitions and transitions.count(stripped_value) == 0:
                     self._error(field, 'Can not change a siteType with existing value {0} to {1}'.format(existing_value, stripped_value))
 
+    def _validate_valid_land_net(self, valid_land_net, field, value):
+        # Check that the land net description field follows the correct template
+
+        """
+        The rule's arguments are validated against this schema:
+        {'type': 'boolean'}
+        """
+        error_message = "Invalid format - Land Net does not fit template"
+
+        if valid_land_net:
+            land_net_template = land_net_ref.get(self.document.districtCode, '')
+            if land_net_template:
+                value_end = len(value) - 1
+                section = land_net_template.index("S")
+                township = land_net_template.index("T")
+                range = land_net_template.index("R")
+                try:
+                    if not (value[section] == "S" and value[township] == "T" and value[range] == "R"):
+                        self._error(field, error_message)
+                    test_match = re.search('[^a-zA-Z0-9 ]', value[section:value_end])
+                    if test_match is not None:
+                        self._error(field, error_message)
+                except IndexError:
+                    self._error(field, error_message)

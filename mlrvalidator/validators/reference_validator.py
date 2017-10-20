@@ -16,20 +16,6 @@ class ReferenceValidator(BaseCrossFieldValidator):
         else:
             return False
 
-    def _validate_valid_reference(self, valid_reference, field, value):
-        """
-        # Check that value is the list of allowable values
-
-        The rule's arguments are validated against this schema:
-        {'valid_reference': True}
-        """
-        error_message = "Value not in reference list"
-
-        if valid_reference:
-            ref_list = reference_lists.reference_info[field]
-
-            if self._is_not_in_list(value, ref_list, 'upper'):
-                return self._error(field, error_message)
 
     def _validate_valid_aquifer_code(self, valid_aquifer_code, field, value):
         """
