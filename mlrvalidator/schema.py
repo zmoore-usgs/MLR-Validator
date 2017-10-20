@@ -4,7 +4,6 @@ import sys
 import yaml
 
 PROJECT_DIR = os.path.dirname(__file__)
-EXEC_PREFIX = sys.exec_prefix
 
 fd = open(os.path.join(PROJECT_DIR, 'schemas/reference_validation_schema.yml'))
 with fd:

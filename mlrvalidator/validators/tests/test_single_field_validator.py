@@ -710,7 +710,7 @@ class ValidateValidDateTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data19))
 
 
-class ValidateReferenceCase(TestCase):
+class ValidateReferenceTestCase(TestCase):
     def setUp(self):
         ref_list = mock.MagicMock()
         ref_list.get_reference_info.return_value = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
@@ -732,3 +732,19 @@ class ValidateReferenceCase(TestCase):
 
     def test_invalid_field(self):
         self.assertFalse(self.validator.validate({'field2': 'A'}))
+
+
+class ValidateSingleQuoteTestCase(TestCase):
+    def setUp(self):
+        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}})
+
+    def test_valid_field(self):
+        self.assertTrue(self.validator.validate({'field1': '   '}))
+        self.assertTrue(self.validator.validate({'field1': 'AAA'}))
+        self.assertTrue(self.validator.validate({'field1': "A'A"}))
+
+    def test_quote_at_end(self):
+        self.assertFalse(self.validator.validate({'field1': "AAAA'"}))
+
+    def test_quote_at_beginning(self):
+        self.assertFalse(self.validator.validate({'field1': "'AAAA"}))

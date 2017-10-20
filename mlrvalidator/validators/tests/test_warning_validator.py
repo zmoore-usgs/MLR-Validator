@@ -1,9 +1,8 @@
-
 from unittest import TestCase, mock
 
-from ..error_validator import ErrorValidator
+from ..warning_validator import WarningValidator
 
-@mock.patch('mlrvalidator.validators.error_validator.SingleFieldValidator')
+@mock.patch('mlrvalidator.validators.warning_validator.SingleFieldValidator')
 class ErrorValidatorErrorsTestCase(TestCase):
 
     def test_all_valid(self, msingle_field_class):
@@ -12,7 +11,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator()
+        validator = WarningValidator()
         result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
 
         self.assertTrue(result)
@@ -24,17 +23,10 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = False
         msingle_field.errors = {'A' : ['Invalid']}
 
-        validator = ErrorValidator()
+        validator = WarningValidator()
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
 
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
-
-
-
-
-
-
-
 
 

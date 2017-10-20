@@ -1,6 +1,4 @@
-
 from collections import defaultdict
-from itertools import chain
 import os
 import yaml
 
@@ -9,13 +7,14 @@ from app import application
 from .single_field_validator import SingleFieldValidator
 
 
-class ErrorValidator:
+class WarningValidator:
 
     def __init__(self):
-        with open(os.path.join(application.config['SCHEMA_DIR'], 'error_schema.yml')) as fd:
-            error_schema = yaml.load(fd.read())
+        with open(os.path.join(application.config['SCHEMA_DIR'], 'warning_schema.yml')) as fd:
+            warning_schema = yaml.load(fd.read())
+            warning_schema = yaml.load(fd.read())
 
-        self.single_field_validator = SingleFieldValidator(error_schema, allow_unknown=True)
+        self.single_field_validator = SingleFieldValidator(warning_schema, allow_unknown=True)
         self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
