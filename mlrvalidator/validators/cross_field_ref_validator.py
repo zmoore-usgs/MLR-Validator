@@ -3,7 +3,7 @@ from collections import defaultdict
 import os
 
 from .country_state_reference_validator import CountryStateReferenceValidator
-from .reference import States
+from .reference import States, NationalWaterUseCodes
 
 class CrossFieldRefValidator:
 
@@ -15,6 +15,7 @@ class CrossFieldRefValidator:
         self.counties_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'county.json'), 'counties', 'countyCode')
 
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
+        self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use_json'))
 
         self._errors = []
 
@@ -28,13 +29,28 @@ class CrossFieldRefValidator:
 
         valid = True
         if country and state:
-            valid = self.states_ref.get_state_attributes(country, state) != {}
+            state_list = self.states_ref.get_state_codes(country)
+            valid = state in state_list if state_list else True
             if not valid:
                 self._errors.append({'stateFipsCode': '{0} is not in the reference list for country {1}.'.format(state, country)})
 
-
         return valid
 
+    def _validate_national_water_use_code(self):
+        '''
+        :return: boolean
+        '''
+
+        site_type = self.merged_document.get('siteTypeCode', '').strip()
+        water_use = self.merged_document.get('nationalWaterUseCode', '').strip()
+
+        valid = True
+        if site_type and water_use:
+            valid = water_use in self.national_water_use_ref.get_national_water_use_codes(site_type)
+            if not valid:
+                self._errors.append({'nationalWaterUseCode': '{0} is not in the referces list for siteTypeCode {1}'.format(water_use, site_type)})
+
+        return valid
 
     def validate(self, document, existing_document):
         '''
@@ -53,16 +69,17 @@ class CrossFieldRefValidator:
         valid_counties = self.counties_ref_validator.validate(document, existing_document)
 
         valid_states = self._validate_states()
+        valid_national_water_use = self._validate_national_water_use_code()
 
 
         self._errors.extend([err for err in [self.aquifer_ref_validator.errors,
                              self.huc_ref_validator.errors,
                              self.mcd_ref_validator.errors,
                              self.national_aquifer_ref_validator.errors,
-                             self.counties_ref_validator.errors,
+                             self.counties_ref_validator.errors
                              ] if err is not None])
 
-        return valid_aquifer and valid_huc and valid_mcd and valid_national_aquifer and valid_counties and valid_states
+        return valid_aquifer and valid_huc and valid_mcd and valid_national_aquifer and valid_counties and valid_states and valid_national_water_use
 
     @property
     def errors(self):
