@@ -73,7 +73,7 @@ class SingleFieldValidator(Validator):
         The rule's arguments are validated against this schema:
         {'valid_site_number': True}
         """
-        stripped_value = value.strip()
+        stripped_value = value.rstrip()
         if valid_site_number and stripped_value:
             if not stripped_value.isdigit():
                 self._error(field, "Site Number can only have digits 0-9")
