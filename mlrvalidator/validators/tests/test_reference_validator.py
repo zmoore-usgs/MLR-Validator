@@ -76,7 +76,7 @@ class ValidateReferenceCase(TestCase):
             'siteTypeCode': 'AG'
         }
         self.good_data22 = {
-            'siteWebReadyCode': 'C'
+            'siteWebReadyCode': 'Y'
         }
         self.good_data23 = {
             'tertiaryUseOfSiteCode': 'A'

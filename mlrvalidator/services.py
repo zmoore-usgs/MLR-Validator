@@ -64,7 +64,6 @@ ddot_location_model = api.model('DdotLocationModel', {
     "timeZoneCode": fields.String(),
     "topographicCode": fields.String(),
     "wellDepth": fields.String(),
-    "transactionType": fields.String()
 })
 
 location_model = api.clone('LocationModel', ddot_location_model, {
@@ -120,5 +119,5 @@ class UpdateValidator(Resource):
     @api.response(200, 'Successfully validated', validation_model)
     @api.expect(validate_location_model)
     def post(self):
-        return 'Not yet implemented'
+        return _validate_response(request.get_json(), update=True)
 
