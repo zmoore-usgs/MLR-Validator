@@ -5,7 +5,7 @@ import os
 from .country_state_reference_validator import CountryStateReferenceValidator
 from .reference import States
 
-class CrossFieldValidator:
+class CrossFieldRefValidator:
 
     def __init__(self, reference_dir):
         self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes, aquiferCode')
@@ -28,12 +28,13 @@ class CrossFieldValidator:
 
         valid = True
         if country and state:
-            valid = self.state_ref.get_state_attributes(country, state) != {}
+            valid = self.states_ref.get_state_attributes(country, state) != {}
             if not valid:
                 self._errors.append({'stateFipsCode': '{0} is not in the reference list for country {1}.'.format(state, country)})
 
 
         return valid
+
 
     def validate(self, document, existing_document):
         '''
@@ -41,7 +42,7 @@ class CrossFieldValidator:
         :param dict existing_document:
         :return: boolean
         '''
-        self._errors = defaultdict(list)
+        self._errors = []
         self.merged_document = existing_document.copy()
         self.merged_document.update(document)
 
@@ -53,13 +54,16 @@ class CrossFieldValidator:
 
         valid_states = self._validate_states()
 
-        self._errors.extend([self.aquifer_ref_validator.errors,
+
+        self._errors.extend([err for err in [self.aquifer_ref_validator.errors,
                              self.huc_ref_validator.errors,
                              self.mcd_ref_validator.errors,
                              self.national_aquifer_ref_validator.errors,
                              self.counties_ref_validator.errors,
-                             ])
+                             ] if err is not None])
+
+        return valid_aquifer and valid_huc and valid_mcd and valid_national_aquifer and valid_counties and valid_states
 
     @property
-    def error(self):
+    def errors(self):
         return self._errors

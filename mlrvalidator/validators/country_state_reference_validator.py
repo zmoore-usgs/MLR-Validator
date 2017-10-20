@@ -16,7 +16,7 @@ class CountryStateReferenceValidator:
         self.country_key = 'countryCode'
         self.state_key = 'stateFipsCode'
 
-        self._errors = {}
+        self._errors = None
 
     def validate(self, document, existing_document):
         """
@@ -26,7 +26,7 @@ class CountryStateReferenceValidator:
         :return: boolean
         The object's errors property will contain a dictionary describing the error if the validation is False
         """
-        self._errors = {}
+        self._errors = None
 
         if any(key in document for key in [self.document_key, self.country_key, self.state_key]):
             merged_document = existing_document.copy()
@@ -43,7 +43,7 @@ class CountryStateReferenceValidator:
                         self.document_key: '{0} is not in the reference list for country {1}, state {2}'.format(value_to_check, country, state)}
 
 
-        return self._errors == {}
+        return self._errors is None
 
     @property
     def errors(self):
