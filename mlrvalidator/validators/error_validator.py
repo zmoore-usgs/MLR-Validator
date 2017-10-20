@@ -28,3 +28,4 @@ class ErrorValidator:
     @property
     def errors(self):
         return self._errors
+
