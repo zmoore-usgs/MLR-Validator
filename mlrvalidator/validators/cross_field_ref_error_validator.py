@@ -6,7 +6,7 @@ from .base_cross_field_validator import BaseCrossFieldValidator
 from .country_state_reference_validator import CountryStateReferenceValidator
 from .reference import States, NationalWaterUseCodes, SiteTypesCrossField
 
-class CrossFieldRefValidator(BaseCrossFieldValidator):
+class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
     def __init__(self, reference_dir):
         super().__init__()

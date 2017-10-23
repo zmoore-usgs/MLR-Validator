@@ -2,18 +2,18 @@
 import json
 from unittest import TestCase, mock
 
-from ..cross_field_ref_validator import CrossFieldRefValidator
+from ..cross_field_ref_error_validator import CrossFieldRefErrorValidator
 
 class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.CountryStateReferenceValidator')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.NationalWaterUseCodes')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.States')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
     def setUp(self, msite_type_ref, mstates_ref, mwater_use_ref, mref_validator_class):
         mref_validator = mref_validator_class.return_value
         mref_validator.validate.return_value = False
         mref_validator.errors = [{'field1' : 'Error message'}]
-        self.validator = CrossFieldRefValidator('ref_dir')
+        self.validator = CrossFieldRefErrorValidator('ref_dir')
 
     def test_multiple_error(self):
         self.assertFalse(self.validator.validate({'dummyfield': 'A'}, {}))
@@ -22,9 +22,9 @@ class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
 
 class CrossFieldRefValidatorForStatesTestCase(TestCase):
 
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.CountryStateReferenceValidator')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.NationalWaterUseCodes')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
     def setUp(self, msite_type_ref, mwater_use_ref, mref_validator_class):
         ref_list = {
             "countries": [
@@ -73,7 +73,7 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
 
     def test_state_not_in_list(self):
         self.assertFalse(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '02'}, {}))
@@ -116,9 +116,9 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
 
 
 class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.CountryStateReferenceValidator')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.States')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
     def setUp(self, m_site_type_ref, mstates_ref, mref_validator_class):
         ref_list = {
             "siteTypeCodes": [
@@ -137,7 +137,7 @@ class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
 
     def test_water_use_code_not_in_list(self):
         self.assertFalse(self.validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': 'CC'}, {}))
@@ -163,9 +163,9 @@ class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
 
 
 class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.CountryStateReferenceValidator')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.States')
-    @mock.patch('mlrvalidator.validators.cross_field_ref_validator.NationalWaterUseCodes')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
     def setUp(self, mwater_use_ref, mstates_ref, mref_validator_class):
         ref_list = {
             "siteTypeCodes": [
@@ -186,7 +186,7 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
 
 
     def test_with_null_attrs_for_site(self):

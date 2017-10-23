@@ -1,13 +1,13 @@
 
 from unittest import TestCase
 
-from ..cross_field_error_validator import Cross_Field_Error_Validator
+from ..cross_field_error_validator import CrossFieldErrorValidator
 
 
 class LocationReciprocalDependencyTestCase(TestCase):
 
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_all_non_null(self):
         self.assertTrue(self.validator.validate(
@@ -54,7 +54,7 @@ class LocationReciprocalDependencyTestCase(TestCase):
 class AltitudeReciprocalDependencyTestCase(TestCase):
 
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_all_non_null(self):
         self.assertTrue(self.validator.validate(
@@ -101,7 +101,7 @@ class AltitudeReciprocalDependencyTestCase(TestCase):
 class UseOfSiteTestCase(TestCase):
 
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_all_valid(self):
         self.assertTrue(self.validator.validate(
@@ -155,7 +155,7 @@ class UseOfSiteTestCase(TestCase):
 class UseOfWaterCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_all_valid(self):
         self.assertTrue(self.validator.validate(
@@ -208,7 +208,7 @@ class UseOfWaterCodeTestCase(TestCase):
 
 class SiteDatesTestCase(TestCase):
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_valid_dates(self):
         self.assertTrue(self.validator.validate({'firstConstructionDate': '20100415', 'siteEstablishmentDate': '20100416'}, {}))
@@ -234,7 +234,7 @@ class SiteDatesTestCase(TestCase):
 
 class DepthsTestCase(TestCase):
     def setUp(self):
-        self.validator = Cross_Field_Error_Validator()
+        self.validator = CrossFieldErrorValidator()
 
     def test_valid_depths(self):
         self.assertTrue(self.validator.validate({'wellDepth': '1234', 'holeDepth': '11234'}, {}))

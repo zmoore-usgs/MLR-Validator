@@ -1,7 +1,7 @@
 
 from .base_cross_field_validator import BaseCrossFieldValidator
 
-class Cross_Field_Error_Validator(BaseCrossFieldValidator):
+class CrossFieldErrorValidator(BaseCrossFieldValidator):
 
     def __init__(self):
         '''

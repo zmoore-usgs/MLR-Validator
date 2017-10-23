@@ -6,7 +6,11 @@ import yaml
 
 from app import application
 
+from .cross_field_error_validator import Cross_Field_Error_Validator
+from .cross_field_ref_validator import  CrossFieldRefValidator
 from .single_field_validator import SingleFieldValidator
+from .transition_validator import TransitionValidator
+
 
 
 class ErrorValidator:
@@ -16,14 +20,12 @@ class ErrorValidator:
             error_schema = yaml.load(fd.read())
 
         self.single_field_validator = SingleFieldValidator(error_schema, allow_unknown=True)
-        self._errors = defaultdict(list)
+        self._errors = []
 
     def validate(self, ddot_location, existing_location, update=False):
-        valid_single_field = self.single_field_validator.validate(ddot_location, update=update)
-        self._errors = defaultdict(list)
-        self._errors = self.single_field_validator.errors.items()
+        self.single_field_validator.validate(ddot_location, update=update)
 
-        return valid_single_field
+        return self._errors == []
 
     @property
     def errors(self):
