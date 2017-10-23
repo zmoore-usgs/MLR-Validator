@@ -7,8 +7,6 @@ site_validator = ReferenceValidator(reference_schema)
 site_validator.allow_unknown = True
 
 
-
-
 class ValidateAquiferCode(TestCase):
 
     def setUp(self):

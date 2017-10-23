@@ -10,26 +10,21 @@ class Cross_Field_Error_Validator(BaseCrossFieldValidator):
         '''
         super().__init__()
 
-    def _validate_location(self):
-        keys = [
-            'latitude',
-            'longitude',
-            'coordinateAccuracyCode',
-            'coordinateDatumCode',
-            'coordinateMethodCode'
-        ]
+    def _validate_reciprocal_dependency(self, keys, error_key):
+        '''
+        If not all values null or all non null an error will be
+        added to self._errors using error_key as the object key
+        :param list of str keys:
+        :param str error_key: key to be used if an error is found
+        '''
         if self._any_fields_in_document(keys):
-            self._validate_reciprocal_dependency(keys, 'location')
-
-    def _validate_altitude(self):
-        keys = [
-            'altitude',
-            'altitudeDatumCode',
-            'altitudeMethodCode',
-            'altitudeAccuracyValue'
-            ]
-        if self._any_fields_in_document(keys):
-            self._validate_reciprocal_dependency(keys, 'altitude')
+            values = [self.merged_document.get(key, '').strip() for key in keys]
+            all_null = [value for value in values if value != '' ] == []
+            all_not_null = [value for value in values if value == ''] == []
+            if not (all_null or all_not_null):
+                self._errors.append(
+                    {error_key: 'The following fields must all be empty or all must not be empty: {0}'.format(', '.join(keys))}
+                )
 
     def _validate_use_code(self, use_key_ending):
         keys = ['primary{0}'.format(use_key_ending), 'secondary{0}'.format(use_key_ending), 'tertiary{0}'.format(use_key_ending)]
@@ -74,8 +69,19 @@ class Cross_Field_Error_Validator(BaseCrossFieldValidator):
         '''
 
         super().validate(document, existing_document)
-        self._validate_location()
-        self._validate_altitude()
+        self._validate_reciprocal_dependency([
+            'latitude',
+            'longitude',
+            'coordinateAccuracyCode',
+            'coordinateDatumCode',
+            'coordinateMethodCode'
+        ], 'location')
+        self._validate_reciprocal_dependency([
+            'altitude',
+            'altitudeDatumCode',
+            'altitudeMethodCode',
+            'altitudeAccuracyValue'
+            ], 'altitude')
         self._validate_use_code('UseOfSite')
         self._validate_use_code('UseOfWaterCode')
         self._validate_site_dates()
