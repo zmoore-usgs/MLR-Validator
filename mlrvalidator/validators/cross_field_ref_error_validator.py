@@ -32,7 +32,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
             if country and state:
                 state_list = self.states_ref.get_state_codes(country)
                 if state_list and state not in state_list:
-                    self._errors.append({'stateFipsCode': '{0} is not in the reference list for country {1}.'.format(state, country)})
+                    self._errors['stateFipsCode'] = ['{0} is not in the reference list for country {1}.'.format(state, country)]
 
 
     def _validate_national_water_use_code(self):
@@ -45,7 +45,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
             if site_type and water_use:
                 if water_use not in self.national_water_use_ref.get_national_water_use_codes(site_type):
-                    self._errors.append({'nationalWaterUseCode': '{0} is not in the referces list for siteTypeCode {1}'.format(water_use, site_type)})
+                    self._errors['nationalWaterUseCode'] = ['{0} is not in the referces list for siteTypeCode {1}'.format(water_use, site_type)]
 
     def _validate_site_type(self):
         site_type = self.merged_document.get('siteTypeCode', '').strip()
@@ -64,14 +64,24 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                               if null_attr in self.document]
 
             # Should check all fields in site_type_attr
+            not_null_errors = []
+            null_errors = []
             for not_null_attr in not_null_attrs:
                 if not self.merged_document.get(not_null_attr, '').strip():
-                    self._errors.append(
-                        {not_null_attr: 'The field must not be null for site type {0}'.format(site_type)})
+                    not_null_errors.append(not_null_attr)
 
             for null_attr in null_attrs:
                 if self.merged_document.get(null_attr, '').strip():
-                    self._errors.append({null_attr: 'The field must be null for site type {0}'.format(site_type)})
+                    null_errors.append(null_attr)
+
+            if not_null_errors or null_errors:
+                self._errors['siteTypeCode'] = []
+                if not_null_errors:
+                    self._errors['siteTypeCode'].append(
+                        'Site type {0} must not have the following attributes null: {1}'.format(site_type, ', '.join(not_null_errors)))
+                if null_errors:
+                    self._errors['siteTypeCode'].append(
+                        'Site type {0} musthave the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
 
     def validate(self, document, existing_document):
         '''
@@ -91,13 +101,13 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._validate_national_water_use_code()
         self._validate_site_type()
 
-        self._errors.extend(self.aquifer_ref_validator.errors)
-        self._errors.extend(self.huc_ref_validator.errors)
-        self._errors.extend(self.huc_ref_validator.errors)
-        self._errors.extend(self.national_aquifer_ref_validator.errors)
-        self._errors.extend(self.counties_ref_validator.errors)
+        self._errors.update(self.aquifer_ref_validator.errors)
+        self._errors.update(self.huc_ref_validator.errors)
+        self._errors.update(self.huc_ref_validator.errors)
+        self._errors.update(self.national_aquifer_ref_validator.errors)
+        self._errors.update(self.counties_ref_validator.errors)
 
-        return self._errors == []
+        return self._errors == {}
 
     @property
     def errors(self):

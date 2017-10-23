@@ -34,15 +34,13 @@ class LocationReciprocalDependencyTestCase(TestCase):
             {'latitude': 'A', 'longitude': 'B', 'coordinateDatumCode': 'D', 'coordinateMethodCode': 'E'},
             {}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('location', self.validator.errors[0])
+        self.assertIn('location', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'longitude': 'B', 'coordinateDatumCode': 'D', 'coordinateMethodCode': 'E'},
             {'latitude': '  '}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('location', self.validator.errors[0])
+        self.assertIn('location', self.validator.errors)
 
     def test_no_fields_in_document(self):
         self.assertTrue(self.validator.validate(
@@ -81,15 +79,13 @@ class AltitudeReciprocalDependencyTestCase(TestCase):
             {'altitude': 'A', 'altitudeDatumCode': ' ', 'altitudeMethodCode': 'C', 'altitudeAccuracyValue': 'D'},
             {}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('altitude', self.validator.errors[0])
+        self.assertIn('altitude', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'altitude': 'A', 'altitudeDatumCode': ' ', 'altitudeMethodCode': 'C', 'altitudeAccuracyValue': 'D'},
             {'altitudeDatumCode': 'A'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('altitude', self.validator.errors[0])
+        self.assertIn('altitude', self.validator.errors)
 
     def test_no_fields_in_document(self):
         self.assertTrue(self.validator.validate(
@@ -118,38 +114,33 @@ class UseOfSiteTestCase(TestCase):
             {'primaryUseOfSite': ' ', 'secondaryUseOfSite': 'B'},
             {}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfSite', self.validator.errors[0])
+        self.assertIn('UseOfSite', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': ' ', 'secondaryUseOfSite': 'B'},
             {'tertiaryUseOfSite': 'C'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfSite', self.validator.errors[0])
+        self.assertIn('UseOfSite', self.validator.errors)
 
     def test_missing_secondary(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': ' '},
             {'tertiaryUseOfSite': 'C'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfSite', self.validator.errors[0])
+        self.assertIn('UseOfSite', self.validator.errors)
 
     def test_non_unique_codes(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'B'},
             {'tertiaryUseOfSite': 'B'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfSite', self.validator.errors[0])
+        self.assertIn('UseOfSite', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'A'},
             {'tertiaryUseOfSite': '  '}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfSite', self.validator.errors[0])
+        self.assertIn('UseOfSite', self.validator.errors)
 
 
 class UseOfWaterCodeTestCase(TestCase):
@@ -172,38 +163,33 @@ class UseOfWaterCodeTestCase(TestCase):
             {'primaryUseOfWaterCode': ' ', 'secondaryUseOfWaterCode': 'B'},
             {}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfWaterCode', self.validator.errors[0])
+        self.assertIn('UseOfWaterCode', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': ' ', 'secondaryUseOfWaterCode': 'B'},
             {'tertiaryUseOfWaterCode': 'C'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfWaterCode', self.validator.errors[0])
+        self.assertIn('UseOfWaterCode', self.validator.errors)
 
     def test_missing_secondary(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': ' '},
             {'tertiaryUseOfWaterCode': 'C'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfWaterCode', self.validator.errors[0])
+        self.assertIn('UseOfWaterCode', self.validator.errors)
 
     def test_non_unique_codes(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'B'},
             {'tertiaryUseOfWaterCode': 'B'}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfWaterCode', self.validator.errors[0])
+        self.assertIn('UseOfWaterCode', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'A'},
             {'tertiaryUseOfWaterCode': '  '}
         ))
-        self.assertEqual(len(self.validator.errors), 1)
-        self.assertIn('UseOfWaterCode', self.validator.errors[0])
+        self.assertIn('UseOfWaterCode', self.validator.errors)
 
 
 class SiteDatesTestCase(TestCase):

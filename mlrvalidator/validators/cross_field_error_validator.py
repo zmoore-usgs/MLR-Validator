@@ -22,9 +22,8 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
             all_null = [value for value in values if value != '' ] == []
             all_not_null = [value for value in values if value == ''] == []
             if not (all_null or all_not_null):
-                self._errors.append(
-                    {error_key: 'The following fields must all be empty or all must not be empty: {0}'.format(', '.join(keys))}
-                )
+                self._errors[error_key] = \
+                    ['The following fields must all be empty or all must not be empty: {0}'.format(', '.join(keys))]
 
     def _validate_use_code(self, use_key_ending):
         keys = ['primary{0}'.format(use_key_ending), 'secondary{0}'.format(use_key_ending), 'tertiary{0}'.format(use_key_ending)]
@@ -32,20 +31,20 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
             primary, secondary, tertiary = [self.merged_document.get(key, '').strip() for key in keys]
 
             if tertiary and (not primary or not secondary):
-                self._errors.append({use_key_ending: 'Primary and secondary must be non null if tertiary is non null'})
+                self._errors[use_key_ending] =['Primary and secondary must be non null if tertiary is non null']
             elif secondary and not primary:
-                self._errors.append({use_key_ending: 'Primary must be non null if secondary is non null'})
+                self._errors[use_key_ending] = ['Primary must be non null if secondary is non null']
             elif (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
-                self._errors.append({use_key_ending: 'Primary, secondary, and tertiary fields must be unique'})
+                self._errors[use_key_ending] = ['Primary, secondary, and tertiary fields must be unique']
             elif (primary and secondary and not tertiary) and (primary == secondary):
-                self._errors.append({use_key_ending: 'Primary and secondary must be unique'})
+                self._errors[use_key_ending] = ['Primary and secondary must be unique']
 
     def _validate_site_dates(self):
         keys = ['firstConstructionDate', 'siteEstablishmentDate']
         if self._any_fields_in_document(keys):
             construction_date, inventory_date = [self.merged_document.get(key, '').strip() for key in keys]
             if (construction_date and inventory_date) and (construction_date > inventory_date):
-                self._errors.append({'site_dates': "firstConstructionDate cannot be more recent than siteEstablishmentDate"})
+                self._errors['site_dates'] = ["firstConstructionDate cannot be more recent than siteEstablishmentDate"]
 
     def _validate_depths(self):
         keys = ['holeDepth', 'wellDepth']
@@ -56,7 +55,7 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
                 pass
             else:
                 if (hole_depth and well_depth) and (well_depth > hole_depth):
-                    self._errors.append({'depths': "wellDepth cannot be greater than holeDepth"})
+                    self._errors['depths'] = ["wellDepth cannot be greater than holeDepth"]
 
 
 
@@ -88,7 +87,7 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
         self._validate_depths()
 
 
-        return self._errors == []
+        return self._errors == {}
 
     @property
     def errors(self):

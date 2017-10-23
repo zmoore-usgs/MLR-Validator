@@ -35,11 +35,10 @@ class CountryStateReferenceValidator(BaseCrossFieldValidator):
             if country and state and value_to_check:
                 ref_list = self.country_state_ref.get_list_by_country_state(country, state)
                 if value_to_check not in ref_list:
-                    self._errors.append({
-                        self.document_key: '{0} is not in the reference list for country {1}, state {2}'.format(value_to_check, country, state)})
+                    self._errors[self.document_key] = ['{0} is not in the reference list for country {1}, state {2}'.format(value_to_check, country, state)]
 
 
-        return self._errors == []
+        return self._errors == {}
 
     @property
     def errors(self):

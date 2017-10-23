@@ -12,12 +12,12 @@ class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
     def setUp(self, msite_type_ref, mstates_ref, mwater_use_ref, mref_validator_class):
         mref_validator = mref_validator_class.return_value
         mref_validator.validate.return_value = False
-        mref_validator.errors = [{'field1' : 'Error message'}]
+        mref_validator.errors = {'field1' : ['Error message']}
         self.validator = CrossFieldRefErrorValidator('ref_dir')
 
     def test_multiple_error(self):
         self.assertFalse(self.validator.validate({'dummyfield': 'A'}, {}))
-        self.assertEqual(len(self.validator.errors), 5)
+        self.assertEqual(len(self.validator.errors), 1)
 
 
 class CrossFieldRefValidatorForStatesTestCase(TestCase):

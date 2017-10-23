@@ -5,7 +5,7 @@ class BaseCrossFieldValidator:
     '''
 
     def __init__(self):
-        self._errors = []
+        self._errors = {}
 
     def validate(self, document, existing_document):
         self.document = document
@@ -13,7 +13,7 @@ class BaseCrossFieldValidator:
         self.merged_document = existing_document.copy()
         self.merged_document.update(document)
 
-        self._errors = []
+        self._errors = {}
 
         return True
 
