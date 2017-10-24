@@ -102,7 +102,7 @@ class UseOfSiteTestCase(TestCase):
     def test_all_valid(self):
         self.assertTrue(self.validator.validate(
             {'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'B'},
-            {'tertiaryUseOfSite': 'C'}
+            {'tertiaryUseOfSiteCode': 'C'}
         ))
         self.assertTrue(self.validator.validate(
             {'secondaryUseOfSite': 'B'},
@@ -114,33 +114,28 @@ class UseOfSiteTestCase(TestCase):
             {'primaryUseOfSite': ' ', 'secondaryUseOfSite': 'B'},
             {}
         ))
-        self.assertIn('UseOfSite', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': ' ', 'secondaryUseOfSite': 'B'},
-            {'tertiaryUseOfSite': 'C'}
+            {'tertiaryUseOfSiteCode': 'C'}
         ))
-        self.assertIn('UseOfSite', self.validator.errors)
 
     def test_missing_secondary(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': ' '},
-            {'tertiaryUseOfSite': 'C'}
+            {'tertiaryUseOfSiteCode': 'C'}
         ))
-        self.assertIn('UseOfSite', self.validator.errors)
 
     def test_non_unique_codes(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'B'},
-            {'tertiaryUseOfSite': 'B'}
+            {'tertiaryUseOfSiteCode': 'B'}
         ))
-        self.assertIn('UseOfSite', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'A'},
-            {'tertiaryUseOfSite': '  '}
+            {'tertiaryUseOfSiteCode': '  '}
         ))
-        self.assertIn('UseOfSite', self.validator.errors)
 
 
 class UseOfWaterCodeTestCase(TestCase):
@@ -163,33 +158,28 @@ class UseOfWaterCodeTestCase(TestCase):
             {'primaryUseOfWaterCode': ' ', 'secondaryUseOfWaterCode': 'B'},
             {}
         ))
-        self.assertIn('UseOfWaterCode', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': ' ', 'secondaryUseOfWaterCode': 'B'},
             {'tertiaryUseOfWaterCode': 'C'}
         ))
-        self.assertIn('UseOfWaterCode', self.validator.errors)
 
     def test_missing_secondary(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': ' '},
             {'tertiaryUseOfWaterCode': 'C'}
         ))
-        self.assertIn('UseOfWaterCode', self.validator.errors)
 
     def test_non_unique_codes(self):
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'B'},
             {'tertiaryUseOfWaterCode': 'B'}
         ))
-        self.assertIn('UseOfWaterCode', self.validator.errors)
 
         self.assertFalse(self.validator.validate(
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'A'},
             {'tertiaryUseOfWaterCode': '  '}
         ))
-        self.assertIn('UseOfWaterCode', self.validator.errors)
 
 
 class SiteDatesTestCase(TestCase):

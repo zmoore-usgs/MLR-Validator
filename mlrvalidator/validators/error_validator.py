@@ -4,8 +4,6 @@ from itertools import chain
 import os
 import yaml
 
-from app import application
-
 from .cross_field_error_validator import CrossFieldErrorValidator
 from .cross_field_ref_error_validator import CrossFieldRefErrorValidator
 from .single_field_validator import SingleFieldValidator
@@ -14,14 +12,14 @@ from .transition_validator import TransitionValidator
 
 class ErrorValidator:
 
-    def __init__(self):
-        with open(os.path.join(application.config['SCHEMA_DIR'], 'error_schema.yml')) as fd:
+    def __init__(self, schema_dir, reference_file_dir):
+        with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
             error_schema = yaml.load(fd.read())
 
         self.single_field_validator = SingleFieldValidator(error_schema, allow_unknown=True)
         self.cross_field_validator = CrossFieldErrorValidator()
-        self.cross_field_ref_validator = CrossFieldRefErrorValidator(application.config['REFERENCE_FILE_DIR'])
-        self.transition_validator = TransitionValidator(application.config['REFERENCE_FILE_DIR'])
+        self.cross_field_ref_validator = CrossFieldRefErrorValidator(reference_file_dir)
+        self.transition_validator = TransitionValidator(reference_file_dir)
         self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):

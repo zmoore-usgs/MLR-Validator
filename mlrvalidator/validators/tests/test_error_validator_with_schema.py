@@ -1,13 +1,9 @@
 
 from unittest import TestCase
 
+from app import application
 from ..error_validator import ErrorValidator
 
-class ErrorValidatorLatitudeTestCase(TestCase):
-    #TODO: fill in with additional tests for latitude. Ideally each field that has validations would have a separate test case.
-
-    def latitude_without_longitude_is_invalid(self):
-        self.assertFalse(self.validator.validate({'latitude': ' 0400000'}, {}))
 
 class ValidateCrossFieldsTestCase(TestCase):
 
@@ -15,7 +11,7 @@ class ValidateCrossFieldsTestCase(TestCase):
     #TODO: Add needed tests for all validations not just cross field.
     #TODO: Add tests with an existing document
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
         self.good_data = {
             'latitude': ' 123456',
             'longitude': ' 1234556',

@@ -25,19 +25,19 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
                 self._errors[error_key] = \
                     ['The following fields must all be empty or all must not be empty: {0}'.format(', '.join(keys))]
 
-    def _validate_use_code(self, use_key_ending):
-        keys = ['primary{0}'.format(use_key_ending), 'secondary{0}'.format(use_key_ending), 'tertiary{0}'.format(use_key_ending)]
+    def _validate_use_code(self, primaryKey, secondaryKey, tertiaryKey):
+        keys = [primaryKey, secondaryKey, tertiaryKey]
         if self._any_fields_in_document(keys):
             primary, secondary, tertiary = [self.merged_document.get(key, '').strip() for key in keys]
 
             if tertiary and (not primary or not secondary):
-                self._errors[use_key_ending] =['Primary and secondary must be non null if tertiary is non null']
+                self._errors[tertiaryKey] =['Primary and secondary must be non null if tertiary is non null']
             elif secondary and not primary:
-                self._errors[use_key_ending] = ['Primary must be non null if secondary is non null']
+                self._errors[secondaryKey] = ['Primary must be non null if secondary is non null']
             elif (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
-                self._errors[use_key_ending] = ['Primary, secondary, and tertiary fields must be unique']
+                self._errors[primaryKey] = ['Primary, secondary, and tertiary fields must be unique']
             elif (primary and secondary and not tertiary) and (primary == secondary):
-                self._errors[use_key_ending] = ['Primary and secondary must be unique']
+                self._errors[primaryKey] = ['Primary and secondary must be unique']
 
     def _validate_site_dates(self):
         keys = ['firstConstructionDate', 'siteEstablishmentDate']
@@ -81,8 +81,8 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
             'altitudeMethodCode',
             'altitudeAccuracyValue'
             ], 'altitude')
-        self._validate_use_code('UseOfSite')
-        self._validate_use_code('UseOfWaterCode')
+        self._validate_use_code('primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
+        self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
         self._validate_site_dates()
         self._validate_depths()
 

@@ -10,14 +10,14 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
     def __init__(self, reference_dir):
         super().__init__()
-        self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes, aquiferCode')
+        self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes', 'aquiferCode')
         self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
         self.mcd_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'mcd.json'), 'minorCivilDivsionCodes', 'minorCivilDivisionCode')
         self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
         self.counties_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'county.json'), 'counties', 'countyCode')
 
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
-        self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_us.json'))
+        self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
         self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'site_type_cross_field.json'))
 
 

@@ -3,19 +3,17 @@ from itertools import chain
 import os
 import yaml
 
-from app import application
-
 from .cross_field_ref_warning_validator import CrossFieldRefWarningValidator
 from .single_field_validator import SingleFieldValidator
 
 class WarningValidator:
 
-    def __init__(self):
-        with open(os.path.join(application.config['SCHEMA_DIR'], 'warning_schema.yml')) as fd:
+    def __init__(self, schema_dir, reference_file_dir):
+        with open(os.path.join(schema_dir, 'warning_schema.yml')) as fd:
             warning_schema = yaml.load(fd.read())
 
         self.single_field_validator = SingleFieldValidator(warning_schema, allow_unknown=True)
-        self.cross_field_ref_validator = CrossFieldRefWarningValidator(application.config['REFERENCE_FILE_DIR'])
+        self.cross_field_ref_validator = CrossFieldRefWarningValidator(reference_file_dir)
         self._warnings = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):

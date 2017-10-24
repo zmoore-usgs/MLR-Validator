@@ -82,9 +82,6 @@ agencyUseCode:
 dataReliabilityCode:
     maxlength: 1
     valid_reference: True
-landNet:
-    maxlength: 23
-    valid_land_net: True
 mapName:
     maxlength: 20
 mapScale:

@@ -92,13 +92,13 @@ def _validate_response(req_json, update=False):
     ddot_location = req_json.get('ddotLocation')
     existing_location = req_json.get('existingLocation')
     no_errors = error_validator.validate(ddot_location, existing_location, update=update)
-    no_warnings = warning_validator.validate(ddot_location, update=update)
+    no_warnings = warning_validator.validate(ddot_location, existing_location)
 
     response = {}
     if not no_errors:
         response["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(error_validator.errors))
     if not no_warnings:
-        response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.errors))
+        response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.warnings))
     if no_errors and no_warnings:
         response["validation_passed_message"] = 'Validations Passed'
 

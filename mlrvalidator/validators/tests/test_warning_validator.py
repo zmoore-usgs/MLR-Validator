@@ -4,6 +4,7 @@ from ..warning_validator import WarningValidator
 
 @mock.patch('mlrvalidator.validators.warning_validator.SingleFieldValidator')
 @mock.patch('mlrvalidator.validators.warning_validator.CrossFieldRefWarningValidator')
+@mock.patch('mlrvalidator.validators.warning_validator.open', mock.mock_open(read_data=''))
 class ErrorValidatorErrorsTestCase(TestCase):
 
     def test_all_valid(self, mcross_ref_class, msingle_field_class):
@@ -15,7 +16,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross_ref.validate.return_value = True
         mcross_ref.errors = {}
 
-        validator = WarningValidator()
+        validator = WarningValidator('schema_dir', 'ref_dir')
 
         self.assertTrue(validator.validate({'A' : 'This', 'B' : 'That'}, {}))
         self.assertEqual(len(validator.warnings), 0)
@@ -29,7 +30,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross_ref.validate.return_value = True
         mcross_ref.errors = {}
 
-        validator = WarningValidator()
+        validator = WarningValidator('schema_dir', 'ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 1)
@@ -44,7 +45,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross_ref.validate.return_value = False
         mcross_ref.errors = {'A': ['Not good'], 'B': ['No match']}
 
-        validator = WarningValidator()
+        validator = WarningValidator('schema_dir', 'ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 2)
@@ -60,7 +61,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross_ref.validate.return_value = False
         mcross_ref.errors = {'A': ['Not good'], 'B': ['No match']}
 
-        validator = WarningValidator()
+        validator = WarningValidator('schema_dir', 'ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 2)
