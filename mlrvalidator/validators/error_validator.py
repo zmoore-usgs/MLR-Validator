@@ -1,5 +1,6 @@
 
-
+from collections import defaultdict
+from itertools import chain
 import os
 import yaml
 
@@ -9,7 +10,6 @@ from .cross_field_error_validator import CrossFieldErrorValidator
 from .cross_field_ref_error_validator import CrossFieldRefErrorValidator
 from .single_field_validator import SingleFieldValidator
 from .transition_validator import TransitionValidator
-
 
 
 class ErrorValidator:
@@ -22,21 +22,28 @@ class ErrorValidator:
         self.cross_field_validator = CrossFieldErrorValidator()
         self.cross_field_ref_validator = CrossFieldRefErrorValidator(application.config['REFERENCE_FILE_DIR'])
         self.transition_validator = TransitionValidator(application.config['REFERENCE_FILE_DIR'])
-        self._errors = []
+        self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_validator.validate(ddot_location, existing_location)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
-        self._errors = self.single_field_validator.errors
-        self._errors.extend(self.cross_field_validator.errors)
-        self._errors.extend(self.cross_field_validator.errors)
+
         if update:
             self.transition_validator.validate(ddot_location, existing_location)
-            self._errors.extend(self.transition_validator.errors)
+            transition_errors = self.transition_validator.errors
+        else:
+            transition_errors = {}
 
-         self._errors.sort(key=)
-        return self._errors == []
+        self._errors = defaultdict(list)
+        all_errors = chain(self.single_field_validator.errors.items(),
+                           self.cross_field_validator.errors.items(),
+                           self.cross_field_ref_validator.errors.items(),
+                           transition_errors.items())
+
+        for k, v in chain(all_errors):
+            self.errors[k].extend(v)
+        return self._errors == {}
 
     @property
     def errors(self):
