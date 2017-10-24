@@ -25,7 +25,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
                 state_attr = self.states_ref.get_state_attributes(country, state)
                 if state_attr and 'state_min_lat_va' in state_attr and 'state_max_lat_va' in state_attr:
                     if not (state_attr['state_min_lat_va'] <= lat < state_attr['state_max_lat_va']):
-                        self._errors.append({'latitude': 'Latitude is out of range for state {0}'.format(state)})
+                        self._errors['latitude'] = ['Latitude is out of range for state {0}'.format(state)]
 
     def _validate_longitude_range(self):
         keys = ['longitude', 'countryCode', 'stateFipsCode']
@@ -37,7 +37,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
                 state_attr = self.states_ref.get_state_attributes(country, state)
                 if state_attr and 'state_min_long_va' in state_attr and 'state_max_long_va' in state_attr:
                     if not (state_attr['state_min_long_va'] <= lat < state_attr['state_max_long_va']):
-                        self._errors.append({'longitude': 'Longitude is out of range for state {0}'.format(state)})
+                        self._errors['longitude'] = ['Longitude is out of range for state {0}'.format(state)]
 
     def _validate_altitude_range(self):
         keys = ['altitude', 'countryCode', 'stateFipsCode']
@@ -53,7 +53,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
                     max_alt_va = stripped_max[len(stripped_max) - 1]
                     try:
                         if not float(min_alt_va) <= float(altitude) <= float(max_alt_va):
-                            self._errors.append({'altitude': "Altitude Out of Range for State {0}".format(state)})
+                            self._errors['altitude'] = ["Altitude Out of Range for State {0}".format(state)]
                     except ValueError:
                         pass
 
@@ -64,7 +64,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self._validate_longitude_range()
         self._validate_altitude_range()
 
-        return self._errors == []
+        return self._errors == {}
 
 
 
