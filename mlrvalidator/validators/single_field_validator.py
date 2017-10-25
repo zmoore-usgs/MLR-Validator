@@ -4,10 +4,17 @@ import re
 
 from cerberus import Validator
 
-from .land_net_templates import land_net_ref
-
 
 class SingleFieldValidator(Validator):
+
+    def __init__(self, *args, **kwargs):
+        ''''
+        Added keyword argument reference_list which should be an instance of reference.ReferenceInfo
+        '''
+        self.reference_list = kwargs.get('reference_list', {})
+        super().__init__(*args, **kwargs)
+
+
     def _validate_type_numeric(self, value):
         # check for numeric value
         if not value.strip():
@@ -40,7 +47,7 @@ class SingleFieldValidator(Validator):
         # Check that precision is no more than 2 decimal places
 
         The rule's arguments are validated against this schema:
-        {'valid_precision': False}
+        {'type': 'boolean'}
         """
         error_message = "Invalid Value, decimal precision error"
 
@@ -61,34 +68,23 @@ class SingleFieldValidator(Validator):
 
     def _validate_is_empty(self, is_empty, field, value):
         """
-        # Since the value coming in could consist of spaces, check that a value of only spaces is considered null
+        Since the value coming in could consist of spaces, check that a value of only spaces is considered null
+        Defaults to true. If set to false, the check is made.
 
         The rule's arguments are validated against this schema:
-        {'valid_is_empty': False}
+        {'type': 'boolean'}
         """
         stripped_value = value.strip()
         if not is_empty:
             if not stripped_value:
                 self._error(field, "Field must contain non whitespace characters")
 
-    def _validate_valid_special_chars(self, valid_special_chars, field, value):
-        """
-        # Check that tab, #, *, \, ", ^, _, and $ do not exist in field
-
-        The rule's arguments are validated against this schema:
-        {'valid_special_chars': True}
-        """
-        if valid_special_chars:
-            test_field = re.search(r'[\t#*\\\"^_$]+', value)
-            if test_field is not None:
-                self._error(field, "Invalid Character: contains tab, #, *, \, "", ^, _, or $")
-
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
         # Check that characters other than 0-9 or a blank space do not exist in field
 
         The rule's arguments are validated against this schema:
-        {'valid_map_scale_chars': True}
+        {'type': 'boolean'}
         """
         if valid_map_scale_chars:
             test_field = re.search('[^0-9 ]+', value)
@@ -96,34 +92,13 @@ class SingleFieldValidator(Validator):
                 # There is something besides digits 0-9 or space
                 self._error(field, "Invalid Character: contains a character other than 0-9")
 
-    def _validate_valid_instruments_chars(self, valid_instruments_chars, field, value):
-        """
-        # Check that characters other than Y, N, or a blank space do not exist in field
-
-        The rule's arguments are validated against this schema:
-        {'valid_instruments_chars': True}
-        """
-        if valid_instruments_chars:
-            if not all(c.upper() in "YN " for c in value):
-                self._error(field, "Invalid Character: contains a character other than Y, N, or a blank space")
-
-    def _validate_valid_data_types_chars(self, valid_data_types_chars, field, value):
-        """
-        # Check that character other than A, I, O, N, or a blank space do not exist in field
-
-        The rule's arguments are validated against this schema:
-        {'valid_data_types_chars': True}
-        """
-        if valid_data_types_chars:
-            if not all(c.upper() in "AION " for c in value):
-                self._error(field, "Invalid Character: contains a character other than A, I, O, N, or a blank space")
 
     def _validate_valid_latitude_dms(self, valid_latitude_dms, field, value):
         # Check that field consists of valid degrees, minutes and second values
 
         """
         The rule's arguments are validated against this schema:
-        {'valid_latitude_dms': True}
+        {'type': 'boolean'}
         """
         error_message = "Invalid Degree/Minute/Second Value"
         rstripped_value = value.rstrip()
@@ -159,14 +134,14 @@ class SingleFieldValidator(Validator):
                         and check_100th_seconds(rstripped_value)):
                     self._error(field, error_message)
             except ValueError:
-                return self._error(field, error_message)
+                self._error(field, error_message)
 
     def _validate_valid_longitude_dms(self, valid_longitude_dms, field, value):
         # Check that field consists of valid degrees, minutes and second values
 
         """
         The rule's arguments are validated against this schema:
-        {'valid_longitude_dms': True}
+        {'type': 'boolean'}
         """
         error_message = "Invalid Degree/Minute/Second Value"
         rstripped_value = value.rstrip()
@@ -201,14 +176,14 @@ class SingleFieldValidator(Validator):
                         and check_100th_seconds(rstripped_value)):
                     self._error(field, error_message)
             except ValueError:
-                return self._error(field, error_message)
+                self._error(field, error_message)
 
     def _validate_valid_date(self, valid_date, field, value):
         # Check that field is a formatted date of YYYY, YYYYMM or YYYYMMDD
 
         """
         The rule's arguments are validated against this schema:
-        {'valid_date': True}
+        {'type': 'boolean'}
         """
         error_message = "Invalid Date, should be YYYY, YYYYMM or YYYYMMDD"
         stripped_value = value.strip()
@@ -237,26 +212,29 @@ class SingleFieldValidator(Validator):
             else:
                 self._error(field, error_message)
 
-    def _validate_valid_land_net(self, valid_land_net, field, value):
-        # Check that the land net description field follows the correct template
-
+    def _validate_valid_reference(self, valid_reference, field, value):
         """
+        # Check that value is the list of allowable values
+
         The rule's arguments are validated against this schema:
-        {'valid_land_net': True}
+        {'type': 'boolean'}
         """
-        error_message = "Invalid format - Land Net does not fit template"
 
-        if valid_land_net:
-            land_net_template = land_net_ref["55"]
-            value_end = len(value) - 1
-            section = land_net_template.index("S")
-            township = land_net_template.index("T")
-            range = land_net_template.index("R")
-            try:
-                if not (value[section] == "S" and value[township] == "T" and value[range] == "R"):
-                    return self._error(field, error_message)
-                test_match = re.search('[^a-zA-Z0-9 ]', value[section:value_end])
-                if test_match is not None:
-                    return self._error(field, error_message)
-            except IndexError:
-                return self._error(field, error_message)
+        if valid_reference and self.reference_list:
+            stripped_value = value.strip()
+            ref_list = self.reference_list.get_reference_info().get(field, [])
+            if stripped_value and stripped_value not in ref_list:
+                return self._error(field, '{0} is not in reference list'.format(value))
+
+    def _validate_valid_single_quotes(self, valid_quotes, field, value):
+        """
+        String is invalid if it starts with a single quote but does not end with a single quote or
+        if the string ends with a single quote but does not start with a single quote.
+
+        The rule's arguments are validated against this schema:
+        {'type': boolean}
+        """
+        if valid_quotes:
+            if ((value.startswith("'") and not value.endswith("'")) or
+                    (not value.startswith("'") and value.endswith("'"))):
+                self._error(field, "Missing Quote: may be missing a quote at beginning or ending of the name")

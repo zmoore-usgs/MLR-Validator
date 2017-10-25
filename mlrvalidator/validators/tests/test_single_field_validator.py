@@ -1,6 +1,10 @@
 
-from unittest import TestCase
+import os
+from unittest import TestCase, mock
 
+from app import application
+
+from ..reference import ReferenceInfo
 from ..single_field_validator import SingleFieldValidator
 
 
@@ -280,75 +284,6 @@ class ValidateValidMapScaleCharsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data2))
         self.assertFalse(self.validator.validate(self.bad_data3))
         self.assertFalse(self.validator.validate(self.bad_data4))
-
-
-class ValidateValidSpecialCharsTestCase(TestCase):
-
-    def setUp(self):
-        self.validator = SingleFieldValidator(schema={'stationName': {'valid_special_chars' : True}})
-        self.good_data = {
-            'stationName': 'br549'
-            }
-        self.good_data2 = {
-            'stationName': 'YYYYNNNN'
-        }
-        self.good_data3 = {
-            'stationName': 'NNNNYYYY'
-        }
-        self.good_data4 = {
-            'stationName': 'NNNN YYYY'
-        }
-        self.good_data5 = {
-            'stationName': ' '
-        }
-        self.good_data6 = {
-            'stationName': 'a-b'
-        }
-
-        self.bad_data = {
-            'stationName': 'br5#49'
-            }
-        self.bad_data2 = {
-            'stationName': 'br\t549'
-        }
-        self.bad_data3 = {
-            'stationName': "br5\\49"
-        }
-        self.bad_data4 = {
-            'stationName': '$br549'
-        }
-        self.bad_data5 = {
-            'stationName': 'b^r549'
-        }
-        self.bad_data6 = {
-            'stationName': 'br5*49'
-        }
-        self.bad_data7 = {
-            'stationName': 'br54"9'
-        }
-        self.bad_data8 = {
-            'stationName': 'br549_'
-        }
-
-
-    def test_validate_ok(self):
-        self.assertTrue(self.validator.validate(self.good_data))
-        self.assertTrue(self.validator.validate(self.good_data2))
-        self.assertTrue(self.validator.validate(self.good_data3))
-        self.assertTrue(self.validator.validate(self.good_data4))
-        self.assertTrue(self.validator.validate(self.good_data5))
-        self.assertTrue(self.validator.validate(self.good_data6))
-
-    def test_with_validate_not_ok(self):
-        self.assertFalse(self.validator.validate(self.bad_data))
-        self.assertFalse(self.validator.validate(self.bad_data2))
-        self.assertFalse(self.validator.validate(self.bad_data3))
-        self.assertFalse(self.validator.validate(self.bad_data4))
-        self.assertFalse(self.validator.validate(self.bad_data5))
-        self.assertFalse(self.validator.validate(self.bad_data6))
-        self.assertFalse(self.validator.validate(self.bad_data7))
-        self.assertFalse(self.validator.validate(self.bad_data8))
-
 
 
 class ValidateValidLatitutdeDMS(TestCase):
@@ -784,56 +719,41 @@ class ValidateValidDateTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data19))
 
 
-class ValidateValidLandNetTestCase(TestCase):
-
+class ValidateReferenceTestCase(TestCase):
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'landNet': {'valid_land_net': True}})
-        self.good_data = {
-            'landNet': 'SWSWSWS010T09832R093425'
-        }
-        self.good_data2 = {
-            'landNet': '      S15 T20N  R11E'
-        }
-        self.good_data3 = {
-            'landNet': 'NWNWSWS15 T014N R022E 4'
-        }
-        self.good_data4 = {
-            'landNet': '      S   T23N  R20E  4'
-        }
-        self.bad_data = {
-            'landNet': 'Q'
-        }
-        self.bad_data2 = {
-            'landNet': 'NWNWSWS15 T014N R02-E 4'
-        }
-        self.bad_data3 = {
-            'landNet': 'NWNWSWS15  T014N R022E4'
-        }
-        self.bad_data4 = {
-            'landNet': 'NWNWSW S15 T014N R022E4'
-        }
-        self.bad_data5 = {
-            'landNet': 'NWNWSWF15 T014N R 022E4'
-        }
-        self.bad_data6 = {
-            'landNet': 'NWNWSWS15 S014N R 022E4'
-        }
-        self.bad_data7 = {
-            'landNet': 'NWNWSWF15 T014N S 022E4'
-        }
+        ref_list = mock.MagicMock()
+        ref_list.get_reference_info.return_value = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
+        self.validator = SingleFieldValidator(schema={
+            'field1': {'valid_reference': True},
+            'field2': {'valid_reference': True}
+        },
+        reference_list=ref_list
+        )
 
-    def test_validate_ok(self):
-        self.assertTrue(self.validator.validate(self.good_data))
-        self.assertTrue(self.validator.validate(self.good_data2))
-        self.assertTrue(self.validator.validate(self.good_data3))
-        self.assertTrue(self.validator.validate(self.good_data4))
+    def test_valid_field(self):
+        self.assertTrue(self.validator.validate({'field2': 'AA'}))
 
-    def test_with_validate_not_ok(self):
-        self.assertFalse(self.validator.validate(self.bad_data))
-        self.assertFalse(self.validator.validate(self.bad_data2))
-        self.assertFalse(self.validator.validate(self.bad_data3))
-        self.assertFalse(self.validator.validate(self.bad_data4))
-        self.assertFalse(self.validator.validate(self.bad_data5))
-        self.assertFalse(self.validator.validate(self.bad_data6))
-        self.assertFalse(self.validator.validate(self.bad_data7))
+    def test_both_fields_good(self):
+        self.assertTrue(self.validator.validate({'field1': 'A', 'field2': 'BB'}))
 
+    def test_field_all_spaces(self):
+        self.assertTrue(self.validator.validate({'field2': '   '}))
+
+    def test_invalid_field(self):
+        self.assertFalse(self.validator.validate({'field2': 'A'}))
+
+
+class ValidateSingleQuoteTestCase(TestCase):
+    def setUp(self):
+        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}})
+
+    def test_valid_field(self):
+        self.assertTrue(self.validator.validate({'field1': '   '}))
+        self.assertTrue(self.validator.validate({'field1': 'AAA'}))
+        self.assertTrue(self.validator.validate({'field1': "A'A"}))
+
+    def test_quote_at_end(self):
+        self.assertFalse(self.validator.validate({'field1': "AAAA'"}))
+
+    def test_quote_at_beginning(self):
+        self.assertFalse(self.validator.validate({'field1': "'AAAA"}))

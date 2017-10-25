@@ -3,8 +3,7 @@ import os
 from flask import Flask
 
 from mlrvalidator.validators.error_validator import ErrorValidator
-from mlrvalidator.validators.single_field_warning_validator import SingleFieldWarningValidator
-from mlrvalidator.schema import warning_schema
+from mlrvalidator.validators.warning_validator import WarningValidator
 
 application = Flask(__name__)
 
@@ -14,8 +13,8 @@ PROJECT_DIR = os.path.dirname(__file__)
 if os.path.exists(os.path.join(PROJECT_DIR, '.env')):
     application.config.from_pyfile('.env')
 
-error_validator = ErrorValidator()
-warning_validator = SingleFieldWarningValidator(warning_schema, allow_unknown=True)
+error_validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+warning_validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
 
 from mlrvalidator.services import *

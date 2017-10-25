@@ -1,126 +1,62 @@
-from unittest import TestCase
+import json
+import os
+from unittest import TestCase, mock
 
-from ..reference import Aquifers, Hucs, Mcds, NationalAquifers, NationalWaterUseCodes, Counties, \
-    States, FieldTransitions, SiteTypesCrossField
+from app import application
+from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties
 
 
-class ValidateGetAquifersCase(TestCase):
+class CountryStateReferenceTestCase(TestCase):
     def setUp(self):
-        self.aquifer = Aquifers('references/aquifer.json')
+        ref_list = {
+            "countries": [
+                {
+                    "countryCode": "BG",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "aquiferCodes": [
+                                "200CRSL"
+                            ]
+                        }
+                    ]
+                }, {
+                    "countryCode": "US",
+                    "states": [
+                        {
+                            "stateFipsCode": "01",
+                            "aquiferCodes": [
+                                "100CNZC",
+                                "110QRNR"
+                            ]
+                        }, {
 
-    def test_validate_ok(self):
-        good_aquifer = ["112EVRS", "112GLCV", "112SUMS"]
-        test_aquifer = self.aquifer.get_aquifers('CA', '96')
+                            "stateFipsCode": "02",
+                            "aquiferCodes": [
+                                "000MCRL",
+                                "000SELS"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        with mock.patch('mlrvalidator.validators.reference.open', mock.mock_open(read_data=json.dumps(ref_list)), create=True):
+            self.aquifer_ref = CountryStateReference('fake_file', 'aquiferCodes')
 
-        self.assertEqual(test_aquifer, good_aquifer)
+    def test_list_that_exists(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('US', '02'), ['000MCRL', '000SELS'])
 
-    def test_validate_not_ok(self):
-        bad_aquifer = []
-        test_aquifer = self.aquifer.get_aquifers('CA', '01')
+    def test_missing_country(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('CN', '02'), [])
 
-        self.assertEqual(test_aquifer, bad_aquifer)
-
-        bad_aquifer = []
-        test_aquifer = self.aquifer.get_aquifers('XY', '96')
-
-        self.assertEqual(test_aquifer, bad_aquifer)
-
-
-class ValidateGetNationalAquifersCase(TestCase):
-    def setUp(self):
-        self.national_aquifer = NationalAquifers('references/national_aquifer.json')
-
-    def test_validate_ok(self):
-        good_aquifer = ["N100AKUNCD", "N9999OTHER"]
-        test_aquifer = self.national_aquifer.get_national_aquifers('US', '02')
-
-        self.assertEqual(test_aquifer, good_aquifer)
-
-    def test_validate_not_ok(self):
-        bad_aquifer = []
-        test_aquifer = self.national_aquifer.get_national_aquifers('US', 'XY')
-
-        self.assertEqual(test_aquifer, bad_aquifer)
-
-        bad_aquifer = []
-        test_aquifer = self.national_aquifer.get_national_aquifers('XY', '01')
-
-        self.assertEqual(test_aquifer, bad_aquifer)
-
-
-class ValidateGetHucsCase(TestCase):
-    def setUp(self):
-        self.huc = Hucs('references/huc.json')
-
-    def test_validate_ok(self):
-        good_huc = ["21030001"]
-        test_huc = self.huc.get_hucs('PM', '61')
-
-        self.assertEqual(test_huc, good_huc)
-
-    def test_validate_not_ok(self):
-        bad_huc = []
-        test_huc = self.huc.get_hucs('PM', 'XY')
-
-        self.assertEqual(test_huc, bad_huc)
-
-        bad_huc = []
-        test_huc = self.huc.get_hucs('XY', '61')
-
-        self.assertEqual(test_huc, bad_huc)
-
-
-class ValidateGetMcdsCase(TestCase):
-    def setUp(self):
-        self.mcd = Mcds('references/mcd.json')
-
-    def test_validate_ok(self):
-        good_mcd = ["90148",
-            "90296",
-            "90444",
-            "90740",
-            "90888",
-            "91036",
-            "91110",
-            "91332",
-            "91480",
-            "91628",
-            "91776",
-            "91924",
-            "92072",
-            "92220",
-            "92368",
-            "92516",
-            "92664",
-            "92738",
-            "92812",
-            "92960",
-            "93108",
-            "93256",
-            "93404",
-            "93552",
-            "93700",
-            "93848",
-            "93996"]
-        test_mcd = self.mcd.get_mcds('US', '10')
-
-        self.assertEqual(test_mcd, good_mcd)
-
-    def test_validate_not_ok(self):
-        bad_mcd = []
-        test_mcd = self.mcd.get_mcds('US', 'XY')
-
-        self.assertEqual(test_mcd, bad_mcd)
-
-        bad_mcd = []
-        test_mcd = self.mcd.get_mcds('XY', '10')
-
-        self.assertEqual(test_mcd, bad_mcd)
+    def test_missing_state(self):
+        self.assertEqual(self.aquifer_ref.get_list_by_country_state('US', '03'), [])
 
 
 class ValidateGetNationalWaterUseCase(TestCase):
     def setUp(self):
-        self.national_water_use = NationalWaterUseCodes('references/national_water_use.json')
+        self.national_water_use = NationalWaterUseCodes(os.path.join(application.config['REFERENCE_FILE_DIR'], 'national_water_use.json'))
 
     def test_validate_ok(self):
         good_national_water_use = [
@@ -149,7 +85,7 @@ class ValidateGetNationalWaterUseCase(TestCase):
 
 class ValidateGetCountyCodeCase(TestCase):
     def setUp(self):
-        self.county = Counties('references/county.json')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
@@ -171,7 +107,7 @@ class ValidateGetCountyCodeCase(TestCase):
 
 class ValidateGetCountyAttributesCase(TestCase):
     def setUp(self):
-        self.county = Counties('references/county.json')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
 
     def test_validate_ok(self):
         good_county = {
@@ -206,7 +142,7 @@ class ValidateGetCountyAttributesCase(TestCase):
 
 class ValidateGetStateCodeCase(TestCase):
     def setUp(self):
-        self.state = States('references/state.json')
+        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
 
     def test_validate_ok(self):
         good_state = ["00", "90", "91", "92", "93", "94", "95", "96", "97", "98"]
@@ -223,7 +159,7 @@ class ValidateGetStateCodeCase(TestCase):
 
 class ValidateGetStateAttributesCase(TestCase):
     def setUp(self):
-        self.state = States('references/state.json')
+        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
 
     def test_validate_ok(self):
         good_state = {
@@ -250,10 +186,9 @@ class ValidateGetStateAttributesCase(TestCase):
 
         self.assertEqual(test_state, bad_state)
 
-
 class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):
-        self.site_type = FieldTransitions('references/site_type_transition.json')
+        self.site_type = FieldTransitions(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_transition.json'))
 
     def test_validate_ok(self):
         good_new_site_type = [
@@ -280,7 +215,7 @@ class ValidateGetFieldTransitionsCase(TestCase):
 class ValidateGetSiteTypesCrossFieldCase(TestCase):
 
     def setUp(self):
-        self.site_type_cf = SiteTypesCrossField('references/site_type_cross_field.json')
+        self.site_type_cf = SiteTypesCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_cross_field.json'))
 
     def test_real_site_type_code(self):
         result = self.site_type_cf.get_site_type_field_dependencies('SB-CV')
