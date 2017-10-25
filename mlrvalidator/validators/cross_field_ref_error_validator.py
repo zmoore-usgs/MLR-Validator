@@ -91,7 +91,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                         'Site type {0} must not have the following attributes null: {1}'.format(site_type, ', '.join(not_null_errors)))
                 if null_errors:
                     self._errors['siteTypeCode'].append(
-                        'Site type {0} musthave the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
+                        'Site type {0} must have the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
 
     def validate(self, document, existing_document):
         '''
