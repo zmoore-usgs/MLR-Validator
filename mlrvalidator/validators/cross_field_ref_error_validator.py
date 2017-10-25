@@ -102,7 +102,9 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         super().validate(document, existing_document)
 
         self.aquifer_ref_validator.validate(document, existing_document)
-        self.huc_ref_validator.validate(document, existing_document)
+        # A huc of 99999999 is always allowed
+        if self.merged_document.get('hydrologicUnitCode', '').strip() != '99999999':
+            self.huc_ref_validator.validate(document, existing_document)
         self.mcd_ref_validator.validate(document, existing_document)
         self.national_aquifer_ref_validator.validate(document, existing_document)
 
@@ -113,7 +115,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)
-        self._errors.update(self.huc_ref_validator.errors)
+        self._errors.update(self.mcd_ref_validator.errors)
         self._errors.update(self.national_aquifer_ref_validator.errors)
 
         return self._errors == {}
