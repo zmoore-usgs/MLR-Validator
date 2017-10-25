@@ -17,6 +17,9 @@ class SingleFieldValidator(Validator):
 
     def _validate_type_numeric(self, value):
         # check for numeric value
+        if not value.strip():
+            return True
+
         try:
             float(value)
         except ValueError:
@@ -26,6 +29,9 @@ class SingleFieldValidator(Validator):
 
     def _validate_type_positive_numeric(self, value):
         # check for positive numeric value
+        if not value.strip():
+            return True
+
         try:
             test_num = float(value)
         except ValueError:
