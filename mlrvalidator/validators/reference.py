@@ -37,6 +37,22 @@ class NationalWaterUseCodes(ReferenceInfo):
         site_type_list = self.reference_info['siteTypeCodes']
         return get_dict(site_type_list, 'siteTypeCode', site_type_code).get('nationalWaterUseCodes', [])
 
+class Counties(CountryStateReference):
+    def get_county_codes(self, country_code, state_code):
+        county_list = self.get_list_by_country_state(country_code, state_code)
+        county_code_list = [d['countyCode'] for d in county_list]
+
+        return county_code_list
+
+    def get_county_attributes(self, country_code, state_code, county_code):
+        county_list = self.get_list_by_country_state(country_code, state_code)
+        try:
+            county_attributes = list(filter(lambda cc: cc['countyCode'] == county_code, county_list))[0]
+        except IndexError:
+            county_attributes = {}
+
+        return county_attributes
+
 
 class States(ReferenceInfo):
 
