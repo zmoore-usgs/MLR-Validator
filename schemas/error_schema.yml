@@ -112,10 +112,10 @@ topographicCode:
     valid_reference: True
 dataTypesCode:
     maxlength: 30
-    regex: ^[^AION ]*$
+    regex: ^[AION ]*$
 instrumentsCode:
     maxlength: 30
-    regex: ^[^YN ]*$
+    regex: ^[YN ]*$
 contributingDrainageArea:
     type: positive_numeric
     maxlength: 8

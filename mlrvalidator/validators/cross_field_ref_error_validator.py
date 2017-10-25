@@ -4,7 +4,7 @@ import os
 
 from .base_cross_field_validator import BaseCrossFieldValidator
 from .country_state_reference_validator import CountryStateReferenceValidator
-from .reference import States, NationalWaterUseCodes, SiteTypesCrossField
+from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties
 
 class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
@@ -14,12 +14,22 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
         self.mcd_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'mcd.json'), 'minorCivilDivsionCodes', 'minorCivilDivisionCode')
         self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
-        self.counties_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'county.json'), 'counties', 'countyCode')
 
+        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'), 'counties')
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
         self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'site_type_cross_field.json'))
 
+
+    def _validate_counties(self):
+        keys = ['countryCode', 'stateFipsCode', 'countyCode']
+        if self._any_fields_in_document(keys):
+            country, state, county = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if country and state and county:
+                county_list = self.counties_ref.get_county_codes(country, state)
+                if county_list and county not in county_list:
+                    self._errors['countyCode'] = ['County {0} is not in the reference list for country {1} and state {2}'.format(county, country, state)]
 
     def _validate_states(self):
         '''
@@ -81,7 +91,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                         'Site type {0} must not have the following attributes null: {1}'.format(site_type, ', '.join(not_null_errors)))
                 if null_errors:
                     self._errors['siteTypeCode'].append(
-                        'Site type {0} musthave the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
+                        'Site type {0} must have the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
 
     def validate(self, document, existing_document):
         '''
@@ -92,20 +102,21 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         super().validate(document, existing_document)
 
         self.aquifer_ref_validator.validate(document, existing_document)
-        self.huc_ref_validator.validate(document, existing_document)
+        # A huc of 99999999 is always allowed
+        if self.merged_document.get('hydrologicUnitCode', '').strip() != '99999999':
+            self.huc_ref_validator.validate(document, existing_document)
         self.mcd_ref_validator.validate(document, existing_document)
         self.national_aquifer_ref_validator.validate(document, existing_document)
-        self.counties_ref_validator.validate(document, existing_document)
 
+        self._validate_counties()
         self._validate_states()
         self._validate_national_water_use_code()
         self._validate_site_type()
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)
-        self._errors.update(self.huc_ref_validator.errors)
+        self._errors.update(self.mcd_ref_validator.errors)
         self._errors.update(self.national_aquifer_ref_validator.errors)
-        self._errors.update(self.counties_ref_validator.errors)
 
         return self._errors == {}
 

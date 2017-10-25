@@ -5,7 +5,173 @@ from unittest import TestCase, mock
 
 from ..cross_field_ref_warning_validator import CrossFieldRefWarningValidator
 
-class CrossFieldRefWarningLatitudeTestCase(TestCase):
+
+class CrossFieldRefWarningCountyLatitudeTestCase(TestCase):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_warning_validator.States')
+    def setUp(self, mstates_ref):
+        ref_list = ref_list = {
+            "countries": [
+                {
+                    "countryCode": "AF",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "292900",
+                                    "county_max_lat_va": "383000",
+                                    "county_min_long_va": "-0745800",
+                                    "county_max_long_va": "-0605000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "countryCode": "CA",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }, {
+                            "stateFipsCode": "90",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "443000",
+                                    "county_max_lat_va": "480500",
+                                    "county_min_long_va": "0634500",
+                                    "county_max_long_va": "0690500",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "02690"
+                                }, {
+                                    "countyCode": "001",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
+
+    def test_valid_latitude_range(self):
+        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 500000'}, {}))
+
+    def test_invalid_latitude_range(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 300000'}, {}))
+
+    def test_missing_fields(self):
+        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    ', 'latitude': ' 500000'}, {}))
+
+    def test_missing_reference(self):
+            self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'latitude': ' 300000'}, {}))
+
+class CrossFieldRefWarningCountyLongitudeTestCase(TestCase):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_warning_validator.States')
+    def setUp(self, mstates_ref):
+        ref_list = ref_list = {
+            "countries": [
+                {
+                    "countryCode": "AF",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "292900",
+                                    "county_max_lat_va": "383000",
+                                    "county_min_long_va": "-0745800",
+                                    "county_max_long_va": "-0605000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "countryCode": "CA",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }, {
+                            "stateFipsCode": "90",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "443000",
+                                    "county_max_lat_va": "480500",
+                                    "county_min_long_va": "0634500",
+                                    "county_max_long_va": "0690500",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "02690"
+                                }, {
+                                    "countyCode": "001",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
+
+    def test_valid_latitude_range(self):
+        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'longitude': ' 1000000'}, {}))
+
+    def test_invalid_latitude_range(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 0100000'}, {}))
+
+    def test_missing_fields(self):
+        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    ', 'latitude': ' 1000000'}, {}))
+
+    def test_missing_reference(self):
+            self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'latitude': ' 1000000'}, {}))
+
+
+class CrossFieldRefWarningStateLatitudeTestCase(TestCase):
 
     def setUp(self):
         ref_list = {

@@ -3,7 +3,7 @@ import os
 from unittest import TestCase, mock
 
 from app import application
-from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField
+from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties
 
 
 class CountryStateReferenceTestCase(TestCase):
@@ -81,6 +81,63 @@ class ValidateGetNationalWaterUseCase(TestCase):
         test_national_water_use = self.national_water_use.get_national_water_use_codes('XY')
 
         self.assertEqual(test_national_water_use, bad_national_water_use)
+
+
+class ValidateGetCountyCodeCase(TestCase):
+    def setUp(self):
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
+
+    def test_validate_ok(self):
+        good_county = ["000", "005", "040", "050", "060"]
+        test_county = self.county.get_county_codes('FM', '64')
+
+        self.assertEqual(test_county, good_county)
+
+    def test_validate_not_ok(self):
+        bad_county = []
+        test_county = self.county.get_county_codes('FM', 'XY')
+
+        self.assertEqual(test_county, bad_county)
+
+        bad_county = []
+        test_county = self.county.get_county_codes('XY', '64')
+
+        self.assertEqual(test_county, bad_county)
+
+
+class ValidateGetCountyAttributesCase(TestCase):
+    def setUp(self):
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
+
+    def test_validate_ok(self):
+        good_county = {
+              "countyCode": "000",
+              "county_min_lat_va": "010400",
+              "county_max_lat_va": "100700",
+              "county_min_long_va": "-1630200",
+              "county_max_long_va": "-1380000",
+              "county_min_alt_va": "00000",
+              "county_max_alt_va": "02600"
+            }
+        test_county = self.county.get_county_attributes('FM', '64', '000')
+
+        self.assertEqual(test_county, good_county)
+
+    def test_validate_not_ok(self):
+        bad_county = {}
+        test_county = self.county.get_county_attributes('FM', '64', '999')
+
+        self.assertEqual(test_county, bad_county)
+
+        bad_county = {}
+        test_county = self.county.get_county_attributes('XY', '64', '000')
+
+        self.assertEqual(test_county, bad_county)
+
+        bad_county = {}
+        test_county = self.county.get_county_attributes('FM', 'XY', '000')
+
+        self.assertEqual(test_county, bad_county)
 
 
 class ValidateGetStateCodeCase(TestCase):

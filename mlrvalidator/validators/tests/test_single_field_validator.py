@@ -61,6 +61,9 @@ class ValidateTypeNumericCheckTestCase(TestCase):
         self.good_data9 = {
             'altitude': '-1'
         }
+        self.good_data10 = {
+            'altitude': ' '
+        }
         self.bad_data = {
             'altitude': '-1df'
             }
@@ -87,6 +90,8 @@ class ValidateTypeNumericCheckTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data7))
         self.assertTrue(self.validator.validate(self.good_data8))
         self.assertTrue(self.validator.validate(self.good_data9))
+        self.assertTrue(self.validator.validate(self.good_data10))
+
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
@@ -183,6 +188,9 @@ class ValidateTypePositiveNumericTestCase(TestCase):
         self.good_data6 = {
             'contributingDrainageArea': '1',
         }
+        self.good_data7 = {
+            'contributingDrainageArea': ' ',
+        }
         self.bad_data = {
             'contributingDrainageArea': '-1234',
         }
@@ -224,6 +232,7 @@ class ValidateTypePositiveNumericTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data4))
         self.assertTrue(self.validator.validate(self.good_data5))
         self.assertTrue(self.validator.validate(self.good_data6))
+        self.assertTrue(self.validator.validate(self.good_data7))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
