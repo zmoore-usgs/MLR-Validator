@@ -41,16 +41,5 @@ setup(name='usgs_wma_mlr_validator',
       platforms='any',
       zip_safe=False,
       py_modules=['config', 'app'],
-      packages=find_packages(),
-      data_files=[('schemas', ['schemas/error_schema.yml', 'schemas/warning_schema.yml']),
-                  ('references', ['references/aquifer.json',
-                                  'references/county.json',
-                                  'references/huc.json',
-                                  'references/mcd.json',
-                                  'references/national_aquifer.json',
-                                  'references/national_water_use.json',
-                                  'references/reference_lists.json',
-                                  'references/site_type_cross_field.json',
-                                  'references/site_type_transition.json',
-                                  'references/state.json'])]
+      packages=find_packages()
       )
