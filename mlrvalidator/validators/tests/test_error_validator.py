@@ -164,7 +164,25 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors.get('A')), 1)
         self.assertEqual(len(validator.errors.get('B')), 3)
 
+    def test_duplicate_site_error(self, mtran_class, mref_class, mcross_class, msingle_field_class):
+        mtran = mtran_class.return_value
+        mref = mref_class.return_value
+        mcross = mcross_class.return_value
+        msingle_field = msingle_field_class.return_value
 
+        mtran.validate.return_value = True
+        mtran.errors = {}
+        mref.validate.return_value = True
+        mref.errors = {}
+        mcross.validate.return_value = True
+        mcross.errors = {}
+        msingle_field.validate.return_value = True
+        msingle_field.errors = {}
+
+        validator = ErrorValidator('schema_dir', 'ref_dir')
+        self.assertFalse(validator.validate({'agencyCode': 'USGS', 'siteNumber': '12345678'}, {'agencyCode': 'USGS', 'siteNumber': '12345678'}))
+        self.assertEqual(len(validator.errors), 1)
+        self.assertTrue('duplicate_site' in validator.errors)
 
 
 
