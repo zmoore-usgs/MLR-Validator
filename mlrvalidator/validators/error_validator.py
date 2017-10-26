@@ -1,40 +1,49 @@
 
 from collections import defaultdict
 from itertools import chain
+import os
+import yaml
 
-from mlrvalidator.schema import single_field_schema, cross_field_schema, reference_schema, site_type_cross_field_schema
-
-from .cross_field_validator import CrossFieldValidator
+from .cross_field_error_validator import CrossFieldErrorValidator
+from .cross_field_ref_error_validator import CrossFieldRefErrorValidator
 from .single_field_validator import SingleFieldValidator
-from .site_type_cross_field_validator import SiteTypeCrossFieldValidator
-from .reference_validator import ReferenceValidator
+from .transition_validator import TransitionValidator
 
 
 class ErrorValidator:
 
-    def __init__(self):
-        self.single_field_validator = SingleFieldValidator(single_field_schema, allow_unknown=True)
-        self.reference_validator = ReferenceValidator(reference_schema, allow_unknown=True)
-        self.site_type_cross_field_validator = SiteTypeCrossFieldValidator(site_type_cross_field_schema, allow_unknown=True)
-        self.cross_field_validator = CrossFieldValidator(cross_field_schema, allow_unknown=True)
+    def __init__(self, schema_dir, reference_file_dir):
+        with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
+            error_schema = yaml.load(fd.read())
+
+        self.single_field_validator = SingleFieldValidator(error_schema, allow_unknown=True)
+        self.cross_field_validator = CrossFieldErrorValidator()
+        self.cross_field_ref_validator = CrossFieldRefErrorValidator(reference_file_dir)
+        self.transition_validator = TransitionValidator(reference_file_dir)
         self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
-        valid_single_field = self.single_field_validator.validate(ddot_location, update=update)
-        valid_reference = self.reference_validator.validate(ddot_location, existing_location, update=update)
-        valid_site_type = self.site_type_cross_field_validator.validate(ddot_location, existing_location, update=update)
-        valid_cross_field = self.cross_field_validator.validate(ddot_location, existing_location, update=update)
+        self.single_field_validator.validate(ddot_location, update=update)
+        self.cross_field_validator.validate(ddot_location, existing_location)
+        self.cross_field_ref_validator.validate(ddot_location, existing_location)
+
+        if update:
+            self.transition_validator.validate(ddot_location, existing_location)
+            transition_errors = self.transition_validator.errors
+        else:
+            transition_errors = {}
 
         self._errors = defaultdict(list)
         all_errors = chain(self.single_field_validator.errors.items(),
-                       self.reference_validator.errors.items(),
-                       self.site_type_cross_field_validator.errors.items(),
-                       self.cross_field_validator.errors.items())
-        for k, v in all_errors:
-            self.errors[k].extend(v)
+                           self.cross_field_validator.errors.items(),
+                           self.cross_field_ref_validator.errors.items(),
+                           transition_errors.items())
 
-        return valid_single_field and valid_reference and valid_site_type and valid_cross_field
+        for k, v in chain(all_errors):
+            self.errors[k].extend(v)
+        return self._errors == {}
 
     @property
     def errors(self):
         return self._errors
+

@@ -1,8 +1,0 @@
-stationName:
-  valid_quotes: True
-countyCode:
-  valid_county_range: True
-stateFipsCode:
-  valid_state_range: True
-altitude:
-  valid_altitude_range: True
