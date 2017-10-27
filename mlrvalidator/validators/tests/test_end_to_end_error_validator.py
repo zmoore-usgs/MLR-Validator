@@ -448,6 +448,66 @@ class AltitudeAccuracyValueTestCase(TestCase):
         self.assertIn('altitudeAccuracyValue', self.validator.errors)
 
 
+class NationalAquiferCodeTestCase(TestCase):
+    def setUp(self):
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+
+    def test_max_length(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'ABCDEFGHIJ'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertNotIn('nationalAquiferCode', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'ABCDEFGHIJK'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertIn('nationalAquiferCode', self.validator.errors)
+
+    def test_aquifer_in_country_state(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '02'}, update=True)
+        self.assertNotIn('nationalAquiferCode', self.validator.errors)
+
+    def test_aquifer_not_in_country_state(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100ALLUVL'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '02'}, update=True)
+        self.assertIn('nationalAquiferCode', self.validator.errors)
+
+    def test_aquifer_country_state_not_in_ref_list(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'AZ', 'stateFipsCode': '02'}, update=True)
+        self.assertIn('nationalAquiferCode', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'RM', 'stateFipsCode': '02'}, update=True)
+        self.assertIn('nationalAquiferCode', self.validator.errors)
+
+    def test_non_null_code_site_type(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'ST-CI'}, update=True)
+        self.assertNotIn('siteTypeCode', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'}, update=True)
+        self.assertIn('siteTypeCode', self.validator.errors)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
