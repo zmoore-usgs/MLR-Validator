@@ -12,7 +12,6 @@ class ReferenceInfo:
         return self.reference_info
 
 
-
 class CountryStateReference(ReferenceInfo):
 
     def __init__(self, path_to_file, ref_list_key):
@@ -36,6 +35,7 @@ class NationalWaterUseCodes(ReferenceInfo):
     def get_national_water_use_codes(self, site_type_code):
         site_type_list = self.reference_info['siteTypeCodes']
         return get_dict(site_type_list, 'siteTypeCode', site_type_code).get('nationalWaterUseCodes', [])
+
 
 class Counties(CountryStateReference):
     def get_county_codes(self, country_code, state_code):
@@ -88,3 +88,14 @@ class SiteTypesCrossField(ReferenceInfo):
         except StopIteration:
             site_type_field_ref = {'siteTypeCode': site_type_code, 'notNullAttrs': [], 'nullAttrs': []}
         return site_type_field_ref
+
+
+class LandNetCrossField(ReferenceInfo):
+
+    def get_land_net_templates(self, district_code):
+        land_net_templates = self.reference_info['landNetTemplates']
+        try:
+            land_net_template = get_dict(land_net_templates, 'districtCode', district_code.strip()).get('landNetTemplate', {})
+        except StopIteration:
+            land_net_template = {}
+        return land_net_template

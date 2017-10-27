@@ -1,4 +1,5 @@
 
+import json
 import os
 from unittest import TestCase, mock
 
@@ -11,7 +12,7 @@ from ..single_field_validator import SingleFieldValidator
 class ValidateIsEmptyTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'agencyCode': {'is_empty' : False}})
+        self.validator = SingleFieldValidator(schema={'agencyCode': {'is_empty': False}}, reference_dir='')
         self.good_data = {
             'agencyCode': 'USGS'
         }
@@ -30,10 +31,44 @@ class ValidateIsEmptyTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data2))
 
 
+class ValidateValidSiteNumberTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}}, reference_dir='')
+        self.only_digits_is_valid = {
+            'siteNumber': '01234'
+        }
+        self.null_value_no_pad_is_valid = {
+            'siteNumber': ''
+        }
+        self.null_value_pad_is_valid = {
+            'siteNumber': ' '
+        }
+        self.non_digit_is_invalid = {
+            'siteNumber': 'a3'
+        }
+        self.non_digit_special_char_is_invalid = {
+            'siteNumber': '$'
+        }
+        self.only_digits_blank_space_is_invalid = {
+            'siteNumber': '32   4'
+        }
+
+    def test_validate_ok(self):
+        self.assertTrue(self.validator.validate(self.only_digits_is_valid))
+        self.assertTrue(self.validator.validate(self.null_value_no_pad_is_valid))
+        self.assertTrue(self.validator.validate(self.null_value_pad_is_valid))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(self.validator.validate(self.non_digit_is_invalid))
+        self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
+        self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
+
+
 class ValidateTypeNumericCheckTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'altitude': {'type': 'numeric'}})
+        self.validator = SingleFieldValidator(schema={'altitude': {'type': 'numeric'}}, reference_dir='')
         self.good_data = {
             'altitude': '1234'
             }
@@ -92,7 +127,6 @@ class ValidateTypeNumericCheckTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data9))
         self.assertTrue(self.validator.validate(self.good_data10))
 
-
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
         self.assertFalse(self.validator.validate(self.bad_data2))
@@ -104,7 +138,7 @@ class ValidateTypeNumericCheckTestCase(TestCase):
 class ValidateValidPrecisionTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'altitude': {'valid_precision' : True}})
+        self.validator = SingleFieldValidator(schema={'altitude': {'valid_precision': True}}, reference_dir='')
         self.good_data = {
             'altitude': '1234'
             }
@@ -169,7 +203,7 @@ class ValidateValidPrecisionTestCase(TestCase):
 
 class ValidateTypePositiveNumericTestCase(TestCase):
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}})
+        self.validator = SingleFieldValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}}, reference_dir='')
         self.good_data = {
             'contributingDrainageArea': '1234',
         }
@@ -251,7 +285,7 @@ class ValidateTypePositiveNumericTestCase(TestCase):
 class ValidateValidMapScaleCharsTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'mapScale': {'valid_map_scale_chars' : True}})
+        self.validator = SingleFieldValidator(schema={'mapScale': {'valid_map_scale_chars': True}}, reference_dir='')
         self.good_data = {
             'mapScale': '24000'
         }
@@ -286,10 +320,10 @@ class ValidateValidMapScaleCharsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data4))
 
 
-class ValidateValidLatitutdeDMS(TestCase):
+class ValidateValidLatitudeDMS(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'latitude': {'valid_latitude_dms': True}})
+        self.validator = SingleFieldValidator(schema={'latitude': {'valid_latitude_dms': True}}, reference_dir='')
         self.good_data = {
             'latitude': ' 123456'
         }
@@ -333,7 +367,7 @@ class ValidateValidLatitutdeDMS(TestCase):
             'latitude': ' 000000'
         }
         self.good_data15 = {
-            'latitude': ' 900000'
+            'latitude': ' 905959'
         }
         self.good_data16 = {
             'latitude': ' 900000.0'
@@ -343,9 +377,6 @@ class ValidateValidLatitutdeDMS(TestCase):
         }
         self.good_data18 = {
             'latitude': ' 900000.093'
-        }
-        self.good_data19 = {
-            'latitude': ' 454856.27 '
         }
         self.good_data20 = {
             'latitude': ' '
@@ -404,8 +435,9 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.bad_data18 = {
             'latitude': ' 900000.-9'
         }
-
-
+        self.bad_data19 = {
+            'latitude': ' 1234564'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.good_data))
@@ -426,9 +458,7 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.assertTrue(self.validator.validate(self.good_data16))
         self.assertTrue(self.validator.validate(self.good_data17))
         self.assertTrue(self.validator.validate(self.good_data18))
-        self.assertTrue(self.validator.validate(self.good_data19))
         self.assertTrue(self.validator.validate(self.good_data20))
-
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
@@ -449,13 +479,13 @@ class ValidateValidLatitutdeDMS(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data16))
         self.assertFalse(self.validator.validate(self.bad_data17))
         self.assertFalse(self.validator.validate(self.bad_data18))
-
+        self.assertFalse(self.validator.validate(self.bad_data19))
 
 
 class ValidateValidLongitudeDMSTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'longitude': {'valid_longitude_dms': True}})
+        self.validator = SingleFieldValidator(schema={'longitude': {'valid_longitude_dms': True}}, reference_dir='')
         self.good_data = {
             'longitude': ' 1234556'
         }
@@ -567,7 +597,9 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.bad_data18 = {
             'longitude': '-1800000.-02'
         }
-
+        self.bad_data19 = {
+            'longitude': ' 123455622'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.good_data))
@@ -590,7 +622,6 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data18))
         self.assertTrue(self.validator.validate(self.good_data19))
 
-
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
         self.assertFalse(self.validator.validate(self.bad_data2))
@@ -610,13 +641,13 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data16))
         self.assertFalse(self.validator.validate(self.bad_data17))
         self.assertFalse(self.validator.validate(self.bad_data18))
-
+        self.assertFalse(self.validator.validate(self.bad_data19))
 
 
 class ValidateValidDateTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'firstConstructionDate' : {'valid_date': True}})
+        self.validator = SingleFieldValidator(schema={'firstConstructionDate': {'valid_date': True}}, reference_dir='')
         self.good_data = {
             'firstConstructionDate': '20140912'
         }
@@ -721,14 +752,13 @@ class ValidateValidDateTestCase(TestCase):
 
 class ValidateReferenceTestCase(TestCase):
     def setUp(self):
-        ref_list = mock.MagicMock()
-        ref_list.get_reference_info.return_value = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
-        self.validator = SingleFieldValidator(schema={
-            'field1': {'valid_reference': True},
-            'field2': {'valid_reference': True}
-        },
-        reference_list=ref_list
-        )
+        ref_list = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = SingleFieldValidator(schema={
+                'field1': {'valid_reference': True},
+                'field2': {'valid_reference': True}
+            }, reference_dir='ref_dir')
 
     def test_valid_field(self):
         self.assertTrue(self.validator.validate({'field2': 'AA'}))
@@ -745,7 +775,7 @@ class ValidateReferenceTestCase(TestCase):
 
 class ValidateSingleQuoteTestCase(TestCase):
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}})
+        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}}, reference_dir='')
 
     def test_valid_field(self):
         self.assertTrue(self.validator.validate({'field1': '   '}))
@@ -757,3 +787,5 @@ class ValidateSingleQuoteTestCase(TestCase):
 
     def test_quote_at_beginning(self):
         self.assertFalse(self.validator.validate({'field1': "'AAAA"}))
+
+
