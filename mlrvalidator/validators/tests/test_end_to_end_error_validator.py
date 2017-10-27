@@ -1346,6 +1346,59 @@ class DistrictCodeTestCase(TestCase):
         self.assertIn('districtCode', validator.errors)
 
 
+class CountryCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode' : 'US'},
+            {},
+            update=False
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('countryCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('countryCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'USS'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('countryCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'ZZ'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('countryCode', validator.errors)
+
 
 
 
