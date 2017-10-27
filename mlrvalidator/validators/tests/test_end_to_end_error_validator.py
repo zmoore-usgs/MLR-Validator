@@ -8,6 +8,8 @@ validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config[
 
 
 class ErrorValidatorAgencyCodeTestCase(TestCase):
+    # We are leaving out the landNet validations for now as there too many questions as to how these will work
+    # The existing land net validation is also well tested by unit tests.
 
     def test_agency_code_no_padding_is_valid(self):
         self.assertTrue(validator.validate({'agencyCode': 'USGS'}, {}, update=True))
@@ -1281,3 +1283,4 @@ class DataReliabilityCodeTestCase(TestCase):
         validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'dataReliabilityCode': 'A'},
                            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
         self.assertIn('dataReliabilityCode', validator.errors)
+
