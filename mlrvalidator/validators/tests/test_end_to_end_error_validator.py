@@ -1221,3 +1221,34 @@ class AquiferTypeCodeTestCase(TestCase):
         validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'aquiferTypeCode': 'U'},
                            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'}, update=True)
         self.assertIn('siteTypeCode', validator.errors)
+
+
+class AgencyUseCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, {}, update=False)
+        self.assertNotIn('agencyUseCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'agencyUseCode': ' '}, {}, update=False)
+        self.assertNotIn('agencyUseCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'agencyUseCode': 'R'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertNotIn('agencyUseCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'agencyUseCode': 'RR'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertIn('agencyUseCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'agencyUseCode': 'R'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertNotIn('agencyUseCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'agencyUseCode': 'U'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertIn('agencyUseCode', validator.errors)
+
