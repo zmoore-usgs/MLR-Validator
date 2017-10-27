@@ -1,10 +1,11 @@
 
 from collections import defaultdict
 import os
+import re
 
 from .base_cross_field_validator import BaseCrossFieldValidator
 from .country_state_reference_validator import CountryStateReferenceValidator
-from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties
+from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties, LandNetCrossField
 
 class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
@@ -18,7 +19,9 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'), 'counties')
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
+        self.land_net_ref = LandNetCrossField(os.path.join(reference_dir, 'land_net.json'))
         self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'site_type_cross_field.json'))
+
 
 
     def _validate_counties(self):
@@ -55,7 +58,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
             if site_type and water_use:
                 if water_use not in self.national_water_use_ref.get_national_water_use_codes(site_type):
-                    self._errors['nationalWaterUseCode'] = ['{0} is not in the referces list for siteTypeCode {1}'.format(water_use, site_type)]
+                    self._errors['nationalWaterUseCode'] = ['{0} is not in the references list for siteTypeCode {1}'.format(water_use, site_type)]
 
     def _validate_site_type(self):
         site_type = self.merged_document.get('siteTypeCode', '').strip()
@@ -93,6 +96,36 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                     self._errors['siteTypeCode'].append(
                         'Site type {0} must have the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
 
+    def _validate_land_net(self):
+        # Check that the land net description field follows the correct template
+
+        """
+        The rule's arguments are validated against this schema:
+        {'valid_land_net': True}
+        """
+        error_message = "Invalid format - Land Net does not fit template"
+
+        keys = ['districtCode', 'landNet']
+        if self._any_fields_in_document(keys):
+            district_code, land_net = [self.merged_document.get(key, '') for key in keys]
+
+            if district_code and land_net:
+                land_net_template = self.land_net_ref.get_land_net_templates(district_code)
+                if land_net_template:
+                    value_end = len(land_net) - 1
+                    section = land_net_template.index("S")
+                    township = land_net_template.index("T")
+                    lrange = land_net_template.index("R")
+                    try:
+                        if land_net[section] == "S" and land_net[township] == "T" and land_net[lrange] == "R":
+                            test_match = re.search('[^a-zA-Z0-9 ]', land_net[section:value_end])
+                            if test_match is not None:
+                                self._errors['landNet'] = [error_message]
+                        else:
+                            self._errors['landNet'] = [error_message]
+                    except IndexError:
+                        self._errors['landNet'] = [error_message]
+
     def validate(self, document, existing_document):
         '''
         :param dict document:
@@ -112,6 +145,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._validate_states()
         self._validate_national_water_use_code()
         self._validate_site_type()
+        self._validate_land_net()
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)

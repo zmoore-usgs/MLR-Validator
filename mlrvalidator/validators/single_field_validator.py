@@ -243,7 +243,7 @@ class SingleFieldValidator(Validator):
             if stripped_value and stripped_value not in ref_list:
                 return self._error(field, '{0} is not in reference list'.format(value))
 
-    def _validate_valid_single_quotes(self, valid_quotes, field, value):
+    def _validate_valid_single_quotes(self, valid_single_quotes, field, value):
         """
         String is invalid if it starts with a single quote but does not end with a single quote or
         if the string ends with a single quote but does not start with a single quote.
@@ -251,7 +251,7 @@ class SingleFieldValidator(Validator):
         The rule's arguments are validated against this schema:
         {'type': boolean}
         """
-        if valid_quotes:
+        if valid_single_quotes:
             if ((value.startswith("'") and not value.endswith("'")) or
                     (not value.startswith("'") and value.endswith("'"))):
                 self._error(field, "Missing Quote: may be missing a quote at beginning or ending of the name")

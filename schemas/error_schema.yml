@@ -12,6 +12,7 @@ stationName:
     required: True
     maxlength: 50
     is_empty: False
+    valid_single_quotes: True
     regex: ^[^\t#\*\\"\^_\$]*$
 siteTypeCode:
     required: True

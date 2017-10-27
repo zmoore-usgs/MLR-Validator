@@ -275,10 +275,11 @@ class ValidateCrossFieldsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data29, {}, update=True))
         self.assertFalse(self.validator.validate(self.bad_data30, {}, update=True))
 
+
 class ErrorValidatorAgencyCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_agency_code_no_padding_is_valid(self):
         self.assertTrue(self.validator.validate({'agencyCode': 'USGS'}, {}, update=True))
@@ -306,10 +307,6 @@ class ErrorValidatorAgencyCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'agencyCode': 'USGS      '}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
 
-    def test_agency_code_not_in_ref_list_padding_too_long_is_invalid(self):
-        self.assertFalse(self.validator.validate({'agencyCode': 'USGS234    '}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('agencyCode')), 2)
-
     def test_agency_code_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'agencyCode': ''}, {}, update=True))
         self.assertEqual(len(self.validator.errors.get('agencyCode')), 1)
@@ -326,7 +323,7 @@ class ErrorValidatorAgencyCodeTestCase(TestCase):
 class ErrorValidatorSiteNumberTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_only_digits_is_valid(self):
         self.assertTrue(self.validator.validate({'siteNumber': '01234'}, {}, update=True))
@@ -367,7 +364,7 @@ class ErrorValidatorSiteNumberTestCase(TestCase):
 class ErrorValidatorStationNameTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_valid_chars_all_lower_is_valid(self):
         self.assertTrue(self.validator.validate({'stationName': 'br549'}, {}, update=True))
@@ -438,7 +435,7 @@ class ErrorValidatorStationNameTestCase(TestCase):
 class ErrorValidatorLatitudeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_null_no_pad_latitude_empty_string_dependencies_is_valid(self):
         self.assertTrue(self.validator.validate({'latitude': '', 'longitude': '',
@@ -672,7 +669,7 @@ class ErrorValidatorLatitudeTestCase(TestCase):
 class ErrorValidatorLongitudeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_null_no_pad_longitude_empty_string_dependencies_is_valid(self):
         self.assertTrue(self.validator.validate({'longitude': '', 'latitude': '',
@@ -917,7 +914,7 @@ class ErrorValidatorLongitudeTestCase(TestCase):
 class ErrorValidatorCoordinateAccuracyCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_coordinate_accuracy_code_digit_in_ref_list_is_valid(self):
         self.assertTrue(self.validator.validate({'coordinateAccuracyCode': '1', 'longitude': ' 1234556',
@@ -1009,7 +1006,7 @@ class ErrorValidatorCoordinateAccuracyCodeTestCase(TestCase):
 class ErrorValidatorCoordinateMethodCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_coordinate_method_code_char_in_ref_list_is_valid(self):
         self.assertTrue(self.validator.validate({'coordinateMethodCode': 'C', 'longitude': ' 1234556',
@@ -1096,7 +1093,7 @@ class ErrorValidatorCoordinateMethodCodeTestCase(TestCase):
 class ErrorValidatorCoordinateDatumCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = ErrorValidator()
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
     def test_coordinate_datum_code_char_in_ref_list_is_valid(self):
         self.assertTrue(self.validator.validate({'coordinateDatumCode': 'BARBADOS', 'longitude': ' 1234556',

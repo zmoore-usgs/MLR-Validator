@@ -311,3 +311,60 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
     def test_with_no_reference(self):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'A', 'field1' : 'A'}, {}))
         self.assertTrue(self.validator.validate({'siteTypeCode': 'A', 'field1': '   '}, {}))
+
+
+class CrossFieldValidatorLandNetTestCase(TestCase):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    def setUp(self, mdistrict_code_ref, mref_validator_class):
+        ref_list = {
+                "landNetTemplates": [
+                    {
+                        "districtCode": "55",
+                        "landNetTemplate": "******S???T?????R??????"
+                    }
+                    ]
+                }
+        mref_validator = mref_validator_class.return_value
+        mref_validator.validate.return_value = True
+        mref_validator.errors = []
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
+
+    def test_with_existing_district_code_qqqtrs_valid_template(self):
+        self.assertTrue(self.validator.validate({'districtCode': '55', 'landNet': 'SWSWSWS010T09832R093425'}, {}))
+
+    def test_with_not_existing_district_code_qqqtrs_valid_template(self):
+        self.assertTrue(self.validator.validate({'districtCode': '65', 'landNet': 'SWSWSWS010T09832R093425'}, {}))
+
+    def test_with_existing_district_code_trs_valid_template(self):
+        self.assertTrue(self.validator.validate({'districtCode': '55', 'landNet': '      S15 T20N  R11E'}, {}))
+
+    def test_with_existing_district_code_qqqt3r3s2_valid_template(self):
+        self.assertTrue(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWS15 T014N R022E 4'}, {}))
+
+    def test_with_existing_district_code_qqqt2r2s_valid_template(self):
+        self.assertTrue(self.validator.validate({'districtCode': '55', 'landNet': '      S   T23N  R20E  4'}, {}))
+
+    def test_with_existing_district_code_qqqtrs_invalid_char_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWS15 T014N R02-E 4'}, {}))
+
+    def test_with_existing_district_code_qqqtrs4_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWS15  T014N R022E4'}, {}))
+
+    def test_with_existing_district_code_qqq1trs4_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSW S15 T014N R022E4'}, {}))
+
+    def test_with_existing_district_code_qqqtrf_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWF15 T014N R 022E4'}, {}))
+
+    def test_with_existing_district_code_qqqsrs_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWS15 S014N R 022E4'}, {}))
+
+    def test_with_existing_district_code_qqqtss_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'NWNWSWF15 T014N S 022E4'}, {}))
+
+    def test_with_existing_district_code_super_wrong_invalid_template(self):
+        self.assertFalse(self.validator.validate({'districtCode': '55', 'landNet': 'Q'}, {}))
