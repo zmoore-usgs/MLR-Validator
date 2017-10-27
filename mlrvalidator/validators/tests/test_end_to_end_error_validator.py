@@ -276,7 +276,7 @@ class ValidateCrossFieldsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data30, {}, update=True))
 
 
-class TestAltitudeErrorValidations(TestCase):
+class AltitudeErrorValidationsTestCase(TestCase):
 
     def setUp(self):
         self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
@@ -369,6 +369,10 @@ class TestAltitudeErrorValidations(TestCase):
             update=True)
         self.assertIn('altitude', self.validator.errors)
 
+
+class AltitudeWarningValidationsTestCase(TestCase):
+    def setUp(self):
+        self.validator = WarnValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
 
 
