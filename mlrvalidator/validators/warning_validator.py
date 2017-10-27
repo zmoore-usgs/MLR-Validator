@@ -20,7 +20,7 @@ class WarningValidator:
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
 
-        self._errors = defaultdict(list)
+        self._warnings = defaultdict(list)
         all_warnings = chain(self.single_field_validator.errors.items(),
                              self.cross_field_ref_validator.errors.items())
 
