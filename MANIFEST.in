@@ -1,2 +1,2 @@
-recursive-include schemas *
-recursive-include references *
+recursive-include mlrvalidator/schemas *
+recursive-include mlrvalidator/references *

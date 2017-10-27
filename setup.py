@@ -28,6 +28,7 @@ def read(filepath):
 
 requirements = read_requirements('requirements.txt')
 
+
 setup(name='usgs_wma_mlr_validator',
       version='0.4.0dev',
       description='MLR Validator Microservice',
