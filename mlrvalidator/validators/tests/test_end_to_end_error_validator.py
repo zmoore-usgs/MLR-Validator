@@ -1284,3 +1284,68 @@ class DataReliabilityCodeTestCase(TestCase):
                            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
         self.assertIn('dataReliabilityCode', validator.errors)
 
+
+class DistrictCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode' : '55'},
+            {},
+            update=False
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('districtCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '122'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '1222'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('districtCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '90'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '1'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('districtCode', validator.errors)
+
+
+
+
+
