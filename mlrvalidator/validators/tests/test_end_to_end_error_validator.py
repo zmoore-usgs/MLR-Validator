@@ -498,8 +498,9 @@ class NationalAquiferCodeTestCase(TestCase):
         self.assertIn('siteTypeCode', self.validator.errors)
 
 
-
-
+class AquiferCodeTestCase(TestCase):
+    def setUp(self):
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
 
 
