@@ -57,3 +57,22 @@ class AltitudeWarningValidationsTestCase(TestCase):
              'countryCode': 'US'},
             update=True)
         self.assertNotIn('altitude', validator .warnings)
+
+
+class WarningValidatorStationNameTestCase(TestCase):
+
+    def test_valid_station_name_matching_quotes(self):
+        self.assertTrue(validator.validate({'stationName': 'this is a station'}, {}, update=True))
+
+    def test_valid_station_name_spaces_matching_quotes(self):
+        self.assertTrue(validator.validate({'stationName': '     '}, {}, update=True))
+
+    def test_valid_station_name_quote_in_middle(self):
+        self.assertTrue(validator.validate({'stationName': "This is USGS's Station"}, {}, update=True))
+
+    def test_invalid_quote_at_end(self):
+        self.assertFalse(validator.validate({'stationName': "This is a USGS Station'"}, {}, update=True))
+
+    def test_invalid_quote_at_beginning(self):
+        self.assertFalse(validator.validate({'stationName': "'This is a USGS Station"}, {}, update=True))
+
