@@ -620,41 +620,42 @@ class ErrorValidatorLatitudeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'latitude': '             ', 'longitude': ' 1234556',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 5)
+        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_latitude_without_longitude_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 040000',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_good_latitude_null_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': '',
                                                  'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 4)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_good_latitude_non_exist_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 123456'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 4)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_good_latitude_good_longitude_null_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
                                                  'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 3)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_good_latitude_good_longitude_null_2_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 2)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_good_latitude_good_longitude_null_1_dependency_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': ' 123456', 'longitude': ' 1234556',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('latitude')), 1)
+        self.assertIn('latitude', self.validator.errors.get('location')[0])
 
     def test_first_char_not_space_or_negative_is_invalid(self):
         self.assertFalse(self.validator.validate({'latitude': '200023', 'longitude': ' 1234556',
@@ -665,6 +666,7 @@ class ErrorValidatorLatitudeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'latitude': ' 200u23', 'longitude': ' 1234556',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
+
 
 class ErrorValidatorLongitudeTestCase(TestCase):
 
@@ -864,41 +866,42 @@ class ErrorValidatorLongitudeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'longitude': '               ', 'latitude': ' 123456',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 5)
+        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_longitude_without_latitude_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 0400000',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_good_longitude_null_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 0123456', 'latitude': '',
                                                  'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 4)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_good_longitude_non_exist_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 0123456'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 4)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_good_longitude_good_latitude_null_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
                                                  'coordinateAccuracyCode': '', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 3)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_good_longitude_good_latitude_null_2_dependencies_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': '',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 2)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_good_longitude_good_latitude_null_1_dependency_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': ' 1234556', 'latitude': ' 123456',
                                                  'coordinateAccuracyCode': '1', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': ''}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('longitude')), 1)
+        self.assertIn('longitude', self.validator.errors.get('location')[0])
 
     def test_first_char_not_space_or_negative_is_invalid(self):
         self.assertFalse(self.validator.validate({'longitude': '1234556', 'latitude': ' 123456',
@@ -941,7 +944,9 @@ class ErrorValidatorCoordinateAccuracyCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '  ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 3)
+        result = self.validator.errors.get('coordinateAccuracyCode')
+        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_lower_char_in_ref_list_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': 'e', 'longitude': ' 1234556',
@@ -952,55 +957,55 @@ class ErrorValidatorCoordinateAccuracyCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': ' ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 2)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_null_no_pad_lat_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 2)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_null_no_pad_lat_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_null_no_pad_lat_not_null_long_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '', 'longitude': ' ',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_null_no_pad_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_null_no_pad_long_not_null_lat_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' ', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_not_null_lat_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': 'E', 'longitude': '',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 2)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_not_null_lat_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': 'E', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_accuracy_code_not_null_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateAccuracyCode': 'E', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateMethodCode': 'C'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateAccuracyCode')), 1)
+        self.assertIn('coordinateAccuracyCode', self.validator.errors.get('location')[0])
 
 
 class ErrorValidatorCoordinateMethodCodeTestCase(TestCase):
@@ -1033,61 +1038,62 @@ class ErrorValidatorCoordinateMethodCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '  ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 3)
+        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_pad_lat_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': ' ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 2)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_no_pad_lat_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 2)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_no_pad_lat_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_no_pad_lat_not_null_long_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '', 'longitude': ' ',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_no_pad_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_null_no_pad_long_not_null_lat_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' ', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_not_null_lat_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': 'C', 'longitude': '',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 2)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_not_null_lat_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': 'C', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_method_code_not_null_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateMethodCode': 'C', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateDatumCode': 'BARBADOS',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateMethodCode')), 1)
+        self.assertIn('coordinateMethodCode', self.validator.errors.get('location')[0])
 
 
 class ErrorValidatorCoordinateDatumCodeTestCase(TestCase):
@@ -1115,59 +1121,60 @@ class ErrorValidatorCoordinateDatumCodeTestCase(TestCase):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': '             ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateMethodCode': '  ',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 3)
+        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_pad_lat_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': ' ', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 2)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_no_pad_lat_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' 123456', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 2)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_no_pad_lat_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': '', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_no_pad_lat_not_null_long_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': 'BARBADOS', 'longitude': ' ',
                                                  'latitude': ' 123456', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_no_pad_long_not_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': '', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_null_no_pad_long_not_null_lat_pad_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': '', 'longitude': ' 1234556',
                                                  'latitude': ' ', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_not_null_lat_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': 'BARBADOS', 'longitude': '',
                                                  'latitude': '', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 2)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_not_null_lat_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': 'BARBADOS', 'longitude': ' 1234556',
                                                  'latitude': '', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 
     def test_coordinate_datum_code_not_null_long_null_is_invalid(self):
         self.assertFalse(self.validator.validate({'coordinateDatumCode': 'BARBADOS', 'longitude': '',
                                                  'latitude': ' 123456', 'coordinateMethodCode': 'C',
                                                   'coordinateAccuracyCode': 'E'}, {}, update=True))
-        self.assertEqual(len(self.validator.errors.get('coordinateDatumCode')), 1)
+        self.assertIn('coordinateDatumCode', self.validator.errors.get('location')[0])
 

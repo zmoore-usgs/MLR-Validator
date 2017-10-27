@@ -10,7 +10,8 @@ class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.Counties')
-    def setUp(self, mcounties_ref, msite_type_ref, mstates_ref, mwater_use_ref, mref_validator_class):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
+    def setUp(self, mcounties_ref, msite_type_ref, mstates_ref, mwater_use_ref, mland_net_ref, mref_validator_class):
         mref_validator = mref_validator_class.return_value
         mref_validator.validate.return_value = False
         mref_validator.errors = {'field1' : ['Error message']}

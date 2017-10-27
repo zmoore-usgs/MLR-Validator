@@ -1,8 +1,11 @@
 
 import datetime
+import os
 import re
 
 from cerberus import Validator
+
+from .reference import ReferenceInfo
 
 
 class SingleFieldValidator(Validator):
@@ -11,9 +14,11 @@ class SingleFieldValidator(Validator):
         ''''
         Added keyword argument reference_list which should be an instance of reference.ReferenceInfo
         '''
-        self.reference_list = kwargs.get('reference_list', {})
+        self.reference_dir = kwargs.get('reference_dir', {})
         super().__init__(*args, **kwargs)
 
+        if self.reference_dir:
+            self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
 
     def _validate_type_numeric(self, value):
         # check for numeric value
@@ -104,7 +109,6 @@ class SingleFieldValidator(Validator):
             if test_field is not None:
                 # There is something besides digits 0-9 or space
                 self._error(field, "Invalid Character: contains a character other than 0-9")
-
 
     def _validate_valid_latitude_dms(self, valid_latitude_dms, field, value):
         # Check that field consists of valid degrees, minutes and second values
@@ -249,7 +253,7 @@ class SingleFieldValidator(Validator):
         if the string ends with a single quote but does not start with a single quote.
 
         The rule's arguments are validated against this schema:
-        {'type': boolean}
+        {'valid_single_quotes': True}
         """
         if valid_single_quotes:
             if ((value.startswith("'") and not value.endswith("'")) or
