@@ -220,18 +220,6 @@ class CrossFieldRefWarningLongitudeTestCase(TestCase):
                         mock.mock_open(read_data=json.dumps(ref_list))):
             self.validator = CrossFieldRefWarningValidator('ref_dir')
 
-    def test_valid_latitude(self):
-        self.assertTrue(self.validator.validate({'longitude': ' 0740000'}, {'stateFipsCode': '34', 'countryCode': 'US'}))
-
-    def test_invalid_latitude(self):
-        self.assertFalse(self.validator.validate({'longitude': ' 0700000'}, {'stateFipsCode': '34', 'countryCode': 'US'}))
-
-    def test_missing_fields(self):
-        self.assertTrue(self.validator.validate({'longitude': ' 0700000'}, {'stateFipsCode': '34'}))
-        self.assertTrue(self.validator.validate({'longitude': ' 0700000'}, {'countryCode': 'US'}))
-
-    def test_missing_reference(self):
-        self.assertTrue(self.validator.validate({'longitude': ' 0700000'}, {'stateFipsCode': '34', 'countryCode': 'CN'}))
 
 
 class CrossFieldRefWarningAltitudeTestCase(TestCase):

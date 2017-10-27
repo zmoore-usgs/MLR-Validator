@@ -1098,7 +1098,7 @@ class NationalAquiferCodeTestCase(TestCase):
     def test_aquifer_in_country_state(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '02'}, update=True)
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': 'US', 'stateFipsCode': '02'}, update=True)
         self.assertNotIn('nationalAquiferCode', validator.errors)
 
     def test_aquifer_not_in_country_state(self):
@@ -1400,5 +1400,88 @@ class CountryCodeTestCase(TestCase):
         self.assertIn('countryCode', validator.errors)
 
 
+class StateFipsCode(TestCase):
 
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode' : 'US'},
+            {},
+            update=False
+        )
+        self.assertNotIn('stateFipsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('stateFips', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '055'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('stateFipsCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '80'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_latitude_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'latitude': ' 430000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('latitude', validator.errors)
+
+    def test_latitude_not_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'latitude': ' 420000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('latitude', validator.errors)
+
+    def test_longitude_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'longitude': ' 0870000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('longitude', validator.errors)
+
+    def test_latitude_not_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'longitude': ' 0930000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('longitude', validator.errors)
 

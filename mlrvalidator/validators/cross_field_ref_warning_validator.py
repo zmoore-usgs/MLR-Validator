@@ -63,8 +63,6 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         super().validate(document, existing_document)
         self._validate_county_latitude_range()
         self._validate_county_longitude_range()
-        self._validate_state_latitude_range()
-        self._validate_state_longitude_range()
         self._validate_altitude_range()
 
         return self._errors == {}
