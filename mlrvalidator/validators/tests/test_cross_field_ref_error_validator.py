@@ -4,6 +4,7 @@ from unittest import TestCase, mock
 
 from ..cross_field_ref_error_validator import CrossFieldRefErrorValidator
 
+
 class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
@@ -316,8 +317,11 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
 
 class CrossFieldValidatorLandNetTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
-    def setUp(self, mdistrict_code_ref, mref_validator_class):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.Counties')
+    def setUp(self, mcounties_ref, msite_type_ref, mstates_ref, mwater_use_ref, mref_validator_class):
         ref_list = {
                 "landNetTemplates": [
                     {
