@@ -232,7 +232,7 @@ class SingleFieldValidator(Validator):
         if the string ends with a single quote but does not start with a single quote.
 
         The rule's arguments are validated against this schema:
-        {'type': boolean}
+        {'type': 'boolean'}
         """
         if valid_quotes:
             if ((value.startswith("'") and not value.endswith("'")) or

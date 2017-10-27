@@ -276,3 +276,106 @@ class ValidateCrossFieldsTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.bad_data30, {}, update=True))
 
 
+class TestAltitudeErrorValidations(TestCase):
+
+    def setUp(self):
+        self.validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+
+    def test_optional(self):
+        self.validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': ' '}, {},)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678'}, {})
+        self.assertNotIn('altitude', self.validator.errors)
+
+    def test_reciprocal_dependency(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345',  'altitudeAccuracyValue' : 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitudeAccuracyValue': ' '},
+            {'altitude': '12345',  'altitudeAccuracyValue' : 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'}, update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitudeMethodCode': ' '},
+            {'altitude': '12345', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'}, update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitudeDatumCode': ' '},
+            {'altitude': '12345', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'}, update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+
+    def test_max_length(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345', 'altitudeAccuracyValue' : 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '123456789', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', }, update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+    def test_numeric(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'}, update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '-12345'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'}, update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345.1'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '-12A'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+    def test_two_decimal_precison(self):
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345.23'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345.233'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '-1234.23'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertNotIn('altitude', self.validator.errors)
+
+        self.validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '-1234.233'},
+            {'altitude': '1234', 'altitudeAccuracyValue': 'A', 'altitudeMethodCode': 'AAA', 'altitudeDatumCode': 'BBB'},
+            update=True)
+        self.assertIn('altitude', self.validator.errors)
+
+
+
+
+
+
+
+
+
+
+
