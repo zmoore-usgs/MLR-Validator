@@ -12,7 +12,7 @@ class WarningValidator:
         with open(os.path.join(schema_dir, 'warning_schema.yml')) as fd:
             warning_schema = yaml.load(fd.read())
 
-        self.single_field_validator = SingleFieldValidator(warning_schema, allow_unknown=True)
+        self.single_field_validator = SingleFieldValidator(warning_schema, reference_dir=reference_file_dir, allow_unknown=True)
         self.cross_field_ref_validator = CrossFieldRefWarningValidator(reference_file_dir)
         self._warnings = defaultdict(list)
 

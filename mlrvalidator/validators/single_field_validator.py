@@ -1,8 +1,11 @@
 
 import datetime
+import os
 import re
 
 from cerberus import Validator
+
+from .reference import ReferenceInfo
 
 
 class SingleFieldValidator(Validator):
@@ -11,9 +14,11 @@ class SingleFieldValidator(Validator):
         ''''
         Added keyword argument reference_list which should be an instance of reference.ReferenceInfo
         '''
-        self.reference_list = kwargs.get('reference_list', {})
+        self.reference_dir = kwargs.get('reference_dir', {})
         super().__init__(*args, **kwargs)
 
+        if self.reference_dir:
+            self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
 
     def _validate_type_numeric(self, value):
         # check for numeric value
@@ -79,6 +84,19 @@ class SingleFieldValidator(Validator):
             if not stripped_value:
                 self._error(field, "Field must contain non whitespace characters")
 
+    def _validate_valid_site_number(self, valid_site_number, field, value):
+        """
+        # We are not validation format as specified in http://nwis.usgs.gov/nwisdocs4_3/gw/gwcoding_Sect2-1.pdf,
+        however, need to ensure that the site number consists of only digits
+
+        The rule's arguments are validated against this schema:
+        {'valid_site_number': True}
+        """
+        stripped_value = value.rstrip()
+        if valid_site_number and stripped_value:
+            if not stripped_value.isdigit():
+                self._error(field, "Site Number can only have digits 0-9")
+
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
         # Check that characters other than 0-9 or a blank space do not exist in field
@@ -92,7 +110,6 @@ class SingleFieldValidator(Validator):
                 # There is something besides digits 0-9 or space
                 self._error(field, "Invalid Character: contains a character other than 0-9")
 
-
     def _validate_valid_latitude_dms(self, valid_latitude_dms, field, value):
         # Check that field consists of valid degrees, minutes and second values
 
@@ -105,20 +122,22 @@ class SingleFieldValidator(Validator):
 
         def check_100th_seconds(val):
             try:
-                val[7] in ["."]
-                test_split = val.split(".")
-                # There is a decimal, but have to check if anything was split from it
-                if test_split[1] == "":
-                    return False
-                else:
-                    # Check that only digits 0-9 exist after the decimal
-                    test_field = re.search('[^0-9]+', test_split[1])
-                    if test_field is None:
-                        # There are only digits 0-9 after the decimal
-                        return True
-                    else:
-                        # There is something besides digits 0-9 after the decimal
+                if val[7] in ["."]:
+                    test_split = val.split(".")
+                    # There is a decimal, but have to check if anything was split from it
+                    if test_split[1] == "":
                         return False
+                    else:
+                        # Check that only digits 0-9 exist after the decimal
+                        test_field = re.search('[^0-9]+', test_split[1])
+                        if test_field is None:
+                            # There are only digits 0-9 after the decimal
+                            return True
+                        else:
+                            # There is something besides digits 0-9 after the decimal
+                            return False
+                else:
+                    return False
             except IndexError:
                 return True
 
@@ -148,20 +167,22 @@ class SingleFieldValidator(Validator):
 
         def check_100th_seconds(val):
             try:
-                val[8] in ["."]
-                test_split = val.split(".")
-                # There is a decimal, but have to check if anything was split from it
-                if test_split[1] == "":
-                    return False
-                else:
-                    # Check that only digits 0-9 exist after the decimal
-                    test_field = re.search('[^0-9]+', test_split[1])
-                    if test_field is None:
-                        # There are only digits 0-9 after the decimal
-                        return True
-                    else:
-                        # There is something besides digits 0-9 after the decimal
+                if val[8] in ["."]:
+                    test_split = val.split(".")
+                    # There is a decimal, but have to check if anything was split from it
+                    if test_split[1] == "":
                         return False
+                    else:
+                        # Check that only digits 0-9 exist after the decimal
+                        test_field = re.search('[^0-9]+', test_split[1])
+                        if test_field is None:
+                            # There are only digits 0-9 after the decimal
+                            return True
+                        else:
+                            # There is something besides digits 0-9 after the decimal
+                            return False
+                else:
+                    return False
             except IndexError:
                 return True
 
@@ -226,7 +247,7 @@ class SingleFieldValidator(Validator):
             if stripped_value and stripped_value not in ref_list:
                 return self._error(field, '{0} is not in reference list'.format(value))
 
-    def _validate_valid_single_quotes(self, valid_quotes, field, value):
+    def _validate_valid_single_quotes(self, valid_single_quotes, field, value):
         """
         String is invalid if it starts with a single quote but does not end with a single quote or
         if the string ends with a single quote but does not start with a single quote.
@@ -234,7 +255,7 @@ class SingleFieldValidator(Validator):
         The rule's arguments are validated against this schema:
         {'type': 'boolean'}
         """
-        if valid_quotes:
+        if valid_single_quotes:
             if ((value.startswith("'") and not value.endswith("'")) or
                     (not value.startswith("'") and value.endswith("'"))):
                 self._error(field, "Missing Quote: may be missing a quote at beginning or ending of the name")

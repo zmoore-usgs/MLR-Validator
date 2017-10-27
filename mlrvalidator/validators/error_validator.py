@@ -16,7 +16,7 @@ class ErrorValidator:
         with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
             error_schema = yaml.load(fd.read())
 
-        self.single_field_validator = SingleFieldValidator(error_schema, allow_unknown=True)
+        self.single_field_validator = SingleFieldValidator(error_schema, reference_dir=reference_file_dir, allow_unknown=True)
         self.cross_field_validator = CrossFieldErrorValidator()
         self.cross_field_ref_validator = CrossFieldRefErrorValidator(reference_file_dir)
         self.transition_validator = TransitionValidator(reference_file_dir)

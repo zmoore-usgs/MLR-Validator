@@ -3,7 +3,7 @@ import os
 from unittest import TestCase, mock
 
 from app import application
-from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties
+from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties, LandNetCrossField
 
 
 class CountryStateReferenceTestCase(TestCase):
@@ -186,6 +186,7 @@ class ValidateGetStateAttributesCase(TestCase):
 
         self.assertEqual(test_state, bad_state)
 
+
 class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):
         self.site_type = FieldTransitions(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_transition.json'))
@@ -261,4 +262,26 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
         site_type_cd = 'Obi-Wan Kenobi'
         result = self.site_type_cf.get_site_type_field_dependencies('Obi-Wan Kenobi')
         expected = {'siteTypeCode': site_type_cd, 'notNullAttrs': [], 'nullAttrs': []}
+        self.assertEqual(result, expected)
+
+
+class ValidateGetLandNetCrossFieldCase(TestCase):
+
+    def setUp(self):
+        self.land_net = LandNetCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'land_net.json'))
+
+    def test_real_district_code(self):
+        result = self.land_net.get_land_net_templates('55')
+        expected = '******S???T?????R??????'
+        self.assertEqual(result, expected)
+
+    def test_district_code_with_padding(self):
+        result = self.land_net.get_land_net_templates('  55  ')
+        expected = '******S???T?????R??????'
+        self.assertEqual(result, expected)
+
+    def test_non_existent_district_code(self):
+        district_code = 'xyz'
+        result = self.land_net.get_land_net_templates(district_code)
+        expected = {}
         self.assertEqual(result, expected)
