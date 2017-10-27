@@ -94,7 +94,6 @@ class LandNetCrossField(ReferenceInfo):
 
     def get_land_net_templates(self, district_code):
         land_net_templates = self.reference_info['landNetTemplates']
-        thing = 'thing'
         try:
             land_net_template = get_dict(land_net_templates, 'districtCode', district_code.strip()).get('landNetTemplate', {})
         except StopIteration:
