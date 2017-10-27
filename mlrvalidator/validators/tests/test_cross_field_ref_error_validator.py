@@ -28,8 +28,9 @@ class CrossFieldRefValidatorForCountiesTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
-    def setUp(self, mstates_ref, msite_type_ref, mwater_use_ref, mref_validator_class):
+    def setUp(self, mstates_ref, msite_type_ref, mland_net_ref, mwater_use_ref, mref_validator_class):
         ref_list = {
             "countries": [
                 {
@@ -120,7 +121,6 @@ class CrossFieldRefValidatorForCountiesTestCase(TestCase):
         self.validator.validate({'countryCode': 'CA', 'stateFipsCode' : '90', 'countyCode': '001'}, {})
         self.assertNotIn('countyCode', self.validator.errors)
 
-
     def test_missing_county(self):
         self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    '}, {})
         self.assertNotIn('countyCode', self.validator.errors)
@@ -131,8 +131,9 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.Counties')
-    def setUp(self, mcounties_ref, msite_type_ref, mwater_use_ref, mref_validator_class):
+    def setUp(self, mcounties_ref, msite_type_ref, mland_net_ref, mwater_use_ref, mref_validator_class):
         ref_list = {
             "countries": [
                 {
@@ -225,8 +226,9 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
 class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
-    def setUp(self, m_site_type_ref, mstates_ref, mref_validator_class):
+    def setUp(self, m_site_type_ref, mland_net_ref, mstates_ref, mref_validator_class):
         ref_list = {
             "siteTypeCodes": [
                 {
@@ -272,8 +274,9 @@ class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
 class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
-    def setUp(self, mwater_use_ref, mstates_ref, mref_validator_class):
+    def setUp(self, mwater_use_ref, mland_net_ref, mstates_ref, mref_validator_class):
         ref_list = {
             "siteTypeCodes": [
                 {
