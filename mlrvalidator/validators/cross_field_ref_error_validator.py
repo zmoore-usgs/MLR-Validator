@@ -125,6 +125,30 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                     except IndexError:
                         self._errors['landNet'] = [error_message]
 
+    def _validate_state_latitude_range(self):
+        keys = ['latitude', 'countryCode', 'stateFipsCode']
+        if self._any_fields_in_document(keys):
+            lat, country, state = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if lat and country and state:
+                # Do a check for lat range using the country and state codes
+                state_attr = self.states_ref.get_state_attributes(country, state)
+                if state_attr and 'state_min_lat_va' in state_attr and 'state_max_lat_va' in state_attr:
+                    if not (state_attr['state_min_lat_va'] <= lat < state_attr['state_max_lat_va']):
+                        self._errors['latitude'] = ['Latitude is out of range for state {0}'.format(state)]
+
+    def _validate_state_longitude_range(self):
+        keys = ['longitude', 'countryCode', 'stateFipsCode']
+        if self._any_fields_in_document(keys):
+            lat, country, state = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if lat and country and state:
+                # Do a check for lat range using the country and state codes
+                state_attr = self.states_ref.get_state_attributes(country, state)
+                if state_attr and 'state_min_long_va' in state_attr and 'state_max_long_va' in state_attr:
+                    if not (state_attr['state_min_long_va'] <= lat < state_attr['state_max_long_va']):
+                        self._errors['longitude'] = ['Longitude is out of range for state {0}'.format(state)]
+
     def validate(self, document, existing_document):
         '''
         :param dict document:
@@ -145,6 +169,8 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._validate_national_water_use_code()
         self._validate_site_type()
         self._validate_land_net()
+        self._validate_state_latitude_range()
+        self._validate_state_longitude_range()
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)

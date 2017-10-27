@@ -158,77 +158,20 @@ class CrossFieldRefWarningCountyLongitudeTestCase(TestCase):
                         mock.mock_open(read_data=json.dumps(ref_list))):
             self.validator = CrossFieldRefWarningValidator('ref_dir')
 
-    def test_valid_latitude_range(self):
-        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'longitude': ' 1000000'}, {}))
-
-    def test_invalid_latitude_range(self):
-        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 0100000'}, {}))
-
     def test_missing_fields(self):
         self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    ', 'latitude': ' 1000000'}, {}))
 
     def test_missing_reference(self):
             self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'latitude': ' 1000000'}, {}))
 
+    def test_valid_latitude_range(self):
+        self.assertTrue(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '90', 'countyCode': '001', 'longitude': ' 1000000'}, {}))
 
-class CrossFieldRefWarningStateLatitudeTestCase(TestCase):
+    def test_invalid_latitude_range(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 0100000'}, {}))
 
-    def setUp(self):
-        ref_list = {
-            'countries': [
-                {
-                    "countryCode": "AF",
-                    "states": [
-                        {
-                            "stateFipsCode": "00",
-                            "state_min_lat_va": "292900",
-                            "state_max_lat_va": "383000",
-                            "state_min_long_va": "-0745800",
-                            "state_max_long_va": "-0605000",
-                            "state_min_alt_va": "00000",
-                            "state_max_alt_va": "30000"
-                        }
-                    ]
-                }, {
-                    "countryCode": "US",
-                    "states": [
-                        {
-                            "stateFipsCode": "02",
-                            "state_min_lat_va": "511030",
-                            "state_max_lat_va": "712628",
-                            "state_min_long_va": "1295846",
-                            "state_max_long_va": "-1722655",
-                            "state_min_alt_va": "00000",
-                            "state_max_alt_va": "20320"
-                        }, {
-                            "stateFipsCode": "34",
-                            "state_min_lat_va": "384719",
-                            "state_max_lat_va": "412127",
-                            "state_min_long_va": "0735306",
-                            "state_max_long_va": "0753349",
-                            "state_min_alt_va": "00-10",
-                            "state_max_alt_va": "01803"
-                        }
-                    ]
-                }
-            ]
-        }
-        with mock.patch('mlrvalidator.validators.reference.open',
-                        mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefWarningValidator('ref_dir')
 
-    def test_valid_latitude(self):
-        self.assertTrue(self.validator.validate({'latitude': ' 520000'}, {'stateFipsCode': '02', 'countryCode': 'US'}))
 
-    def test_invalid_latitude(self):
-        self.assertFalse(self.validator.validate({'latitude': ' 500000'}, {'stateFipsCode': '02', 'countryCode': 'US'}))
-
-    def test_missing_fields(self):
-        self.assertTrue(self.validator.validate({'latitude': ' 500000'}, {'stateFipsCode': '02'}))
-        self.assertTrue(self.validator.validate({'latitude': ' 500000'}, {'countryCode': 'US'}))
-
-    def test_missing_reference(self):
-        self.assertTrue(self.validator.validate({'latitude': ' 500000'}, {'stateFipsCode': '02', 'countryCode': 'CN'}))
 
 
 class CrossFieldRefWarningLongitudeTestCase(TestCase):

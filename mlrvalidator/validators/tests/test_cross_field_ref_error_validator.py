@@ -222,6 +222,33 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
         self.assertTrue(self.validator.validate({}, {'stateFipsCode': '01'}))
         self.assertEqual(len(self.validator.errors), 0)
 
+    def test_valid_latitude_range(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 310000'}, {'stateFipsCode': '01', 'countryCode': 'US'}))
+
+    def test_invalid_latitude_range(self):
+        self.assertFalse(self.validator.validate({'latitude': ' 500000'}, {'stateFipsCode': '01', 'countryCode': 'US'}))
+
+    def test_missing_fields_latitude_range(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 310000'}, {'stateFipsCode': '01'}))
+        self.assertTrue(self.validator.validate({'latitude': ' 310000'}, {'countryCode': 'US'}))
+
+    def test_missing_reference_latitude_range(self):
+        self.assertTrue(self.validator.validate({'latitude': ' 310000'}, {'stateFipsCode': '01', 'countryCode': 'CN'}))
+
+    def test_valid_longitude_range(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0850000'}, {'stateFipsCode': '01', 'countryCode': 'US'}))
+
+    def test_invalid_longitude_range(self):
+        self.assertFalse(self.validator.validate({'longitude': ' 0900000'}, {'stateFipsCode': '01', 'countryCode': 'US'}))
+
+    def test_missing_fields_for_longitude_range(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0850000'}, {'stateFipsCode': '01'}))
+        self.assertTrue(self.validator.validate({'longitude': ' 0850000'}, {'countryCode': 'US'}))
+
+    def test_missing_reference_for_longitude_range(self):
+        self.assertTrue(self.validator.validate({'longitude': ' 0850000'}, {'stateFipsCode': '01', 'countryCode': 'CN'}))
+
+
 
 class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
