@@ -57,6 +57,7 @@ class CountryStateReferenceValidatorTestCase(TestCase):
         self.assertTrue(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '01'}, {}))
         self.assertTrue(self.validator.validate({'countryCode': 'US'}, { 'aquiferCode': '110QRNR'}))
         self.assertTrue(self.validator.validate({'stateFipsCode': '01', 'aquiferCode': '110QRNR'}, {}))
+        self.assertTrue(self.validator.validate({'stateFipsCode': '01', 'aquiferCode': None}, {}))
 
     def test_bad_lookup(self):
         self.assertFalse(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '01', 'aquiferCode': 'A'}, {}))
