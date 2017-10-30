@@ -1544,4 +1544,56 @@ class CountyCodeTestCase(TestCase):
         self.assertIn('countyCode', validator.errors)
 
 
+class MinorCivilDivisionCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            {},
+            update=False
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
+    def test_ref_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00275'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
+    def test_ref_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+    def test_country_state_county_not_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'CN', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '85',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '002'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+
+
+
 

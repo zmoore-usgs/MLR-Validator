@@ -126,6 +126,196 @@ class CrossFieldRefValidatorForCountiesTestCase(TestCase):
         self.assertNotIn('countyCode', self.validator.errors)
 
 
+class CrossFieldRefValidatorForMCDsTestCase(TestCase):
+
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    def setUp(self, mstates_ref, msite_type_ref, mland_net_ref, mwater_use_ref, mref_validator_class):
+        ref_list = {
+            "countries": [
+                {
+                    "countryCode": "US",
+                    "states": [
+                        {
+                            "stateFipsCode": "01",
+                            "counties": [
+                                {
+                                    "countyCode": "001",
+                                    "minorCivilDivisionCodes": [
+                                        "90171",
+                                        "90315",
+                                        "92106",
+                                        "92628"
+                                    ]
+                                },
+                                {
+                                    "countyCode": "003",
+                                    "minorCivilDivisionCodes": [
+                                        "90207",
+                                        "90846",
+                                        "90963",
+                                        "91053",
+                                        "91152",
+                                        "92754",
+                                        "93024",
+                                        "93042"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        mref_validator = mref_validator_class.return_value
+        mref_validator.validate.return_value = True
+        mref_validator.errors = []
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
+
+    def test_mcd_in_list(self):
+        self.validator.validate(
+            {'countryCode': 'US', 'stateFipsCode': '01', 'countyCode': '001', 'minorCivilDivisionCode': '90171'},
+            {}
+        )
+        self.assertNotIn('minorCivilDivisionCode', self.validator.errors)
+
+    def test_mcd_not_in_list(self):
+        self.validator.validate(
+            {'countryCode': 'US', 'stateFipsCode': '01', 'countyCode': '001', 'minorCivilDivisionCode': '90172'},
+            {}
+        )
+        self.assertIn('minorCivilDivisionCode', self.validator.errors)
+
+    def test_country_state_county_not_in_list(self):
+        self.validator.validate(
+            {'countryCode': 'CN', 'stateFipsCode': '01', 'countyCode': '001', 'minorCivilDivisionCode': '90172'},
+            {}
+        )
+        self.assertIn('minorCivilDivisionCode', self.validator.errors)
+
+        self.validator.validate(
+            {'countryCode': 'US', 'stateFipsCode': '05', 'countyCode': '001', 'minorCivilDivisionCode': '90172'},
+            {}
+        )
+        self.assertIn('minorCivilDivisionCode', self.validator.errors)
+
+        self.validator.validate(
+            {'countryCode': 'US', 'stateFipsCode': '01', 'countyCode': '020', 'minorCivilDivisionCode': '90172'},
+            {}
+        )
+        self.assertIn('minorCivilDivisionCode', self.validator.errors)
+
+
+
+class CrossFieldRefValidatorForCountiesTestCase(TestCase):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    def setUp(self, mstates_ref, msite_type_ref, mland_net_ref, mwater_use_ref, mref_validator_class):
+        ref_list = {
+            "countries": [
+                {
+                    "countryCode": "AF",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "292900",
+                                    "county_max_lat_va": "383000",
+                                    "county_min_long_va": "-0745800",
+                                    "county_max_long_va": "-0605000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }, {
+                    "countryCode": "CA",
+                    "states": [
+                        {
+                            "stateFipsCode": "00",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }, {
+                            "stateFipsCode": "90",
+                            "counties": [
+                                {
+                                    "countyCode": "000",
+                                    "county_min_lat_va": "443000",
+                                    "county_max_lat_va": "480500",
+                                    "county_min_long_va": "0634500",
+                                    "county_max_long_va": "0690500",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "02690"
+                                }, {
+                                    "countyCode": "001",
+                                    "county_min_lat_va": "414036",
+                                    "county_max_lat_va": "694000",
+                                    "county_min_long_va": "0553000",
+                                    "county_max_long_va": "1410000",
+                                    "county_min_alt_va": "00000",
+                                    "county_max_alt_va": "30000"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+
+        mref_validator = mref_validator_class.return_value
+        mref_validator.validate.return_value = True
+        mref_validator.errors = []
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefErrorValidator('ref_dir')
+
+    def test_county_not_in_list(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode' : '90', 'countyCode': '002'}, {}))
+
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90'}, {'countyCode': '002'}))
+
+    def test_state_not_in_list(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '80', 'countyCode': '002'}, {}))
+
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '80'}, {'countyCode': '002'}))
+
+    def test_country_not_in_list(self):
+        self.assertFalse(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '80', 'countyCode': '002'}, {}))
+
+        self.assertFalse(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '80'}, {'countyCode': '002'}))
+
+    def test_valid_county(self):
+        self.validator.validate({'countryCode': 'CA', 'stateFipsCode' : '90', 'countyCode': '001'}, {})
+        self.assertNotIn('countyCode', self.validator.errors)
+
+    def test_missing_county(self):
+        self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    '}, {})
+        self.assertNotIn('countyCode', self.validator.errors)
+
+
 class CrossFieldRefValidatorForStatesTestCase(TestCase):
 
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')

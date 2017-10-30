@@ -12,7 +12,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         :param object states_reference: should be a references.States instance
         '''
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
-        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'), 'counties')
+        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
 
         super().__init__()
 
