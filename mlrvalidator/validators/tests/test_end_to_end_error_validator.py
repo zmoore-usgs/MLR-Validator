@@ -1784,5 +1784,37 @@ class BasinCodeTestCase(TestCase):
         self.assertIn('basinCode', validator.errors)
 
 
+class MapNameTestCase(TestCase):
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '12345678901234567890'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '123456789012345678901'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('mapName', validator.errors)
+
+
 
 
