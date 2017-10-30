@@ -1477,11 +1477,71 @@ class StateFipsCode(TestCase):
         )
         self.assertNotIn('longitude', validator.errors)
 
-    def test_latitude_not_in_us_state_range(self):
+    def test_longitude_not_in_us_state_range(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'longitude': ' 0930000'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
             update=True
         )
         self.assertIn('longitude', validator.errors)
+
+
+class CountyCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode' : '003'},
+            {},
+            update=False
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode' : ''},
+            {},
+            update=False
+        )
+        self.assertIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            {},
+            update=False
+        )
+        self.assertIn('countyCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode' : '003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '005'},
+            update=True
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '0003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertIn('countyCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '005'},
+            update=True
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '002'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertIn('countyCode', validator.errors)
+
+
 
