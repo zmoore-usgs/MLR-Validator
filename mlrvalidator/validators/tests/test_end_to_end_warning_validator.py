@@ -76,3 +76,23 @@ class WarningValidatorStationNameTestCase(TestCase):
     def test_invalid_quote_at_beginning(self):
         self.assertFalse(validator.validate({'stationName': "'This is a USGS Station"}, {}, update=True))
 
+
+class CountyCodeTestCase(TestCase):
+
+    def test_county_in_latitude_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '003', 'latitude': ' 460000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertNotIn('latitude', validator.warnings)
+
+    def test_county_not_in_latitude_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '003', 'latitude': ' 450000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertIn('latitude', validator.warnings)

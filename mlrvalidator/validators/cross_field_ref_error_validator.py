@@ -14,10 +14,10 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         super().__init__()
         self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes', 'aquiferCode')
         self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
-        self.mcd_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'mcd.json'), 'minorCivilDivsionCodes', 'minorCivilDivisionCode')
         self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
 
-        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'), 'counties')
+        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
+        self.mcd_ref = Counties(os.path.join(reference_dir, 'mcd.json'))
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
         self.land_net_ref = LandNetCrossField(os.path.join(reference_dir, 'land_net.json'))
@@ -32,6 +32,20 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                 county_list = self.counties_ref.get_county_codes(country, state)
                 if county_list and county not in county_list:
                     self._errors['countyCode'] = ['County {0} is not in the reference list for country {1} and state {2}'.format(county, country, state)]
+
+    def _validate_mcd(self):
+        keys = ['countryCode', 'stateFipsCode', 'countyCode', 'minorCivilDivisionCode']
+        if self._any_fields_in_document(keys):
+            if self.merged_document.get('minorCivilDivisionCode') is not None:
+                country, state, county, mcd = [self.merged_document.get(key, '').strip() for key in keys]
+
+                if country and state and county and mcd:
+                    allowed_mcds = self.mcd_ref.get_county_attributes(country, state, county).get('minorCivilDivisionCodes', [])
+
+                    if mcd not in allowed_mcds:
+                        self._errors['minorCivilDivisionCode'] = \
+                            ['MCD {0} is not in the list for country {1}, state {2} and county {3}'.format(mcd, country, state, county)]
+
 
     def _validate_states(self):
         '''
@@ -125,6 +139,30 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                     except IndexError:
                         self._errors['landNet'] = [error_message]
 
+    def _validate_state_latitude_range(self):
+        keys = ['latitude', 'countryCode', 'stateFipsCode']
+        if self._any_fields_in_document(keys):
+            lat, country, state = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if lat and country and state:
+                # Do a check for lat range using the country and state codes
+                state_attr = self.states_ref.get_state_attributes(country, state)
+                if state_attr and 'state_min_lat_va' in state_attr and 'state_max_lat_va' in state_attr:
+                    if not (state_attr['state_min_lat_va'] <= lat < state_attr['state_max_lat_va']):
+                        self._errors['latitude'] = ['Latitude is out of range for state {0}'.format(state)]
+
+    def _validate_state_longitude_range(self):
+        keys = ['longitude', 'countryCode', 'stateFipsCode']
+        if self._any_fields_in_document(keys):
+            lat, country, state = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if lat and country and state:
+                # Do a check for lat range using the country and state codes
+                state_attr = self.states_ref.get_state_attributes(country, state)
+                if state_attr and 'state_min_long_va' in state_attr and 'state_max_long_va' in state_attr:
+                    if not (state_attr['state_min_long_va'] <= lat < state_attr['state_max_long_va']):
+                        self._errors['longitude'] = ['Longitude is out of range for state {0}'.format(state)]
+
     def validate(self, document, existing_document):
         '''
         :param dict document:
@@ -137,18 +175,19 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         # A huc of 99999999 is always allowed
         if self.merged_document.get('hydrologicUnitCode', '').strip() != '99999999':
             self.huc_ref_validator.validate(document, existing_document)
-        self.mcd_ref_validator.validate(document, existing_document)
         self.national_aquifer_ref_validator.validate(document, existing_document)
 
         self._validate_counties()
+        self._validate_mcd()
         self._validate_states()
         self._validate_national_water_use_code()
         self._validate_site_type()
         self._validate_land_net()
+        self._validate_state_latitude_range()
+        self._validate_state_longitude_range()
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)
-        self._errors.update(self.mcd_ref_validator.errors)
         self._errors.update(self.national_aquifer_ref_validator.errors)
 
         return self._errors == {}

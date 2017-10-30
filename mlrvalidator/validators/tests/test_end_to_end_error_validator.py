@@ -1098,7 +1098,7 @@ class NationalAquiferCodeTestCase(TestCase):
     def test_aquifer_in_country_state(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'nationalAquiferCode': 'N100AKUNCD'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '02'}, update=True)
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': 'US', 'stateFipsCode': '02'}, update=True)
         self.assertNotIn('nationalAquiferCode', validator.errors)
 
     def test_aquifer_not_in_country_state(self):
@@ -1283,4 +1283,593 @@ class DataReliabilityCodeTestCase(TestCase):
         validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'dataReliabilityCode': 'A'},
                            {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
         self.assertIn('dataReliabilityCode', validator.errors)
+
+
+class DistrictCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode' : '55'},
+            {},
+            update=False
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('districtCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '122'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '1222'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('districtCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('districtCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '90'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('districtCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'districtCode': '1'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('districtCode', validator.errors)
+
+
+class CountryCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode' : 'US'},
+            {},
+            update=False
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('countryCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('countryCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'USS'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('countryCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('countryCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'ZZ'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('countryCode', validator.errors)
+
+
+class StateFipsCode(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode' : 'US'},
+            {},
+            update=False
+        )
+        self.assertNotIn('stateFipsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('stateFips', validator.errors)
+
+        validator.validate({'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '055'},
+                           {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+                           update=True
+                           )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('stateFipsCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '80'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('stateFipsCode', validator.errors)
+
+    def test_latitude_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'latitude': ' 430000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('latitude', validator.errors)
+
+    def test_latitude_not_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'latitude': ' 420000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('latitude', validator.errors)
+
+    def test_longitude_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'longitude': ' 0870000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertNotIn('longitude', validator.errors)
+
+    def test_longitude_not_in_us_state_range(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'longitude': ' 0930000'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'stateFipsCode': '55', 'countryCode': 'US'},
+            update=True
+        )
+        self.assertIn('longitude', validator.errors)
+
+
+class CountyCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode' : '003'},
+            {},
+            update=False
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode' : ''},
+            {},
+            update=False
+        )
+        self.assertIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            {},
+            update=False
+        )
+        self.assertIn('countyCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode' : '003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '005'},
+            update=True
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '0003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertIn('countyCode', validator.errors)
+
+    def test_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '003'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '005'},
+            update=True
+        )
+        self.assertNotIn('countyCode', validator.errors)
+
+    def test_not_in_reference_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countyCode': '002'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            update=True
+        )
+        self.assertIn('countyCode', validator.errors)
+
+
+class MinorCivilDivisionCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '005'},
+            {},
+            update=False
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
+    def test_null_mcd_code(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '001'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': None}
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
+    def test_ref_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00275'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
+    def test_ref_not_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+    def test_country_state_county_not_in_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'CN', 'stateFipsCode': '55',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '85',
+             'countyCode': '001'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
+             'countyCode': '002'}
+        )
+        self.assertIn('minorCivilDivisionCode', validator.errors)
+
+
+class HydrologicUnitCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            {},
+            update=False
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'hydrologicUnitCode': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+    def test_valid_huc_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode' : '07'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0701'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070102'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '07010206'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0701020609'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070102060903'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+
+    def test_valid_huc_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '07'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0701'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070102'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '07010206'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0701020609'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070102060903'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+    def test_valid_huc_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '08'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0708'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070103'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '07010207'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '0701020608'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '070102060904'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertIn('hydrologicUnitCode', validator.errors)
+
+    def test_special_value(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'hydrologicUnitCode': '99999999'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55'},
+            update=True
+        )
+        self.assertNotIn('hydrologicUnitCode', validator.errors)
+
+
+
+class BasinCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('basinCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'basinCode': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('basinCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'basinCode': 'AA'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('basinCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'basinCode': 'AAA'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('basinCode', validator.errors)
+
+
+class MapNameTestCase(TestCase):
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '12345678901234567890'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('mapName', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapName': '123456789012345678901'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('mapName', validator.errors)
+
+
+class MapScaleTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapScale', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapScale': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('mapScale', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapScale': '1234567'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('mapScale', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapScale': '12345678'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('mapScale', validator.errors)
+
+    def test_invalid_chars(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapScale': ' 123456'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('mapScale', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'mapScale': 'A123456'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('mapScale', validator.errors)
+
+
+
 
