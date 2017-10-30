@@ -88,6 +88,7 @@ class CrossFieldRefWarningCountyLatitudeTestCase(TestCase):
     def test_missing_reference(self):
             self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'latitude': ' 300000'}, {}))
 
+
 class CrossFieldRefWarningCountyLongitudeTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_warning_validator.States')
     def setUp(self, mstates_ref):
@@ -159,16 +160,16 @@ class CrossFieldRefWarningCountyLongitudeTestCase(TestCase):
             self.validator = CrossFieldRefWarningValidator('ref_dir')
 
     def test_missing_fields(self):
-        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    ', 'latitude': ' 1000000'}, {}))
+        self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '    ', 'longitude': ' 1000000'}, {}))
 
     def test_missing_reference(self):
-            self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'latitude': ' 1000000'}, {}))
+            self.assertTrue(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '010', 'longitude': ' 1000000'}, {}))
 
     def test_valid_latitude_range(self):
         self.assertTrue(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '90', 'countyCode': '001', 'longitude': ' 1000000'}, {}))
 
     def test_invalid_latitude_range(self):
-        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'latitude': ' 0100000'}, {}))
+        self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode': '90', 'countyCode': '001', 'longitude': ' 0100000'}, {}))
 
 
 
@@ -233,3 +234,6 @@ class CrossFieldRefWarningAltitudeTestCase(TestCase):
     def test_missing_reference(self):
         self.assertTrue(self.validator.validate({'altitude': '-19'}, {'stateFipsCode': '34', 'countryCode': 'CN'}))
         self.assertTrue(self.validator.validate({'altitude': '-19'}, {'stateFipsCode': '33', 'countryCode': 'US'}))
+
+    def test_nonnumeric_altitude(self):
+        self.assertTrue(self.validator.validate({'altitude': 'N19'},{'stateFipsCode': '33', 'countryCode': 'US'}))
