@@ -193,6 +193,13 @@ class CrossFieldRefValidatorForMCDsTestCase(TestCase):
         )
         self.assertIn('minorCivilDivisionCode', self.validator.errors)
 
+    def test_mcd_null(self):
+        self.validator.validate(
+            {'countryCode': 'US', 'stateFipsCode': '01', 'countyCode': '001', 'minorCivilDivisionCode': None},
+            {}
+        )
+        self.assertNotIn('minorCivilDivisionCode', self.validator.errors)
+
     def test_country_state_county_not_in_list(self):
         self.validator.validate(
             {'countryCode': 'CN', 'stateFipsCode': '01', 'countyCode': '001', 'minorCivilDivisionCode': '90172'},

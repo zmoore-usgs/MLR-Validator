@@ -36,14 +36,15 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
     def _validate_mcd(self):
         keys = ['countryCode', 'stateFipsCode', 'countyCode', 'minorCivilDivisionCode']
         if self._any_fields_in_document(keys):
-            country, state, county, mcd = [self.merged_document.get(key, '').strip() for key in keys]
+            if self.merged_document.get('minorCivilDivisionCode') is not None:
+                country, state, county, mcd = [self.merged_document.get(key, '').strip() for key in keys]
 
-            if country and state and county and mcd:
-                allowed_mcds = self.mcd_ref.get_county_attributes(country, state, county).get('minorCivilDivisionCodes', [])
+                if country and state and county and mcd:
+                    allowed_mcds = self.mcd_ref.get_county_attributes(country, state, county).get('minorCivilDivisionCodes', [])
 
-                if mcd not in allowed_mcds:
-                    self._errors['minorCivilDivisionCode'] = \
-                        ['MCD {0} is not in the list for country {1}, state {2} and county {3}'.format(mcd, country, state, county)]
+                    if mcd not in allowed_mcds:
+                        self._errors['minorCivilDivisionCode'] = \
+                            ['MCD {0} is not in the list for country {1}, state {2} and county {3}'.format(mcd, country, state, county)]
 
 
     def _validate_states(self):
