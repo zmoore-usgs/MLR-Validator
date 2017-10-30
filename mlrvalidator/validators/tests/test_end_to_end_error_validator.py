@@ -1555,6 +1555,13 @@ class MinorCivilDivisionCodeTestCase(TestCase):
         )
         self.assertNotIn('minorCivilDivisionCode', validator.errors)
 
+    def test_null_mcd_code(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55', 'countyCode': '001'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': None}
+        )
+        self.assertNotIn('minorCivilDivisionCode', validator.errors)
+
     def test_ref_in_list(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00275'},
@@ -1563,7 +1570,7 @@ class MinorCivilDivisionCodeTestCase(TestCase):
         )
         self.assertNotIn('minorCivilDivisionCode', validator.errors)
 
-    def test_ref_in_list(self):
+    def test_ref_not_in_list(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'minorCivilDivisionCode': '00277'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'countryCode': 'US', 'stateFipsCode': '55',
