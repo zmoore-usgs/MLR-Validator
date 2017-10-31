@@ -1023,7 +1023,7 @@ class AltitudeMethodCodeTestCase(TestCase):
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'}, update=True)
         self.assertNotIn('altitudeMethodCode', validator.errors)
 
-    def test_in_reference_list(self):
+    def test_not_in_reference_list(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '12345', 'altitudeAccuracyValue': '1' ,
              'altitudeMethodCode': 'B', 'altitudeDatumCode': 'BARGECANAL'},
