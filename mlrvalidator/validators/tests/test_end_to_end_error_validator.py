@@ -3178,3 +3178,60 @@ class TimeZoneCodeTestCase(TestCase):
             update=True
         )
         self.assertIn('timeZoneCode', validator.errors)
+
+
+class DaylightSavingsTimeFlag(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('daylightSavingsTimeFlag', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': '  '},
+            {},
+            update=False
+        )
+        self.assertIn('daylightSavingsTimeFlag', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': 'Y'},
+            {},
+            update=False
+        )
+        self.assertNotIn('daylightSavingsTimeFlag', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': 'Y'},
+            {},
+            update=False
+        )
+        self.assertNotIn('daylightSavingsTimeFlag', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': 'YY'},
+            {},
+            update=False
+        )
+        self.assertIn('daylightSavingsTimeFlag', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': 'Y'},
+            {},
+            update=False
+        )
+        self.assertNotIn('daylightSavingsTimeFlag', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'daylightSavingsTimeFlag': 'A'},
+            {},
+            update=False
+        )
+        self.assertIn('daylightSavingsTimeFlag', validator.errors)
+
