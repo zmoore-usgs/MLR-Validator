@@ -2456,3 +2456,95 @@ class DataTypesCode(TestCase):
             update=True
         )
         self.assertIn('dataTypesCode', validator.errors)
+
+
+class ContributingDrainageAreaTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('contributingDrainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '   '},
+            {},
+            update=False
+        )
+        self.assertNotIn('contributingDrainageArea', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '12345678'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update= True
+        )
+        self.assertNotIn('contributingDrainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '123456789'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update=True
+        )
+        self.assertIn('contributingDrainageArea', validator.errors)
+
+    def test_positive_numeric(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '12345678'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update=True
+        )
+        self.assertNotIn('contributingDrainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '123.4567'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update=True
+        )
+        self.assertNotIn('contributingDrainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '-1234567'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update=True
+        )
+        self.assertIn('contributingDrainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '123A567'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99999999'},
+            update=True
+        )
+        self.assertIn('contributingDrainageArea', validator.errors)
+
+    def test_missing_drainage_area(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '123A567'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('contributingDrainageArea', validator.errors)
+
+    def test_cannot_be_larger_than_drainage_area(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '100'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '101'},
+            update=True
+        )
+        self.assertNotIn('drainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '100'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '100'},
+            update=True
+        )
+        self.assertNotIn('drainageArea', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '100'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '99'},
+            update=True
+        )
+        self.assertIn('drainageArea', validator.errors)
