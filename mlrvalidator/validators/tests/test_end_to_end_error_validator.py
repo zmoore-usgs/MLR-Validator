@@ -2747,6 +2747,142 @@ class FirstConstructionDateTestCase(TestCase):
         self.assertIn('site_dates', validator.errors)
 
 
+class SiteEstablishmentDate(TestCase):
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '   '},
+            {},
+            update=False
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19921112'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '199211121'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+    def test_valid_date(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19921112'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '1992111'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update = True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19921330'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update = True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+    def test_partial_dates(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '1992'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '199210'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '1992101'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19921'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '199'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('siteEstablishmentDate', validator.errors)
+
+    def test_construction_date_before_inventory_date(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19920315'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920215'},
+            update=True
+        )
+        self.assertNotIn('site_dates', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '1993'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920215'},
+            update=True
+        )
+        self.assertNotIn('site_dates', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '199203'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920215'},
+            update=True
+        )
+        self.assertNotIn('site_dates', validator.errors)
+
+    def test_construction_date_after_inventory_date(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '19920215'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920315'},
+            update=True
+        )
+        self.assertIn('site_dates', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '199202'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920315'},
+            update=True
+        )
+        self.assertIn('site_dates', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteEstablishmentDate': '1992'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'firstConstructionDate': '19920315'},
+            update=True
+        )
+        self.assertIn('site_dates', validator.errors)
+
+
+
+
 
 
 
