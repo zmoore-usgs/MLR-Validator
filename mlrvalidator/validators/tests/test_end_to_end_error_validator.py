@@ -2881,6 +2881,70 @@ class SiteEstablishmentDate(TestCase):
         self.assertIn('site_dates', validator.errors)
 
 
+class HoleDepthTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'holeDepth': '   '},
+            {},
+            update=False
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 12345678'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('holeDepth', validator.errors)
+
+    def test_numeric(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': '-1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 1234.67'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('holeDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 123A567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('holeDepth', validator.errors)
+
+    #TODO: Add site type tests after the site_type_cross_field.json has been regenerated
+
+
 
 
 
