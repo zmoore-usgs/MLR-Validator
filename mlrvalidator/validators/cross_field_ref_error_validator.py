@@ -21,7 +21,8 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
         self.land_net_ref = LandNetCrossField(os.path.join(reference_dir, 'land_net.json'))
-        self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'site_type_cross_field.json'))
+        # TODO: Replace with the regenerated site_type_cross_field.json file when available
+        self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'temp_site_type_cross_field.json'))
 
     def _validate_counties(self):
         keys = ['countryCode', 'stateFipsCode', 'countyCode']
@@ -181,6 +182,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._validate_mcd()
         self._validate_states()
         self._validate_national_water_use_code()
+
         self._validate_site_type()
         self._validate_land_net()
         self._validate_state_latitude_range()
