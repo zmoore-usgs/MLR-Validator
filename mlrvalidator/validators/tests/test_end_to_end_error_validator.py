@@ -1,5 +1,5 @@
 
-from unittest import TestCase, skip
+from unittest import TestCase
 
 from app import application
 from ..error_validator import ErrorValidator
