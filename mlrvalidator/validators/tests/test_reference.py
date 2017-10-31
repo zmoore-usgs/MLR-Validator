@@ -85,7 +85,7 @@ class ValidateGetNationalWaterUseCase(TestCase):
 
 class ValidateGetCountyCodeCase(TestCase):
     def setUp(self):
-        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
@@ -107,7 +107,7 @@ class ValidateGetCountyCodeCase(TestCase):
 
 class ValidateGetCountyAttributesCase(TestCase):
     def setUp(self):
-        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'), 'counties')
+        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
 
     def test_validate_ok(self):
         good_county = {

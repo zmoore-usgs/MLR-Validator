@@ -38,6 +38,11 @@ class NationalWaterUseCodes(ReferenceInfo):
 
 
 class Counties(CountryStateReference):
+
+    def __init__(self, path_to_file):
+        super().__init__(path_to_file, 'counties')
+
+
     def get_county_codes(self, country_code, state_code):
         county_list = self.get_list_by_country_state(country_code, state_code)
         county_code_list = [d['countyCode'] for d in county_list]
