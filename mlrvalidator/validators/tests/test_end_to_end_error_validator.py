@@ -2226,3 +2226,61 @@ class SecondaryUseOfWaterCodeTestCase(TestCase):
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'}
         )
         self.assertIn('secondaryUseOfWaterCode', validator.errors)
+
+
+class TertiaryUseOfWaterCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('tertiaryUseOfWaterCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': ' '},
+            {},
+            update=False
+        )
+        self.assertNotIn('tertiaryUseOfWaterCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': 'U'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B'},
+            update=True
+        )
+        self.assertNotIn('tertiaryUseOfWaterCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': 'UU'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B'},
+            update=True
+        )
+        self.assertIn('tertiaryUseOfWaterCode', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': 'U'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B'},
+            update=True
+        )
+        self.assertNotIn('tertiaryUseOfWaterCode', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': 'V'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B'},
+            update=True
+        )
+        self.assertIn('tertiaryUseOfWaterCode', validator.errors)
+
+    def test_null_secondary_with_tertiary(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfWaterCode': 'V'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('tertiaryUseOfWaterCode', validator.errors)
+
