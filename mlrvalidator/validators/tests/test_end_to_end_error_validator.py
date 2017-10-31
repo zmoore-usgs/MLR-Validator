@@ -2945,10 +2945,96 @@ class HoleDepthTestCase(TestCase):
     #TODO: Add site type tests after the site_type_cross_field.json has been regenerated
 
 
+class WellDepthTestCase(TestCase):
 
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('wellDepth', validator.errors)
 
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': '  '},
+            {},
+            update=False
+        )
+        self.assertNotIn('wellDepth', validator.errors)
 
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('wellDepth', validator.errors)
 
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 12345678'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('wellDepth', validator.errors)
 
+    def test_numeric(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('wellDepth', validator.errors)
 
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': '-1234567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('wellDepth', validator.errors)
 
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 1234.67'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('wellDepth', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 123A567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('wellDepth', validator.errors)
+
+    def test_well_depth_greater_than_hole_depth(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 123567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 120000'},
+            update=True
+        )
+        self.assertIn('depths', validator.errors)
+
+    def test_well_depth_less_than_hole_depth(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 123567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 130000'},
+            update=True
+        )
+        self.assertNotIn('depths', validator.errors)
+
+    def test_depth_when_one_is_blank(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' 123567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' '},
+            update=True
+        )
+        self.assertNotIn('depths', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'holeDepth': ' 123567'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'wellDepth': ' '},
+            update=True
+        )
+        self.assertNotIn('depths', validator.errors)
+
+    #TODO: Add site type tests after the site_type_cross_field.json file has been regenerated.
