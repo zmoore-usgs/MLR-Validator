@@ -663,6 +663,12 @@ class ValidateValidDateTestCase(TestCase):
         self.good_data5 = {
             'firstConstructionDate': '2014'
         }
+        self.good_data6 = {
+            'firstConstructionDate': ' '
+        }
+        self.good_data7 = {
+            'firstConstructionDate': ''
+        }
         self.bad_data = {
             'firstConstructionDate': '20440912'
         }
@@ -727,6 +733,8 @@ class ValidateValidDateTestCase(TestCase):
         self.assertTrue(self.validator.validate(self.good_data3))
         self.assertTrue(self.validator.validate(self.good_data4))
         self.assertTrue(self.validator.validate(self.good_data5))
+        self.assertTrue(self.validator.validate(self.good_data6))
+        self.assertTrue(self.validator.validate(self.good_data7))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))

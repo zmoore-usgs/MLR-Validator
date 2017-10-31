@@ -208,7 +208,7 @@ class SingleFieldValidator(Validator):
         """
         error_message = "Invalid Date, should be YYYY, YYYYMM or YYYYMMDD"
         stripped_value = value.strip()
-        if valid_date:
+        if valid_date and stripped_value:
         # Check for valid full or partial date lengths
             if len(stripped_value) in [8, 6, 4]:
                 # Check that only digits 0-9 exist in the string

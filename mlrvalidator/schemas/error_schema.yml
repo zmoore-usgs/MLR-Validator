@@ -66,6 +66,7 @@ countyCode:
     maxlength: 3
 minorCivilDivisionCode:
     maxlength: 5
+    nullable: True
 hydrologicUnitCode:
     maxlength: 16
 basinCode:
