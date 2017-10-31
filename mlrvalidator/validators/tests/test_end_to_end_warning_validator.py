@@ -107,3 +107,18 @@ class ContributingDrainageAreaTestCase(TestCase):
             update=True
         )
         self.assertIn('drainageArea', validator.warnings)
+
+    def test_contributing_drainage_area_not_equal_to_drainage_area(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '110'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '100'},
+            update=True
+        )
+        self.assertNotIn('drainageArea', validator.warnings)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '110'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '120'},
+            update=True
+        )
+        self.assertNotIn('drainageArea', validator.warnings)
