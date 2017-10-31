@@ -3091,5 +3091,38 @@ class SourceOfDepthCodeTestCase(TestCase):
     #TODO: Add site type tests after site_type_cross_field.json is regenerated
 
 
+class ProjectNumberTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('projectNumber', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'projectNumber': '   '},
+            {},
+            update=False
+        )
+        self.assertNotIn('projectNumber', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'projectNumber': '123456789ABC'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('projectNumber', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'projectNumber': '123456789ABCD'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('projectNumber', validator.errors)
+
+
 
 
