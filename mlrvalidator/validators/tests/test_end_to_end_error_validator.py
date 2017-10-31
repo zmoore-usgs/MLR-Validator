@@ -3124,5 +3124,57 @@ class ProjectNumberTestCase(TestCase):
         self.assertIn('projectNumber', validator.errors)
 
 
+class TimeZoneCodeTestCase(TestCase):
 
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('timeZoneCode', validator.errors)
 
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode' : '  '},
+            {},
+            update=False
+        )
+        self.assertIn('timeZoneCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode' : 'EST'},
+            {},
+            update=False
+        )
+        self.assertNotIn('timeZoneCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+         {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZP-11'},
+         {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+         update=True
+        )
+        self.assertNotIn('timeZoneCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZZP-11'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('timeZoneCode', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZP-11'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('timeZoneCode', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZP-10'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('timeZoneCode', validator.errors)
