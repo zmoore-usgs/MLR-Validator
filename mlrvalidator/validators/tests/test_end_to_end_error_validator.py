@@ -2332,3 +2332,58 @@ class TopographicCodeTestCase(TestCase):
             update=True
         )
         self.assertIn('topographicCode', validator.errors)
+
+
+class InstrumentsCode(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('instrumentsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': '   '},
+            {},
+            update=False
+        )
+        self.assertNotIn('instrumentsCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': 'YNYNYNYNYNYNYNYNYNYNYNYNYNYNYN'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('instrumentsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': 'YNYNYNYNYNYNYNYNYNYNYNYNYNYNYNY'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('instrumentsCode', validator.errors)
+
+    def test_invalid_characters(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': '  YYYYNNN'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('instrumentsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': '  YYYXNNN'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('instrumentsCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'instrumentsCode': '  YYY*NNN'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('instrumentsCode', validator.errors)
