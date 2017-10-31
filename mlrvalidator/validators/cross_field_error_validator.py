@@ -3,13 +3,6 @@ from .base_cross_field_validator import BaseCrossFieldValidator
 
 class CrossFieldErrorValidator(BaseCrossFieldValidator):
 
-    def __init__(self):
-        '''
-
-        :param object site_type_reference: should be a references.SiteTypesCrossField instance
-        '''
-        super().__init__()
-
     def _validate_reciprocal_dependency(self, keys, error_key):
         '''
         If not all values null or all non null an error will be
@@ -101,6 +94,3 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
 
         return self._errors == {}
 
-    @property
-    def errors(self):
-        return self._errors

@@ -96,3 +96,14 @@ class CountyCodeTestCase(TestCase):
             update=True
         )
         self.assertIn('latitude', validator.warnings)
+
+
+class ContributingDrainageAreaTestCase(TestCase):
+
+    def test_contributing_drainage_area_equal_to_drainage_area(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'contributingDrainageArea': '100'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'drainageArea': '100'},
+            update=True
+        )
+        self.assertIn('drainageArea', validator.warnings)
