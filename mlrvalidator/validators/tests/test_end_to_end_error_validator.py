@@ -3038,3 +3038,58 @@ class WellDepthTestCase(TestCase):
         self.assertNotIn('depths', validator.errors)
 
     #TODO: Add site type tests after the site_type_cross_field.json file has been regenerated.
+
+
+class SourceOfDepthCodeTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('sourceOfDepthCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'sourceOfDepthCode': ' '},
+            {},
+            update=False
+        )
+        self.assertNotIn('sourceOfDepthCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'sourceOfDepthCode': 'A'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('sourceOfDepthCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'sourceOfDepthCode': 'AA'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('sourceOfDepthCode', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'sourceOfDepthCode': 'A'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('sourceOfDepthCode', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'sourceOfDepthCode': 'B'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('sourceOfDepthCode', validator.errors)
+
+    #TODO: Add site type tests after site_type_cross_field.json is regenerated
+
+
+
+
