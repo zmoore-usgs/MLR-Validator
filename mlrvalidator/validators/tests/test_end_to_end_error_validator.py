@@ -3306,3 +3306,37 @@ class SiteTypeCodeTestCase(TestCase):
             update=True
         )
         self.assertIn('siteTypeCode', validator.errors)
+
+
+class RemarksTestCase(TestCase):
+
+    def test_optional(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertNotIn('remarks', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'remarks': ''},
+            {},
+            update=False
+        )
+        self.assertNotIn('remarks', validator.errors)
+
+    def test_max_lenth(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'remarks': '12345678901234567890123456789012345678901234567890'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertNotIn('remarks', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678',
+             'remarks': '123456789012345678901234567890123456789012345678901'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('remarks', validator.errors)
