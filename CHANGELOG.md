@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - POST endpoint /validators/add. Expects a payload containing a ddotLocation and existingLocation json object.
 - POST endpoint /validators/update. Expects a payload containing a ddotLocation and existingLocation json object.
 - Duplicate site check for /validators/add.
-resource file.
 - Tests which test the ErrorValidator and WarningValidator without mocking any external resources
 - Site type transition checks
 
