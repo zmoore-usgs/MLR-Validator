@@ -3235,3 +3235,74 @@ class DaylightSavingsTimeFlag(TestCase):
         )
         self.assertIn('daylightSavingsTimeFlag', validator.errors)
 
+
+class SiteTypeCodeTestCase(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': '  '},
+            {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'},
+            {},
+            update=False
+        )
+        self.assertNotIn('siteTypeCode', validator.errors)
+
+    def test_max_length(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-PV'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-PV'},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CIIII'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'},
+            update=True
+        )
+        self.assertIn('siteTypeCode', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CS'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CJ'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CI'},
+            update=True
+        )
+        self.assertIn('siteTypeCode', validator.errors)
+
+    def test_for_allowed_transition(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CS'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-PV'},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', validator.errors)
+
+    def test_for_invalid_transition(self):
+        validator.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-CS'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA-OF'},
+            update=True
+        )
+        self.assertIn('siteTypeCode', validator.errors)
