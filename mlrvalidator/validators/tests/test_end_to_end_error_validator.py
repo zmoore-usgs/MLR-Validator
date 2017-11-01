@@ -3340,3 +3340,44 @@ class RemarksTestCase(TestCase):
             update=True
         )
         self.assertIn('remarks', validator.errors)
+
+
+class SiteWebReadyCode(TestCase):
+
+    def test_required(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
+            {},
+            update=False
+        )
+        self.assertIn('siteWebReadyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': ' '},
+            {},
+            update=False
+        )
+        self.assertIn('siteWebReadyCode', validator.errors)
+
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': 'P'},
+            {},
+            update=False
+        )
+        self.assertNotIn('siteWebReadyCode', validator.errors)
+
+    def test_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': 'Y'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': 'P'},
+            update=True
+        )
+        self.assertNotIn('siteWebReadyCode', validator.errors)
+
+    def test_not_in_ref_list(self):
+        validator.validate(
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': 'C'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteWebReadyCode': 'P'},
+            update=True
+        )
+        self.assertIn('siteWebReadyCode', validator.errors)
