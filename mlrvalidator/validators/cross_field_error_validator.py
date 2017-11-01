@@ -3,13 +3,6 @@ from .base_cross_field_validator import BaseCrossFieldValidator
 
 class CrossFieldErrorValidator(BaseCrossFieldValidator):
 
-    def __init__(self):
-        '''
-
-        :param object site_type_reference: should be a references.SiteTypesCrossField instance
-        '''
-        super().__init__()
-
     def _validate_reciprocal_dependency(self, keys, error_key):
         '''
         If not all values null or all non null an error will be
@@ -57,6 +50,18 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
                 if (hole_depth and well_depth) and (well_depth > hole_depth):
                     self._errors['depths'] = ["wellDepth cannot be greater than holeDepth"]
 
+    def _validate_drainage_area(self):
+        keys = ['drainageArea', 'contributingDrainageArea']
+        if self._any_fields_in_document(keys):
+            drainage_area, contributing_drainage_area = [self.merged_document.get(key, '').strip() for key in keys]
+            if contributing_drainage_area and not drainage_area:
+                self._errors['contributingDrainageArea'] = ['Can not have contributingDrainageArea without drainageArea']
+            else:
+                try:
+                    if (drainage_area and contributing_drainage_area) and float(contributing_drainage_area) > float(drainage_area):
+                        self._errors['drainageArea'] = ['contributingDrainageArea can not be larger than drainageArea']
+                except ValueError:
+                    pass
 
 
     def validate(self, document, existing_document):
@@ -85,10 +90,7 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
         self._validate_site_dates()
         self._validate_depths()
-
+        self._validate_drainage_area()
 
         return self._errors == {}
 
-    @property
-    def errors(self):
-        return self._errors

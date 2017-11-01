@@ -193,7 +193,3 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._errors.update(self.national_aquifer_ref_validator.errors)
 
         return self._errors == {}
-
-    @property
-    def errors(self):
-        return self._errors

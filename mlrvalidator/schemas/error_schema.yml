@@ -139,6 +139,7 @@ wellDepth:
     valid_precision: True
 sourceOfDepthCode:
     maxlength: 1
+    valid_reference: True
 projectNumber:
     maxlength: 12
 timeZoneCode:
