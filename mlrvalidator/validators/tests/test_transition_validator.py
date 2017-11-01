@@ -38,3 +38,6 @@ class TransitionValidatorSiteTypeTestCase(TestCase):
 
     def test_existing_not_in_ref_list(self):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-DV'}, {'siteTypeCode': 'AB'}))
+
+    def test_no_change_from_existing_to_new(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AG'}, {'siteTypeCode': 'AG'}))
