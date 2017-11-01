@@ -32,9 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 0.2.0 - 2017-10-04
 
 ## Added
-POST endpoint /validators
-Implement single field validations
-Swagger docs endpoint /api
+- POST endpoint /validators
+- Implement single field validations
+- Swagger docs endpoint /api
 
 [Unreleased]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.4.0...master
 [0.4.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.3.0...MLR-Validator-0.4.0
