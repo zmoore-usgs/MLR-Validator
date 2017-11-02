@@ -238,30 +238,20 @@ class CrossFieldRefWarningAltitudeTestCase(TestCase):
     def test_nonnumeric_altitude(self):
         self.assertTrue(self.validator.validate({'altitude': 'N19'},{'stateFipsCode': '33', 'countryCode': 'US'}))
 
-class CrossFieldRefWarningSiteUseCodeTestCase(TestCase):
+class CrossFieldRefWarningUseCodeTestCase(TestCase):
 
     def setUp(self):
         self.validator = CrossFieldRefWarningValidator('ref_dir')
+        self.site_lists = [['primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
+                      ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
 
-    def test_unique_site_use_codes(self):
-        self.assertTrue(self.validator.validate({'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'B', 'tertiaryUseOfSiteCode': 'C'}, {}))
+    def test_unique_use_codes(self):
+        for sites in self.site_lists:
+            self.assertTrue(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'C'}, {}))
 
-    def test_non_unique_site_use_codes(self):
-        self.assertFalse(self.validator.validate({'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'A', 'tertiaryUseOfSiteCode': 'A'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'A', 'tertiaryUseOfSiteCode': 'C'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'B', 'tertiaryUseOfSiteCode': 'A'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'B', 'tertiaryUseOfSiteCode': 'B'}, {}))
-
-class CrossFieldRefWarningWaterUseCodeTestCase(TestCase):
-
-    def setUp(self):
-        self.validator = CrossFieldRefWarningValidator('ref_dir')
-
-    def test_unique_water_use_codes(self):
-        self.assertTrue(self.validator.validate({'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B', 'tertiaryUseOfWaterCode': 'C'}, {}))
-
-    def test_non_unique_water_use_codes(self):
-        self.assertFalse(self.validator.validate({'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'A', 'tertiaryUseOfWaterCode': 'A'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'A', 'tertiaryUseOfWaterCode': 'C'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B', 'tertiaryUseOfWaterCode': 'A'}, {}))
-        self.assertFalse(self.validator.validate({'primaryUseOfWaterCode': 'A', 'secondaryUseOfWaterCode': 'B', 'tertiaryUseOfWaterCode': 'B'}, {}))
+    def test_non_unique_use_codes(self):
+        for sites in self.site_lists:
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'A'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'C'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'A'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'B'}, {}))
