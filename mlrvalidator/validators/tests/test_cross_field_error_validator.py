@@ -226,3 +226,22 @@ class DepthsTestCase(TestCase):
         self.assertFalse(self.validator.validate({'wellDepth': '11234', 'holeDepth': '1234'}, {}))
         self.assertFalse(self.validator.validate({'wellDepth': '10', 'holeDepth': '9'}, {}))
 
+
+class DrainageAreaTestCase(TestCase):
+
+    def setUp(self):
+        self.validator = CrossFieldErrorValidator()
+
+    def test_valid_areas(self):
+        self.assertTrue(self.validator.validate({'drainageArea': '100', 'contributingDrainageArea': '99'}, {}))
+        self.assertTrue(self.validator.validate({'drainageArea': '100', 'contributingDrainageArea': '100'}, {}))
+        self.assertTrue(self.validator.validate({'drainageArea': '10.2'}, {'contributingDrainageArea': '10.1'}))
+
+    def test_with_empty_areas(self):
+        self.assertTrue(self.validator.validate({'drainageArea': '100', 'contributingDrainageArea': '   '}, {}))
+        self.assertFalse(self.validator.validate({'contributingDrainageArea': '100'}, {}))
+
+    def test_invalid_areas(self):
+        self.assertFalse(self.validator.validate({'drainageArea': '100', 'contributingDrainageArea': '101'}, {}))
+        self.assertFalse(self.validator.validate({'drainageArea': '10.1', 'contributingDrainageArea': '10.2'}, {}))
+

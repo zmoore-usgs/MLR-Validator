@@ -139,6 +139,7 @@ wellDepth:
     valid_precision: True
 sourceOfDepthCode:
     maxlength: 1
+    valid_reference: True
 projectNumber:
     maxlength: 12
 timeZoneCode:
@@ -154,6 +155,8 @@ daylightSavingsTimeFlag:
 remarks:
     maxlength: 50
 siteWebReadyCode:
+    required: True
+    is_empty: False
     maxlength: 1
     valid_reference: True
 gwFileCode:

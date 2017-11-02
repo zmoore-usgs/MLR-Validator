@@ -4,6 +4,7 @@ import os
 import yaml
 
 from .cross_field_ref_warning_validator import CrossFieldRefWarningValidator
+from .cross_field_warning_validator import CrossFieldWarningValidator
 from .single_field_validator import SingleFieldValidator
 
 class WarningValidator:
@@ -14,15 +15,18 @@ class WarningValidator:
 
         self.single_field_validator = SingleFieldValidator(warning_schema, reference_dir=reference_file_dir, allow_unknown=True)
         self.cross_field_ref_validator = CrossFieldRefWarningValidator(reference_file_dir)
+        self.cross_field_validator = CrossFieldWarningValidator()
         self._warnings = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
+        self.cross_field_validator.validate(ddot_location, existing_location)
 
         self._warnings = defaultdict(list)
         all_warnings = chain(self.single_field_validator.errors.items(),
-                             self.cross_field_ref_validator.errors.items())
+                             self.cross_field_ref_validator.errors.items(),
+                             self.cross_field_validator.errors.items())
 
         for k, v in chain(all_warnings):
             self._warnings[k].extend(v)
