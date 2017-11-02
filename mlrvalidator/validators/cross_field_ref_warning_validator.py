@@ -63,9 +63,8 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         keys = [primaryKey, secondaryKey, tertiaryKey]
         if self._any_fields_in_document(keys):
             primary, secondary, tertiary = [self.merged_document.get(key, '').strip() for key in keys]
-
-        if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
-            self._errors['uniqueUseCodes'] = ['Primary, secondary, and tertiary fields must be unique']
+            if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
+                self._errors['uniqueUseCodes'] = ['Primary, secondary, and tertiary fields must be unique']
 
     def _validate_site_type_national_water_use_null(self):
         keys = ['siteTypeCode', 'nationalWaterUseCode']
