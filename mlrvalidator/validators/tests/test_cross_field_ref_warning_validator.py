@@ -255,3 +255,70 @@ class CrossFieldRefWarningUseCodeTestCase(TestCase):
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'C'}, {}))
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'A'}, {}))
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'B'}, {}))
+
+class CrossFieldRefWarningSiteTypeNationalWaterUseTestCase(TestCase):
+
+    def setUp(self):
+        ref_list = {
+            "siteTypeCodes": [
+            {
+                "siteTypeCode": "AG",
+                "nationalWaterUseCodes": [
+                    "AQ",
+                    "CO",
+                    "DO",
+                    "IN",
+                    "IR",
+                    "LV",
+                    "MI",
+                    "RM",
+                    "ST",
+                    "TE",
+                    "WS"
+                  ]
+                },
+            {
+                  "siteTypeCode": "AS",
+                  "nationalWaterUseCodes": [
+                        "AQ",
+                        "CO",
+                        "DO",
+                        "IN",
+                        "IR",
+                        "LV",
+                        "MI",
+                        "RM",
+                        "ST",
+                        "TE",
+                        "WS"
+                  ]
+            }
+            ]
+        }
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
+
+    def test_valid_national_water_use(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': 'AQ'}, {}))
+
+    def test_invalid_site_type(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'XY', 'nationalWaterUseCode': 'AQ'}, {}))
+
+    def test_no_site_type(self):
+        self.assertTrue(self.validator.validate({'nationalWaterUseCode': 'AQ'}, {}))
+
+    def test_empty_site_type(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': '', 'nationalWaterUseCode': 'AQ'}, {}))
+
+    def test_empty_space_site_type(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': ' ', 'nationalWaterUseCode': 'AQ'}, {}))
+
+    def test_empty_national_water_use(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': ''}, {}))
+
+    def test_empty_space_national_water_use(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': ' '}, {}))
+
+    def test_no_national_water_use(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AG'}, {}))
