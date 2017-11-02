@@ -3,7 +3,7 @@ import os
 import re
 
 from .base_cross_field_validator import BaseCrossFieldValidator
-from .reference import States, Counties
+from .reference import States, Counties, NationalWaterUseCodes
 
 class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
 
@@ -13,6 +13,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         '''
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
+        self.site_types_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
 
         super().__init__()
 
@@ -66,6 +67,14 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
             self._errors['uniqueUseCodes'] = ['Primary, secondary, and tertiary fields must be unique']
 
+    def _validate_site_type_national_water_use_null(self):
+        keys = ['siteTypeCode', 'nationalWaterUseCode']
+        if self._any_fields_in_document(keys):
+            siteType, nationalWaterUse = [self.merged_document.get(key, '').strip() for key in keys]
+            if siteType and not nationalWaterUse:
+                site = self.site_types_ref.get_national_water_use_codes(siteType)
+                if site:
+                    self._errors['nationalWaterUseCode'] = ["The site type can potentially have water use information. A national water use code is required to enter water use information."]
 
     def validate(self, document, existing_document):
         super().validate(document, existing_document)
@@ -74,6 +83,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self._validate_altitude_range()
         self._validate_use_code('primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
+        self._validate_site_type_national_water_use_null()
 
         return self._errors == {}
 
