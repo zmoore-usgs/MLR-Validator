@@ -256,7 +256,6 @@ class CrossFieldRefWarningUseCodeTestCase(TestCase):
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'A'}, {}))
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'B'}, {}))
 
-
 class CrossFieldRefWarningSiteTypeNationalWaterUseTestCase(TestCase):
 
     def setUp(self):

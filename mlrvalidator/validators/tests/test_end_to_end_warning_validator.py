@@ -168,7 +168,6 @@ class UseCodesTestCase(TestCase):
             )
             self.assertIn('uniqueUseCodes', validator.warnings)
 
-
 class NationalWaterUseTestCase(TestCase):
 
     def test_valid_national_water_use(self):

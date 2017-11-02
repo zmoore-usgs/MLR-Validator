@@ -84,7 +84,6 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self._validate_use_code('primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
         self._validate_site_type_national_water_use_null()
-
         return self._errors == {}
 
 
