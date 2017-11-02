@@ -64,7 +64,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
             primary, secondary, tertiary = [self.merged_document.get(key, '').strip() for key in keys]
 
         if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
-            self._errors[primaryKey] = ['Primary, secondary, and tertiary fields must be unique']
+            self._errors['uniqueUseCodes'] = ['Primary, secondary, and tertiary fields must be unique']
 
 
     def validate(self, document, existing_document):
