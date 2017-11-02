@@ -34,8 +34,6 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
                 self._errors[tertiaryKey] =['Primary and secondary must be non null if tertiary is non null']
             elif secondary and not primary:
                 self._errors[secondaryKey] = ['Primary must be non null if secondary is non null']
-            elif (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
-                self._errors[primaryKey] = ['Primary, secondary, and tertiary fields must be unique']
             elif (primary and secondary and not tertiary) and (primary == secondary):
                 self._errors[primaryKey] = ['Primary and secondary must be unique']
 

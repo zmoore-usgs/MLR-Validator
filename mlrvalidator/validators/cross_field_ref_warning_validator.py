@@ -58,12 +58,22 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
                     except ValueError:
                         pass
 
+    def _validate_use_code(self, primaryKey, secondaryKey, tertiaryKey):
+        keys = [primaryKey, secondaryKey, tertiaryKey]
+        if self._any_fields_in_document(keys):
+            primary, secondary, tertiary = [self.merged_document.get(key, '').strip() for key in keys]
+
+        if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
+            self._errors[primaryKey] = ['Primary, secondary, and tertiary fields must be unique']
+
 
     def validate(self, document, existing_document):
         super().validate(document, existing_document)
         self._validate_county_latitude_range()
         self._validate_county_longitude_range()
         self._validate_altitude_range()
+        self._validate_use_code('primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
+        self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
 
         return self._errors == {}
 
