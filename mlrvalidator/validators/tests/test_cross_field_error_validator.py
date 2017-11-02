@@ -126,17 +126,6 @@ class UseOfSiteTestCase(TestCase):
             {'tertiaryUseOfSiteCode': 'C'}
         ))
 
-    def test_non_unique_codes(self):
-        self.assertFalse(self.validator.validate(
-            {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'B'},
-            {'tertiaryUseOfSiteCode': 'B'}
-        ))
-
-        self.assertFalse(self.validator.validate(
-            {'primaryUseOfSite': 'A ', 'secondaryUseOfSite': 'A'},
-            {'tertiaryUseOfSiteCode': '  '}
-        ))
-
 
 class UseOfWaterCodeTestCase(TestCase):
 
@@ -169,17 +158,6 @@ class UseOfWaterCodeTestCase(TestCase):
             {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': ' '},
             {'tertiaryUseOfWaterCode': 'C'}
         ))
-
-    # def test_non_unique_codes(self):
-    #     self.assertFalse(self.validator.validate(
-    #         {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'B'},
-    #         {'tertiaryUseOfWaterCode': 'B'}
-    #     ))
-    #
-    #     self.assertFalse(self.validator.validate(
-    #         {'primaryUseOfWaterCode': 'A ', 'secondaryUseOfWaterCode': 'A'},
-    #         {'tertiaryUseOfWaterCode': '  '}
-    #     ))
 
 
 class SiteDatesTestCase(TestCase):
