@@ -27,8 +27,6 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
                 self._errors[tertiaryKey] =['Primary and secondary must be non null if tertiary is non null']
             elif secondary and not primary:
                 self._errors[secondaryKey] = ['Primary must be non null if secondary is non null']
-            elif (primary and secondary and not tertiary) and (primary == secondary):
-                self._errors[primaryKey] = ['Primary and secondary must be unique']
 
     def _validate_site_dates(self):
         keys = ['firstConstructionDate', 'siteEstablishmentDate']
