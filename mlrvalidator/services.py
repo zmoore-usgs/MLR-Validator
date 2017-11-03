@@ -1,4 +1,6 @@
 
+import pkg_resources
+
 from flask import request
 from flask_restplus import Api, Resource, fields
 from werkzeug.exceptions import BadRequest
@@ -69,22 +71,23 @@ ddot_location_model = api.model('DdotLocationModel', {
 location_model = api.clone('LocationModel', ddot_location_model, {
     "created": fields.String(),
     "createdBy": fields.String(),
-    "decimalLatitude" : fields.Integer(),
-    "decimalLongitude" : fields.Integer(),
+    "decimalLatitude": fields.Integer(),
+    "decimalLongitude": fields.Integer(),
     "id": fields.Integer(),
-    "stationIx" : fields.Integer(),
+    "stationIx": fields.Integer(),
     "updated": fields.String(),
     "updatedBy": fields.String(),
 })
 
 validate_location_model = api.model('ValidateLocationModel', {
-    'ddotLocation' : fields.Nested(ddot_location_model),
-    'existingLocation' : fields.Nested(location_model)
+    'ddotLocation': fields.Nested(ddot_location_model),
+    'existingLocation': fields.Nested(location_model)
 })
 
 validation_model = api.model('SuccessModel', {'validation_passed_message': fields.String(),
                                               'warning_message': fields.String(),
                                               'fatal_error_message': fields.String()})
+
 
 def _validate_response(req_json, update=False):
     if 'ddotLocation' not in req_json or 'existingLocation' not in req_json:
@@ -104,6 +107,7 @@ def _validate_response(req_json, update=False):
 
     return response, 200
 
+
 @api.route('/validators/add')
 class AddValidator(Resource):
 
@@ -121,3 +125,28 @@ class UpdateValidator(Resource):
     def post(self):
         return _validate_response(request.get_json(), update=True)
 
+
+version_model = api.model('VersionModel', {
+    'version': fields.String,
+    'artifact': fields.String
+})
+
+
+@api.route('/version')
+class Version(Resource):
+
+    @api.response(200, 'Success', version_model)
+    def get(self):
+        try:
+            distribution = pkg_resources.get_distribution('usgs_wma_mlr_validator')
+        except pkg_resources.DistributionNotFound:
+            resp = {
+                "version": "local_development",
+                "artifact": None
+            }
+        else:
+            resp = {
+                "version": distribution.version,
+                "artifact": distribution.project_name
+            }
+        return resp
