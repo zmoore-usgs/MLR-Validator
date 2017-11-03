@@ -241,7 +241,25 @@ class CrossFieldRefWarningAltitudeTestCase(TestCase):
 class CrossFieldRefWarningUseCodeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = CrossFieldRefWarningValidator('ref_dir')
+        ref_list = {
+            "siteUseCodes": [
+                {
+                    'primaryUseOfSite': 'A',
+                    'secondaryUseOfSite': ['A', 'B'],
+                    'tertiaryUseOfSiteCode': ['A', 'B', 'C']
+                },
+                ],
+            "waterUseCodes": [
+                {
+                    'primaryUseOfWaterCode': 'A',
+                    'secondaryUseOfWaterCode': ['A', 'B'],
+                    'tertiaryUseOfWaterCode': ['A', 'B', 'C']
+                }
+            ]
+        }
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
         self.site_lists = [['primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
                       ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
 
