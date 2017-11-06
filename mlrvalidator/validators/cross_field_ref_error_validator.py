@@ -5,7 +5,7 @@ import re
 
 from .base_cross_field_validator import BaseCrossFieldValidator
 from .country_state_reference_validator import CountryStateReferenceValidator
-from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties, LandNetCrossField
+from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties, LandNetCrossField, SiteNumberFormat
 
 
 class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
@@ -21,6 +21,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
         self.land_net_ref = LandNetCrossField(os.path.join(reference_dir, 'land_net.json'))
+        self.site_number_format_ref = SiteNumberFormat(os.path.join(reference_dir,'site_number_format.json'))
         # TODO: Replace with the regenerated site_type_cross_field.json file when available
         self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'temp_site_type_cross_field.json'))
 
@@ -164,6 +165,33 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                     if not (state_attr['state_min_long_va'] <= lat < state_attr['state_max_long_va']):
                         self._errors['longitude'] = ['Longitude is out of range for state {0}'.format(state)]
 
+    def _validate_site_number_format(self):
+        '''
+        :return: boolean
+        '''
+        keys = ['siteNumber', 'siteTypeCode']
+        if self._any_fields_in_document(keys):
+            site_number, site_type_code = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if site_number and site_type_code:
+                error_message = [
+                    'Site Number is not the right format for site type code {0}'.format(site_type_code)]
+                site_format_code = self.site_number_format_ref.get_site_number_template(site_type_code)
+                if site_format_code == 'LL' and len(site_number) != 15:
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'DSLL' and not 8 <= len(site_number) <= 15:
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'WU' and not (10 <= len(site_number) <= 15 and site_number[0] == '9'):
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'LLWU' and not (len(site_number) == 15 or (10 <= len(site_number) < 15 and site_number[0] == '9')):
+                    self._errors['siteNumber'] = error_message
+
+
+
+
     def validate(self, document, existing_document):
         '''
         :param dict document:
@@ -187,6 +215,7 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
         self._validate_land_net()
         self._validate_state_latitude_range()
         self._validate_state_longitude_range()
+        self._validate_site_number_format()
 
         self._errors.update(self.aquifer_ref_validator.errors)
         self._errors.update(self.huc_ref_validator.errors)

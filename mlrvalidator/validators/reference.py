@@ -104,3 +104,16 @@ class LandNetCrossField(ReferenceInfo):
         except StopIteration:
             land_net_template = {}
         return land_net_template
+
+
+class SiteNumberFormat(ReferenceInfo):
+    def get_site_number_template(self, site_type_code):
+        site_number_format_refs = self.reference_info['siteNumberFormatCodes']
+
+        try:
+            idx = next(index for (index, d) in enumerate(site_number_format_refs) if site_type_code in d['siteTypeCode'])
+            site_number_format_ref = site_number_format_refs[idx]['siteNumberFormatCode']
+        except StopIteration:
+            site_number_format_ref = ''
+        return site_number_format_ref
+
