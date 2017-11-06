@@ -1,0 +1,77 @@
+{
+  "siteNumberFormatCodes": [
+    {
+      "siteNumberFormatCode": "LL",
+      "siteTypeCode": [
+        "AT",
+        "OC",
+        "OC-CO",
+        "GW",
+        "GW-CR",
+        "GW-EX",
+        "GW-HZ",
+        "GW-IW",
+        "GW-MW",
+        "GW-TH",
+        "SB",
+        "SB-CV",
+        "SB-GWD",
+        "SB-TSM",
+        "SB-UZ",
+        "LA",
+        "LA-EX",
+        "LA-OU",
+        "LA-SNK",
+        "LA-SH",
+        "LA-SR",
+        "FA-WIW",
+        "FA-WWD"
+      ]
+    },
+    {
+      "siteNumberFormatCode": "DSLL",
+      "siteTypeCode": [
+        "GL",
+        "LK",
+        "ST",
+        "ST-CA",
+        "ST-DCH",
+        "ST-TS",
+        "SP",
+        "WE",
+        "ES",
+        "FA-DV",
+        "FA-HP",
+        "FA-OF"
+      ]
+    },
+    {
+      "siteNumberFormatCode": "WU",
+      "siteTypeCode": [
+        "AW",
+        "AG",
+        "AS"
+      ]
+    },
+    {
+      "siteNumberFormatCode": "LLWU",
+      "siteTypeCode": [
+        "FA-CI",
+        "FA-CS",
+        "FA-FON",
+        "FA-GC",
+        "FA-QC",
+        "FA-LF",
+        "FA-PV",
+        "FA-SEW",
+        "FA-SPS",
+        "FA-STS",
+        "FA-TEP",
+        "FA-WWTP",
+        "FA-WDS",
+        "FA-WTP",
+        "FA-WU"
+      ]
+    }
+  ]
+}

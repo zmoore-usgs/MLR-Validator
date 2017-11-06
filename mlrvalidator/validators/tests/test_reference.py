@@ -3,7 +3,8 @@ import os
 from unittest import TestCase, mock
 
 from app import application
-from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties, LandNetCrossField
+from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties, \
+    LandNetCrossField, SiteNumberFormat
 
 
 class CountryStateReferenceTestCase(TestCase):
@@ -284,4 +285,19 @@ class ValidateGetLandNetCrossFieldCase(TestCase):
         district_code = 'xyz'
         result = self.land_net.get_land_net_templates(district_code)
         expected = {}
+        self.assertEqual(result, expected)
+
+
+class ValidateGetSiteNumberFormatCase(TestCase):
+    def setUp(self):
+        self.site_format = SiteNumberFormat(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_number_format.json'))
+
+    def test_real_site_type(self):
+        result = self.site_format.get_site_number_template('FA-HP')
+        expected = 'DSLL'
+        self.assertEqual(result, expected)
+
+    def test_bad_site_type(self):
+        result = self.site_format.get_site_number_template('XY')
+        expected = ''
         self.assertEqual(result, expected)
