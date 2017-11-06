@@ -112,8 +112,9 @@ class SiteNumberFormat(ReferenceInfo):
 
         try:
             idx = next(index for (index, d) in enumerate(site_number_format_refs) if site_type_code in d['siteTypeCode'])
-            site_number_format_ref = site_number_format_refs[idx]['siteNumberFormatCode']
         except StopIteration:
             site_number_format_ref = ''
+        else:
+            site_number_format_ref = site_number_format_refs[idx]['siteNumberFormatCode']
         return site_number_format_ref
 
