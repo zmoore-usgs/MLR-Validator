@@ -123,6 +123,50 @@ class ContributingDrainageAreaTestCase(TestCase):
         )
         self.assertNotIn('drainageArea', validator.warnings)
 
+class UseCodesTestCase(TestCase):
+
+    def setUp(self):
+        self.site_lists = [['primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
+                           ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
+
+    def test_unique_use_codes(self):
+        for sites in self.site_lists:
+            validator.validate(
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[0]: 'A'},
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[1]: 'B', sites[2]: 'C'},
+                update=True
+            )
+            self.assertNotIn('uniqueUseCodes', validator.warnings)
+
+    def test_non_unique_use_codes(self):
+        for sites in self.site_lists:
+            validator.validate(
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[0]: 'A'},
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[1]: 'A', sites[2]: 'A'},
+                update=True
+            )
+            self.assertIn('uniqueUseCodes', validator.warnings)
+
+            validator.validate(
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[0]: 'A'},
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[1]: 'A', sites[2]: 'C'},
+                update=True
+            )
+            self.assertIn('uniqueUseCodes', validator.warnings)
+
+            validator.validate(
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[0]: 'A'},
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[1]: 'B', sites[2]: 'A'},
+                update=True
+            )
+            self.assertIn('uniqueUseCodes', validator.warnings)
+
+            validator.validate(
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[0]: 'A'},
+                {'agencyCode': 'USGS', 'siteNumber': '12345678', sites[1]: 'B', sites[2]: 'B'},
+                update=True
+            )
+            self.assertIn('uniqueUseCodes', validator.warnings)
 
 class NationalWaterUseTestCase(TestCase):
 

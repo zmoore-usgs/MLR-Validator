@@ -238,6 +238,41 @@ class CrossFieldRefWarningAltitudeTestCase(TestCase):
     def test_nonnumeric_altitude(self):
         self.assertTrue(self.validator.validate({'altitude': 'N19'},{'stateFipsCode': '33', 'countryCode': 'US'}))
 
+class CrossFieldRefWarningUseCodeTestCase(TestCase):
+
+    def setUp(self):
+        ref_list = {
+            "siteUseCodes": [
+                {
+                    'primaryUseOfSite': 'A',
+                    'secondaryUseOfSite': ['A', 'B'],
+                    'tertiaryUseOfSiteCode': ['A', 'B', 'C']
+                },
+                ],
+            "waterUseCodes": [
+                {
+                    'primaryUseOfWaterCode': 'A',
+                    'secondaryUseOfWaterCode': ['A', 'B'],
+                    'tertiaryUseOfWaterCode': ['A', 'B', 'C']
+                }
+            ]
+        }
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
+        self.site_lists = [['primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
+                      ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
+
+    def test_unique_use_codes(self):
+        for sites in self.site_lists:
+            self.assertTrue(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'C'}, {}))
+
+    def test_non_unique_use_codes(self):
+        for sites in self.site_lists:
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'A'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'C'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'A'}, {}))
+            self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'B'}, {}))
 
 class CrossFieldRefWarningSiteTypeNationalWaterUseTestCase(TestCase):
 
