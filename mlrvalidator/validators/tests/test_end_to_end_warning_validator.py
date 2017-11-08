@@ -168,20 +168,3 @@ class UseCodesTestCase(TestCase):
             )
             self.assertIn('uniqueUseCodes', validator.warnings)
 
-class NationalWaterUseTestCase(TestCase):
-
-    def test_valid_national_water_use(self):
-        self.assertTrue(validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': 'AQ'},{}))
-        self.assertNotIn('nationalWaterUseCode', validator.warnings)
-
-    def test_invalid_site_type(self):
-        self.assertTrue(validator.validate({'siteTypeCode': 'XY', 'nationalWaterUseCode': 'AQ'},{}))
-        self.assertNotIn('nationalWaterUseCode', validator.warnings)
-
-    def test_empty_national_water_use(self):
-        self.assertFalse(validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': ''}, {}))
-        self.assertIn('nationalWaterUseCode', validator.warnings)
-
-    def test_no_national_water_use(self):
-        self.assertFalse(validator.validate({'siteTypeCode': 'AG'}, {}))
-        self.assertIn('nationalWaterUseCode', validator.warnings)
