@@ -220,43 +220,49 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
         self.site_type_cf = SiteTypesCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_cross_field.json'))
 
     def test_real_site_type_code(self):
-        result = self.site_type_cf.get_site_type_field_dependencies('SB-CV')
-        expected = {'notNullAttrs': ['longitude',
-                                     'latitude',
-                                     'primaryUseOfSite',
-                                     'dataReliabilityCode'
-                                     ],
-                    'nullAttrs': ['aquiferTypeCode',
-                                  'aquiferCode',
-                                  'contributingDrainageArea',
-                                  'wellDepth',
-                                  'sourceOfDepthCode',
-                                  'drainageArea',
-                                  'nationalAquiferCode',
-                                  'holeDepth'
-                                  ],
-                    'siteTypeCode': 'SB-CV'
-                    }
+        result = self.site_type_cf.get_site_type_field_dependencies('ST-DCH')
+        expected = {
+              "siteTypeCode": "ST-DCH",
+              "notNullAttrs": [
+                "latitude",
+                "longitude"
+              ],
+              "nullAttrs": [
+                "aquiferCode",
+                "aquiferTypeCode",
+                "holeDepth",
+                "nationalAquiferCode",
+                "nationalWaterUseCode",
+                "primaryUseOfSite",
+                "secondaryUseOfSite",
+                "sourceOfDepthCode",
+                "tertiaryUseOfSiteCode",
+                "wellDepth"
+              ]
+        }
         self.assertEqual(result, expected)
 
     def test_site_type_code_with_padding(self):
-        result = self.site_type_cf.get_site_type_field_dependencies('   SB-CV  ')
-        expected = {'notNullAttrs': ['longitude',
-                                     'latitude',
-                                     'primaryUseOfSite',
-                                     'dataReliabilityCode'
-                                     ],
-                    'nullAttrs': ['aquiferTypeCode',
-                                  'aquiferCode',
-                                  'contributingDrainageArea',
-                                  'wellDepth',
-                                  'sourceOfDepthCode',
-                                  'drainageArea',
-                                  'nationalAquiferCode',
-                                  'holeDepth'
-                                  ],
-                    'siteTypeCode': 'SB-CV'
-                    }
+        result = self.site_type_cf.get_site_type_field_dependencies('   ST-DCH  ')
+        expected = {
+              "siteTypeCode": "ST-DCH",
+              "notNullAttrs": [
+                "latitude",
+                "longitude"
+              ],
+              "nullAttrs": [
+                "aquiferCode",
+                "aquiferTypeCode",
+                "holeDepth",
+                "nationalAquiferCode",
+                "nationalWaterUseCode",
+                "primaryUseOfSite",
+                "secondaryUseOfSite",
+                "sourceOfDepthCode",
+                "tertiaryUseOfSiteCode",
+                "wellDepth"
+              ]
+        }
         self.assertEqual(result, expected)
 
     def test_non_existent_site_type_code(self):

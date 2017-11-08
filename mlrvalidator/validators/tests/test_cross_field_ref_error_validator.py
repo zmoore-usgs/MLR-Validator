@@ -524,7 +524,6 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
                         mock.mock_open(read_data=json.dumps(ref_list))):
             self.validator = CrossFieldRefErrorValidator('ref_dir')
 
-
     def test_with_null_attrs_for_site(self):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'AS', 'field1': '   ', 'field2' : 'A'},
                                                 {'field3': 'B'}
