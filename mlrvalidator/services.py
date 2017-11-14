@@ -6,13 +6,29 @@ from flask_restplus import Api, Resource, fields
 from werkzeug.exceptions import BadRequest
 
 from app import application, error_validator, warning_validator
+from .flask_restplus_jwt import JWTRestplusManager, jwt_required
+
+
+# This will add the Authorize button to the swagger docs
+authorizations = {
+    'apikey': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    }
+}
 
 api = Api(application,
           title='MLR Validator',
           description='Provides a service to take a json input of an MLR transaction, validate it, respond back with a response containing the validation results',
           default='Validator',
           default_label='Validator',
-          doc='/api')
+          doc='/api',
+          authorizations=authorizations
+          )
+
+# Setup the Flask-JWT-Simple extension
+jwt = JWTRestplusManager(api, application)
 
 ddot_location_model = api.model('DdotLocationModel', {
     "agencyCode": fields.String(),
@@ -112,7 +128,10 @@ def _validate_response(req_json, update=False):
 class AddValidator(Resource):
 
     @api.response(200, 'Successfully validated', validation_model)
+    @api.response(401, 'Not authorized')
+    @api.doc(security='apikey')
     @api.expect(validate_location_model)
+    @jwt_required
     def post(self):
         return _validate_response(request.get_json())
 
@@ -121,7 +140,10 @@ class AddValidator(Resource):
 class UpdateValidator(Resource):
 
     @api.response(200, 'Successfully validated', validation_model)
+    @api.response(401, 'Not authorized')
+    @api.doc(security='apikey')
     @api.expect(validate_location_model)
+    @jwt_required
     def post(self):
         return _validate_response(request.get_json(), update=True)
 
