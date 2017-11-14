@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - GET endpoint /version to show the current version and artifact name
+- Authentication for /validators/add and /validators/update endpoint
 
 ## [0.4.0] - 2017-11-01
 ### Removed
-- Removed POST endpoint /validators
+- Removed POST endpoint /validators/
 
 ### Changed
 - Refactored to implement cross field error and warning validations without using Cerberus.
