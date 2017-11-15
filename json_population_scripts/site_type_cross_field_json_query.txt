@@ -1,0 +1,94 @@
+with function mlr_name(col_name in varchar2) return varchar2 is
+    begin
+    declare
+        ret varchar2(100);
+        begin
+        ret := case col_name
+        when 'aqfr_cd' then 'aquiferCode'                         
+        when 'aqfr_type_cd' then 'aquiferTypeCode'  
+        when 'contrib_drain_area_va' then 'contributingDrainageArea'  
+        when 'drain_area_va' then 'drainageArea'
+        when 'depth_src_cd' then 'sourceOfDepthCode'
+        when 'hole_depth_va' then 'holeDepth'
+        when 'lat_va' then 'latitude'
+        when 'long_va' then 'longitude'
+        when 'nat_aqfr_cd' then 'nationalAquiferCode'
+        when 'nat_water_use_cd' then 'nationalWaterUseCode'
+        when 'reliability_cd' then 'dataReliabilityCode' 
+        when 'site_use_1_cd' then 'primaryUseOfSite'
+        when 'site_use_2_cd' then 'secondaryUseOfSite'
+        when 'site_use_3_cd' then 'tertiaryUseOfSiteCode'
+        when 'well_depth_va' then 'wellDepth'
+        end;
+    return ret;
+    end;
+   end;
+opt_cols as 
+(select distinct attr_nm from site_tp_attr_grp s, attr_grp a 
+where s.attr_grp_cd=a.attr_grp_cd and 
+a.attr_nm in ('aqfr_cd', 
+'aqfr_type_cd'  ,
+'contrib_drain_area_va',  
+'drain_area_va',
+'depth_src_cd',
+'hole_depth_va',
+'lat_va',
+'long_va',
+'nat_aqfr_cd',
+'nat_water_use_cd',
+'reliability_cd',
+'site_use_1_cd',
+'site_use_2_cd',
+'site_use_3_cd',
+'well_depth_va')
+and ddl_nm = 'SITEFILE_##'
+and site_tp_allow_cd = 'O')
+
+select '{"siteTypeCode": "'||nvl(na.site_tp_cd,nvl(nna.site_tp_cd, na.site_tp_cd))||'", '||nvl(nna.notnullattrs,'"notNullAttrs": []')||', '||nvl(na.nullattrs,'"nullAttrs":[]')||'},' from
+(select distinct site_tp_cd, '"notNullAttrs": ['||listagg('"'||mlr_name(attr_nm)||'"', ', ') within group (order by 1)||']' notnullattrs from (
+select distinct site_tp_cd, attr_nm from site_tp_attr_grp s, opt_cols
+minus
+select distinct site_tp_cd, attr_nm from site_tp_attr_grp s, attr_grp a 
+where s.attr_grp_cd=a.attr_grp_cd and 
+a.attr_nm in ('aqfr_cd', 
+'aqfr_type_cd'  ,
+'contrib_drain_area_va',  
+'drain_area_va',
+'depth_src_cd',
+'hole_depth_va',
+'lat_va',
+'long_va',
+'nat_aqfr_cd',
+'nat_water_use_cd',
+'reliability_cd',
+'site_use_1_cd',
+'site_use_2_cd',
+'site_use_3_cd',
+'well_depth_va')
+and ddl_nm = 'SITEFILE_##'
+and site_tp_allow_cd in ('O', 'N')
+)
+group by site_tp_cd) nna
+full outer join
+(select site_tp_cd, '"nullAttrs": ['||listagg('"'||mlr_name(attr_nm)||'"', ', ') within group (order by 1)||']' nullattrs from (
+select * from site_tp_attr_grp s, attr_grp a 
+where s.attr_grp_cd=a.attr_grp_cd 
+and attr_nm in ('aqfr_cd', 
+'aqfr_type_cd'  ,
+'contrib_drain_area_va',  
+'drain_area_va',
+'depth_src_cd',
+'hole_depth_va',
+'lat_va',
+'long_va',
+'nat_aqfr_cd',
+'nat_water_use_cd',
+'reliability_cd',
+'site_use_1_cd',
+'site_use_2_cd',
+'site_use_3_cd',
+'well_depth_va')
+and ddl_nm = 'SITEFILE_##' and
+ site_tp_allow_cd = 'N' )
+group by site_tp_cd) na
+on na.site_tp_cd = nna.site_tp_cd
