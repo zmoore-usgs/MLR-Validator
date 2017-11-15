@@ -5,9 +5,8 @@ from flask import request
 from flask_restplus import Api, Resource, fields
 from werkzeug.exceptions import BadRequest
 
-from flask_restplus_jwt import JWTRestplusManager, jwt_required
-
 from app import application, error_validator, warning_validator
+from .flask_restplus_jwt import JWTRestplusManager, jwt_required
 
 
 # This will add the Authorize button to the swagger docs
