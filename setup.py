@@ -11,7 +11,11 @@ def read_requirements(filename):
     with open(filename, 'r') as req:
         requirements = req.readlines()
     install_requires = [r.strip() for r in requirements if r.find('git+') != 0]
-    return install_requires
+    dependency_links = [r.strip() for r in requirements if r.find('git+') == 0]
+    return {
+        'install_requires': install_requires,
+        'dependency_links': dependency_links
+    }
 
 
 def read(filepath):
@@ -36,7 +40,8 @@ setup(name='usgs_wma_mlr_validator',
       author_email='mlr-devs@usgs.gov',
       include_package_data=True,
       long_description =read('README.md'),
-      install_requires=requirements,
+      install_requires=requirements['install_requires'],
+      dependency_links=requirements['dependency_links'],
       test_loader='unittest:TestLoader',
       platforms='any',
       zip_safe=False,
