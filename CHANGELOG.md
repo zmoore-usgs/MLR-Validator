@@ -2,12 +2,15 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html). (Patch version X.Y.0 is implied if not specified.)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.0] - 2017-11-20
 ### Added
 - GET endpoint /version to show the current version and artifact name
 - Authentication for /validators/add and /validators/update endpoint
+- HTTPS Support
 
 ## [0.4.0] - 2017-11-01
 ### Removed
@@ -39,6 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Implement single field validations
 - Swagger docs endpoint /api
 
-[Unreleased]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.4.0...master
+[Unreleased]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.5.0...master
+[0.5.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.4.0...MLR-Validator-0.5.0
 [0.4.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.3.0...MLR-Validator-0.4.0
 [0.3.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.2.0...MLR-Validator-0.3.0
