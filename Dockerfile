@@ -21,3 +21,4 @@ ENV bind_port ${listening_port}
 ENV log_level INFO
 EXPOSE ${bind_port}
 CMD ["/usr/bin/gunicorn", "--reload",  "app", "--config", "file:/local/gunicorn_config.py"]
+HEALTHCHECK CMD curl -k 'https://127.0.0.1:8443/version' | grep -q '"artifact": "usgs-wma-mlr-validators"' || exit 1
