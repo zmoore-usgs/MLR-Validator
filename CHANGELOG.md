@@ -5,11 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Updated
+- isuftin@usgs.gov - Updated the version constraint for pyca/cryptography due to
+CVE https://nvd.nist.gov/vuln/detail/CVE-2018-10903
+
 ### Added
 - Dockerfile Healthcheck
 
 ### Removed
-- Dockerfile 
+- Dockerfile
 - Dockerfile-DOI
 - gunicorn_config.py
 
