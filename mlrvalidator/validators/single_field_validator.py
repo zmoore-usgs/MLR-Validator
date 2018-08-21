@@ -195,9 +195,9 @@ class SingleFieldValidator(Validator):
                 if not ((first_val in "- ") and (0 <= int(check_degrees) <= 180) and (
                         0 <= int(check_minutes) < 60) and (0 <= int(check_seconds) < 60)
                         and check_100th_seconds(rstripped_value)):
-                    self._error(field, error_message)
+                    self._error(field, error_message + "; Validation error: " + rstripped_value)
             except ValueError:
-                self._error(field, error_message)
+                self._error(field, error_message + "; ValueError: " + rstripped_value)
 
     def _validate_valid_date(self, valid_date, field, value):
         # Check that field is a formatted date of YYYY, YYYYMM or YYYYMMDD
