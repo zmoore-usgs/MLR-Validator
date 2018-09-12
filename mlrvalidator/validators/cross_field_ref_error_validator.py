@@ -110,35 +110,35 @@ class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
                     self._errors['siteTypeCode'].append(
                         'Site type {0} must have the following attributes null: {1}'.format(site_type, ', '.join(null_errors)))
 
-    def _validate_land_net(self):
-        # Check that the land net description field follows the correct template
-
-        """
-        The rule's arguments are validated against this schema:
-        {'valid_land_net': True}
-        """
-        error_message = "Invalid format - Land Net does not fit template"
-
-        keys = ['districtCode', 'landNet']
-        if self._any_fields_in_document(keys):
-            district_code, land_net = [self.merged_document.get(key, '') for key in keys]
-
-            if district_code and land_net:
-                land_net_template = self.land_net_ref.get_land_net_templates(district_code)
-                if land_net_template:
-                    value_end = len(land_net) - 1
-                    section = land_net_template.index("S")
-                    township = land_net_template.index("T")
-                    lrange = land_net_template.index("R")
-                    try:
-                        if land_net[section] == "S" and land_net[township] == "T" and land_net[lrange] == "R":
-                            test_match = re.search('[^a-zA-Z0-9 ]', land_net[section:value_end])
-                            if test_match is not None:
-                                self._errors['landNet'] = [error_message]
-                        else:
-                            self._errors['landNet'] = [error_message]
-                    except IndexError:
-                        self._errors['landNet'] = [error_message]
+    # def _validate_land_net(self):
+    #     # Check that the land net description field follows the correct template
+    #
+    #     """
+    #     The rule's arguments are validated against this schema:
+    #     {'valid_land_net': True}
+    #     """
+    #     error_message = "Invalid format - Land Net does not fit template"
+    #
+    #     keys = ['districtCode', 'landNet']
+    #     if self._any_fields_in_document(keys):
+    #         district_code, land_net = [self.merged_document.get(key, '') for key in keys]
+    #
+    #         if district_code and land_net:
+    #             land_net_template = self.land_net_ref.get_land_net_templates(district_code)
+    #             if land_net_template:
+    #                 value_end = len(land_net) - 1
+    #                 section = land_net_template.index("S")
+    #                 township = land_net_template.index("T")
+    #                 lrange = land_net_template.index("R")
+    #                 try:
+    #                     if land_net[section] == "S" and land_net[township] == "T" and land_net[lrange] == "R":
+    #                         test_match = re.search('[^a-zA-Z0-9 ]', land_net[section:value_end])
+    #                         if test_match is not None:
+    #                             self._errors['landNet'] = [error_message]
+    #                     else:
+    #                         self._errors['landNet'] = [error_message]
+    #                 except IndexError:
+    #                     self._errors['landNet'] = [error_message]
 
     def _validate_state_latitude_range(self):
         keys = ['latitude', 'countryCode', 'stateFipsCode']
