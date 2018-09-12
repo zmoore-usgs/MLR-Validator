@@ -1,6 +1,7 @@
 
 import json
-from unittest import TestCase, mock
+import unittest
+from unittest import TestCase, mock, skip
 
 from ..cross_field_ref_error_validator import CrossFieldRefErrorValidator
 
@@ -543,6 +544,7 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'A', 'field1': '   '}, {}))
 
 
+@unittest.skip("not validating land net")
 class CrossFieldValidatorLandNetTestCase(TestCase):
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
     @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
