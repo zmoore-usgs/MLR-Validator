@@ -4,8 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+[Unreleased]
 
+### Updated
+- kmschoep@usgs.gov - remove land net validation
+- updated flask version due to CVE https://nvd.nist.gov/vuln/detail/CVE-2018-1000656
+
+## [0.7.0] - 2018-09-10
+### Updated
+- kmschoep@usgs.gov - Updated reference lists for 2018 winter, spring, summer.
+
+## [0.6.0] 2018-08-23
 ### Updated
 - isuftin@usgs.gov - Updated the version constraint for pyca/cryptography due to
 CVE https://nvd.nist.gov/vuln/detail/CVE-2018-10903
