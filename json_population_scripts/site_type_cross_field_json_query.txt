@@ -16,7 +16,7 @@ with function mlr_name(col_name in varchar2) return varchar2 is
         when 'nat_water_use_cd' then 'nationalWaterUseCode'
         when 'reliability_cd' then 'dataReliabilityCode' 
         when 'site_use_1_cd' then 'primaryUseOfSiteCode'
-        when 'site_use_2_cd' then 'secondaryUseOfSite'
+        when 'site_use_2_cd' then 'secondaryUseOfSiteCode'
         when 'site_use_3_cd' then 'tertiaryUseOfSiteCode'
         when 'well_depth_va' then 'wellDepth'
         end;

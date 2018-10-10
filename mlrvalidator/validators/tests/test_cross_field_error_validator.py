@@ -101,28 +101,28 @@ class UseOfSiteTestCase(TestCase):
 
     def test_all_valid(self):
         self.assertTrue(self.validator.validate(
-            {'primaryUseOfSiteCode': 'A', 'secondaryUseOfSite': 'B'},
+            {'primaryUseOfSiteCode': 'A', 'secondaryUseOfSiteCode': 'B'},
             {'tertiaryUseOfSiteCode': 'C'}
         ))
         self.assertTrue(self.validator.validate(
-            {'secondaryUseOfSite': 'B'},
+            {'secondaryUseOfSiteCode': 'B'},
             {'primaryUseOfSiteCode': 'A', }
         ))
 
     def test_missing_primary(self):
         self.assertFalse(self.validator.validate(
-            {'primaryUseOfSiteCode': ' ', 'secondaryUseOfSite': 'B'},
+            {'primaryUseOfSiteCode': ' ', 'secondaryUseOfSiteCode': 'B'},
             {}
         ))
 
         self.assertFalse(self.validator.validate(
-            {'primaryUseOfSiteCode': ' ', 'secondaryUseOfSite': 'B'},
+            {'primaryUseOfSiteCode': ' ', 'secondaryUseOfSiteCode': 'B'},
             {'tertiaryUseOfSiteCode': 'C'}
         ))
 
     def test_missing_secondary(self):
         self.assertFalse(self.validator.validate(
-            {'primaryUseOfSiteCode': 'A ', 'secondaryUseOfSite': ' '},
+            {'primaryUseOfSiteCode': 'A ', 'secondaryUseOfSiteCode': ' '},
             {'tertiaryUseOfSiteCode': 'C'}
         ))
 

@@ -126,7 +126,7 @@ class ContributingDrainageAreaTestCase(TestCase):
 class UseCodesTestCase(TestCase):
 
     def setUp(self):
-        self.site_lists = [['primaryUseOfSiteCode', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
+        self.site_lists = [['primaryUseOfSiteCode', 'secondaryUseOfSiteCode', 'tertiaryUseOfSiteCode'],
                            ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
 
     def test_unique_use_codes(self):

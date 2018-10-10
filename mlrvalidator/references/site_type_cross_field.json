@@ -15,7 +15,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -30,7 +30,7 @@
       "nullAttrs": [
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -166,7 +166,7 @@
         "drainageArea",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -177,7 +177,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -192,7 +192,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -207,7 +207,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -222,7 +222,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -237,7 +237,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -252,7 +252,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -267,7 +267,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -363,7 +363,7 @@
       ],
       "nullAttrs": [
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -378,7 +378,7 @@
         "drainageArea",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -391,7 +391,7 @@
       "nullAttrs": [
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -413,7 +413,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -428,7 +428,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -442,7 +442,7 @@
         "latitude",
         "longitude",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ],
       "nullAttrs": [
@@ -492,7 +492,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -511,7 +511,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -530,7 +530,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -549,7 +549,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -568,7 +568,7 @@
         "nationalAquiferCode",
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"
@@ -583,7 +583,7 @@
       "nullAttrs": [
         "nationalWaterUseCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -671,7 +671,7 @@
         "contributingDrainageArea",
         "drainageArea",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "tertiaryUseOfSiteCode"
       ]
     },
@@ -711,7 +711,7 @@
         "holeDepth",
         "nationalAquiferCode",
         "primaryUseOfSiteCode",
-        "secondaryUseOfSite",
+        "secondaryUseOfSiteCode",
         "sourceOfDepthCode",
         "tertiaryUseOfSiteCode",
         "wellDepth"

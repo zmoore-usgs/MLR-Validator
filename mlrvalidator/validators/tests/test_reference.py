@@ -234,7 +234,7 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
                 "nationalAquiferCode",
                 "nationalWaterUseCode",
                 "primaryUseOfSiteCode",
-                "secondaryUseOfSite",
+                "secondaryUseOfSiteCode",
                 "sourceOfDepthCode",
                 "tertiaryUseOfSiteCode",
                 "wellDepth"
@@ -257,7 +257,7 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
                 "nationalAquiferCode",
                 "nationalWaterUseCode",
                 "primaryUseOfSiteCode",
-                "secondaryUseOfSite",
+                "secondaryUseOfSiteCode",
                 "sourceOfDepthCode",
                 "tertiaryUseOfSiteCode",
                 "wellDepth"

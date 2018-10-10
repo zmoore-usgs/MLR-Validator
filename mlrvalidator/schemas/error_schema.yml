@@ -94,7 +94,7 @@ nationalWaterUseCode:
 primaryUseOfSiteCode:
     maxlength: 1
     valid_reference: True
-secondaryUseOfSite:
+secondaryUseOfSiteCode:
     maxlength: 1
     valid_reference: True
 tertiaryUseOfSiteCode:

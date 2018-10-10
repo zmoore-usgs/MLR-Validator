@@ -71,7 +71,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self._validate_county_latitude_range()
         self._validate_county_longitude_range()
         self._validate_altitude_range()
-        self._validate_use_code('primaryUseOfSiteCode', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
+        self._validate_use_code('primaryUseOfSiteCode', 'secondaryUseOfSiteCode', 'tertiaryUseOfSiteCode')
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
         return self._errors == {}
 

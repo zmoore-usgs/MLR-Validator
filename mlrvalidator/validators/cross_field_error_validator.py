@@ -82,7 +82,7 @@ class CrossFieldErrorValidator(BaseCrossFieldValidator):
             'altitudeMethodCode',
             'altitudeAccuracyValue'
             ], 'altitude')
-        self._validate_use_code('primaryUseOfSiteCode', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode')
+        self._validate_use_code('primaryUseOfSiteCode', 'secondaryUseOfSiteCode', 'tertiaryUseOfSiteCode')
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
         self._validate_site_dates()
         self._validate_depths()
