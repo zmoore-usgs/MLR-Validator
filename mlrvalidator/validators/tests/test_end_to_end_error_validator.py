@@ -2268,6 +2268,19 @@ class TertiaryUseOfSiteCode(TestCase):
         )
         self.assertNotIn('siteTypeCode', validator.errors)
 
+    def test_create_with_all_three_use_of_site_codes(self):
+        validator.validate(
+            {
+                "primaryUseOfSite": "U",
+                "secondaryUseOfSite": "O",
+                "tertiaryUseOfSiteCode": "H",
+            },
+            {}
+        )
+        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('secondaryUseOfSite', validator.errors)
+        self.assertNotIn('tertiaryUseOfSiteCode', validator.errors)
+
 
 class PrimaryUseOfWaterCodeTestCase(TestCase):
 
