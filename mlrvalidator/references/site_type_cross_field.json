@@ -176,9 +176,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",

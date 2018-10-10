@@ -2110,6 +2110,20 @@ class primaryUseOfSiteCodeTestCase(TestCase):
         )
         self.assertNotIn('siteTypeCode', validator.errors)
 
+    def test_create_gw_location_with_primary_use_of_site_code(self):
+        validator.validate(
+            {
+                "siteTypeCode": "GW",
+                "primaryUseOfSiteCode": "U",
+            },
+            {}
+        )
+        site_type_code_error_message = validator.errors['siteTypeCode'][0]
+
+        self.assertNotIn('primaryUseOfSiteCode', site_type_code_error_message)
+        self.assertNotIn('secondaryUseOfSiteCode', site_type_code_error_message)
+        self.assertNotIn('tertiaryUseOfSiteCode', site_type_code_error_message)
+
 
 class secondaryUseOfSiteCode(TestCase):
 
