@@ -64,7 +64,7 @@ ddot_location_model = api.model('DdotLocationModel', {
     "minorCivilDivisionCode": fields.String(),
     "nationalAquiferCode": fields.String(),
     "nationalWaterUseCode": fields.String(),
-    "primaryUseOfSite": fields.String(),
+    "primaryUseOfSiteCode": fields.String(),
     "primaryUseOfWaterCode": fields.String(),
     "projectNumber": fields.String(),
     "remarks": fields.String(),

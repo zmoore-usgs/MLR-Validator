@@ -2025,7 +2025,7 @@ class NationalWaterUseCodeTestCase(TestCase):
         self.assertNotIn('siteTypeCode', validator.errors)
 
 
-class PrimaryUseOfSiteTestCase(TestCase):
+class primaryUseOfSiteCodeTestCase(TestCase):
 
     def test_optional(self):
         validator.validate(
@@ -2033,63 +2033,63 @@ class PrimaryUseOfSiteTestCase(TestCase):
             {},
             update=False
         )
-        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('primaryUseOfSiteCode', validator.errors)
 
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': ' '},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': ' '},
             {},
             update=False
         )
-        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('primaryUseOfSiteCode', validator.errors)
 
     def test_max_length(self):
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
             update=False
         )
-        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('primaryUseOfSiteCode', validator.errors)
 
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'AA'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'AA'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
             update=False
         )
-        self.assertIn('primaryUseOfSite', validator.errors)
+        self.assertIn('primaryUseOfSiteCode', validator.errors)
 
     def test_in_reference(self):
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
             update=True
         )
-        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('primaryUseOfSiteCode', validator.errors)
 
     def test_not_in_reference(self):
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'B'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'B'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678'},
             update=True
         )
-        self.assertIn('primaryUseOfSite', validator.errors)
+        self.assertIn('primaryUseOfSiteCode', validator.errors)
 
     def test_invalid_non_null_code_for_site_type(self):
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'AW'},
             update=True
         )
-        self.assertIn('primaryUseOfSite', validator.errors['siteTypeCode'][0])
+        self.assertIn('primaryUseOfSiteCode', validator.errors['siteTypeCode'][0])
 
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': ' '},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': ' '},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'AW'},
             update=True
         )
         self.assertNotIn('siteTypeCode', validator.errors)
 
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': ' '},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': ' '},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'AG'},
             update=True
         )
@@ -2097,14 +2097,14 @@ class PrimaryUseOfSiteTestCase(TestCase):
 
     def test_invalid_null_code_for_site_type(self):
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': ' '},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': ' '},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'GW'},
             update=True
         )
-        self.assertIn('primaryUseOfSite', validator.errors['siteTypeCode'][0])
+        self.assertIn('primaryUseOfSiteCode', validator.errors['siteTypeCode'][0])
 
         validator.validate(
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'siteTypeCode': 'GW'},
             update=True
         )
@@ -2131,14 +2131,14 @@ class SecondaryUseOfSite(TestCase):
     def test_max_length(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'secondaryUseOfSite': 'C'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             update=True
         )
         self.assertNotIn('secondaryUseOfSite', validator.errors)
 
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'secondaryUseOfSite': 'CC'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             update=True
         )
         self.assertIn('secondaryUseOfSite', validator.errors)
@@ -2146,7 +2146,7 @@ class SecondaryUseOfSite(TestCase):
     def test_in_reference(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'secondaryUseOfSite': 'C'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             update=True
         )
         self.assertNotIn('secondaryUseOfSite', validator.errors)
@@ -2154,7 +2154,7 @@ class SecondaryUseOfSite(TestCase):
     def test_not_in_reference(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'secondaryUseOfSite': 'B'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A'},
             update=True
         )
         self.assertIn('secondaryUseOfSite', validator.errors)
@@ -2210,14 +2210,14 @@ class TertiaryUseOfSiteCode(TestCase):
     def test_max_length(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfSiteCode': 'Z'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'C'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A', 'secondaryUseOfSite': 'C'},
             update=True
         )
         self.assertNotIn('tertiaryUseOfSiteCode', validator.errors)
 
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfSiteCode': 'ZZ'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'C'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A', 'secondaryUseOfSite': 'C'},
             update=True
         )
         self.assertIn('tertiaryUseOfSiteCode', validator.errors)
@@ -2225,7 +2225,7 @@ class TertiaryUseOfSiteCode(TestCase):
     def test_in_reference(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfSiteCode': 'Z'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'C'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A', 'secondaryUseOfSite': 'C'},
             update=True
         )
         self.assertNotIn('tertiaryUseOfSiteCode', validator.errors)
@@ -2233,7 +2233,7 @@ class TertiaryUseOfSiteCode(TestCase):
     def test_not_in_reference(self):
         validator.validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'tertiaryUseOfSiteCode': 'B'},
-            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSite': 'A', 'secondaryUseOfSite': 'C'},
+            {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'primaryUseOfSiteCode': 'A', 'secondaryUseOfSite': 'C'},
             update=True
         )
         self.assertIn('tertiaryUseOfSiteCode', validator.errors)
@@ -2271,13 +2271,13 @@ class TertiaryUseOfSiteCode(TestCase):
     def test_create_with_all_three_use_of_site_codes(self):
         validator.validate(
             {
-                "primaryUseOfSite": "U",
+                "primaryUseOfSiteCode": "U",
                 "secondaryUseOfSite": "O",
                 "tertiaryUseOfSiteCode": "H",
             },
             {}
         )
-        self.assertNotIn('primaryUseOfSite', validator.errors)
+        self.assertNotIn('primaryUseOfSiteCode', validator.errors)
         self.assertNotIn('secondaryUseOfSite', validator.errors)
         self.assertNotIn('tertiaryUseOfSiteCode', validator.errors)
 

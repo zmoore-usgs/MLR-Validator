@@ -91,7 +91,7 @@ mapScale:
     valid_map_scale_chars: True
 nationalWaterUseCode:
     maxlength: 2
-primaryUseOfSite:
+primaryUseOfSiteCode:
     maxlength: 1
     valid_reference: True
 secondaryUseOfSite:
