@@ -22,8 +22,16 @@ class ErrorValidator:
         self.transition_validator = TransitionValidator(reference_file_dir)
         self._errors = defaultdict(list)
 
-
     def validate(self, ddot_location, existing_location, update=False):
+        """
+        Validates location creations and updates
+
+        :param ddot_location: dict describing properties of a new location or properties to be merged into an existing location
+        :param existing_location: dict describing properties of an existing location. Cannot be None, even if there is no existing location. Specify an empty dict instead.
+        :param update: Boolean True if the properties in ddot_location should be merged into existing_location. False otherwise.
+                        If this is False and existing_location is non-empty, this method returns False because it is considered a duplicate
+        :return: Boolean True if valid, False if invalid.
+        """
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_validator.validate(ddot_location, existing_location)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
