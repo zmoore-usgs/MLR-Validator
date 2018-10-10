@@ -2025,7 +2025,7 @@ class NationalWaterUseCodeTestCase(TestCase):
         self.assertNotIn('siteTypeCode', validator.errors)
 
 
-class primaryUseOfSiteCodeTestCase(TestCase):
+class PrimaryUseOfSiteCodeTestCase(TestCase):
 
     def test_optional(self):
         validator.validate(
@@ -2125,7 +2125,7 @@ class primaryUseOfSiteCodeTestCase(TestCase):
         self.assertNotIn('tertiaryUseOfSiteCode', site_type_code_error_message)
 
 
-class secondaryUseOfSiteCode(TestCase):
+class SecondaryUseOfSiteCode(TestCase):
 
     def test_optional(self):
         validator.validate(
