@@ -189,9 +189,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
@@ -204,9 +202,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
@@ -219,9 +215,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
@@ -234,9 +228,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
@@ -249,9 +241,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
@@ -264,9 +254,7 @@
         "dataReliabilityCode",
         "latitude",
         "longitude",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
+        "primaryUseOfSiteCode"
       ],
       "nullAttrs": [
         "contributingDrainageArea",
