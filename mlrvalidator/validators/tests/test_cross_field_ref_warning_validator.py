@@ -244,8 +244,8 @@ class CrossFieldRefWarningUseCodeTestCase(TestCase):
         ref_list = {
             "siteUseCodes": [
                 {
-                    'primaryUseOfSite': 'A',
-                    'secondaryUseOfSite': ['A', 'B'],
+                    'primaryUseOfSiteCode': 'A',
+                    'secondaryUseOfSiteCode': ['A', 'B'],
                     'tertiaryUseOfSiteCode': ['A', 'B', 'C']
                 },
                 ],
@@ -260,7 +260,7 @@ class CrossFieldRefWarningUseCodeTestCase(TestCase):
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
             self.validator = CrossFieldRefWarningValidator('ref_dir')
-        self.site_lists = [['primaryUseOfSite', 'secondaryUseOfSite', 'tertiaryUseOfSiteCode'],
+        self.site_lists = [['primaryUseOfSiteCode', 'secondaryUseOfSiteCode', 'tertiaryUseOfSiteCode'],
                       ['primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode']]
 
     def test_unique_use_codes(self):
