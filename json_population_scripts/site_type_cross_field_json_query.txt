@@ -25,10 +25,10 @@ with function mlr_name(col_name in varchar2) return varchar2 is
    end;
 site_use_gw_cols as (
  select distinct SITE_TP_CD, 'site_use_2_cd' attr_nm from site_tp_attr_grp
- where site_tp_cd like trim('GW%')
+ where trim(site_tp_cd) like 'GW%'
  union 
  select distinct SITE_TP_CD, 'site_use_3_cd' attr_nm from site_tp_attr_grp
- where site_tp_cd like trim('GW%')
+ where trim(site_tp_cd) like 'GW%'
 ),
 opt_cols as 
 (select distinct attr_nm from site_tp_attr_grp s, attr_grp a 
