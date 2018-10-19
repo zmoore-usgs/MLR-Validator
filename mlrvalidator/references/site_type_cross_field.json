@@ -298,7 +298,9 @@
         "latitude",
         "longitude"
       ],
-      "nullAttrs": []
+      "nullAttrs": [
+        
+      ]
     },
     {
       "siteTypeCode": "LA-SH",
@@ -575,7 +577,9 @@
     },
     {
       "siteTypeCode": "FA-WWD",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -586,7 +590,9 @@
     },
     {
       "siteTypeCode": "FA-WU",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -597,7 +603,9 @@
     },
     {
       "siteTypeCode": "FA-WWTP",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -608,7 +616,9 @@
     },
     {
       "siteTypeCode": "FA-STS",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -619,7 +629,9 @@
     },
     {
       "siteTypeCode": "FA-HP",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -630,7 +642,9 @@
     },
     {
       "siteTypeCode": "FA-CS",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -641,7 +655,9 @@
     },
     {
       "siteTypeCode": "FA-SEW",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -652,7 +668,9 @@
     },
     {
       "siteTypeCode": "FA",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -663,7 +681,9 @@
     },
     {
       "siteTypeCode": "FA-GC",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -674,7 +694,9 @@
     },
     {
       "siteTypeCode": "AS",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "aquiferCode",
         "aquiferTypeCode",
@@ -688,7 +710,9 @@
     },
     {
       "siteTypeCode": "AW",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "aquiferCode",
         "aquiferTypeCode",
@@ -705,7 +729,9 @@
     },
     {
       "siteTypeCode": "FA-TEP",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -716,7 +742,9 @@
     },
     {
       "siteTypeCode": "FA-FON",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -727,7 +755,9 @@
     },
     {
       "siteTypeCode": "AG",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -738,7 +768,9 @@
     },
     {
       "siteTypeCode": "FA-WTP",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
@@ -749,7 +781,9 @@
     },
     {
       "siteTypeCode": "FA-WDS",
-      "notNullAttrs": [],
+      "notNullAttrs": [
+        
+      ],
       "nullAttrs": [
         "contributingDrainageArea",
         "drainageArea",
