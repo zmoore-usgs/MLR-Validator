@@ -23,6 +23,13 @@ with function mlr_name(col_name in varchar2) return varchar2 is
     return ret;
     end;
    end;
+site_use_gw_cols as (
+ select distinct SITE_TP_CD, 'site_use_2_cd' attr_nm from site_tp_attr_grp
+ where site_tp_cd like trim('GW%')
+ union 
+ select distinct SITE_TP_CD, 'site_use_3_cd' attr_nm from site_tp_attr_grp
+ where site_tp_cd like trim('GW%')
+),
 opt_cols as 
 (select distinct attr_nm from site_tp_attr_grp s, attr_grp a 
 where s.attr_grp_cd=a.attr_grp_cd and 
@@ -43,12 +50,11 @@ a.attr_nm in ('aqfr_cd',
 'well_depth_va')
 and ddl_nm = 'SITEFILE_##'
 and site_tp_allow_cd = 'O')
-
 select '{"siteTypeCode": "'||nvl(na.site_tp_cd,nvl(nna.site_tp_cd, na.site_tp_cd))||'", '||nvl(nna.notnullattrs,'"notNullAttrs": []')||', '||nvl(na.nullattrs,'"nullAttrs":[]')||'},' from
 (select distinct site_tp_cd, '"notNullAttrs": ['||listagg('"'||mlr_name(attr_nm)||'"', ', ') within group (order by 1)||']' notnullattrs from (
 select distinct site_tp_cd, attr_nm from site_tp_attr_grp s, opt_cols
 minus
-select distinct site_tp_cd, attr_nm from site_tp_attr_grp s, attr_grp a 
+(select distinct site_tp_cd, attr_nm from site_tp_attr_grp s, attr_grp a 
 where s.attr_grp_cd=a.attr_grp_cd and 
 a.attr_nm in ('aqfr_cd', 
 'aqfr_type_cd'  ,
@@ -67,6 +73,8 @@ a.attr_nm in ('aqfr_cd',
 'well_depth_va')
 and ddl_nm = 'SITEFILE_##'
 and site_tp_allow_cd in ('O', 'N')
+union
+select site_tp_cd, attr_nm from site_use_gw_cols)
 )
 group by site_tp_cd) nna
 full outer join
