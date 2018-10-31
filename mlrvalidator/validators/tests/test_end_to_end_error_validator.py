@@ -4,7 +4,8 @@ from unittest import TestCase
 from app import application
 from ..error_validator import ErrorValidator
 
-validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'],
+                           'http://localhost')
 
 
 class ErrorValidatorAgencyCodeTestCase(TestCase):
