@@ -58,11 +58,11 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         base_site = {
             "stationIx": "MYSTATION",
             "agencyCode": "USGS",
-            "transactionType": "M"
         }
         station = {
             **base_site,
             "siteNumber": '1234567890',
+            "transactionType": "M"
         }
 
         other_station = {
@@ -76,11 +76,11 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         base_site = {
             "stationIx": "MYSTATION",
             "siteNumber": "1234567890",
-            "transactionType": "M"
         }
         station = {
             **base_site,
             "agencyCode": "USGS",
+            "transactionType": "M",
         }
 
         other_station = {
@@ -94,12 +94,12 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         base_site = {
             "stationIx": "MYSTATION",
             "siteNumber": "1234567890",
-            "transactionType": "M",
-            "agencyCode": "USGS"
+            "agencyCode": "USGS",
         }
         station = {
             **base_site,
             "projectNumber": "1",
+            "transactionType": "M",
         }
 
         existing_station = {
@@ -113,12 +113,12 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         base_site = {
             "stationIx": "MYSTATION",
             "siteNumber": "1234567890",
-            "transactionType": "M",
-            "agencyCode": "USGS"
+            "agencyCode": "USGS",
         }
         station = {
             **base_site,
             "projectNumber": "1",
+            "transactionType": "M",
         }
 
         existing_station0 = {
@@ -142,16 +142,20 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         valid = self.instance._validate_normalized_station_name(site, [])
         self.assertValid(valid)
 
-    def test_create_when_no_duplicates_exist(self):
-        site = {
+    def test_create_when_duplicate_exists(self):
+        base_site = {
             "stationIx": "MYSTATION",
             "siteNumber": "1234567890",
-            "transactionType": "A",
             "agencyCode": "USGS"
         }
-        duplicate = site.copy()
+        duplicate = base_site.copy()
+        site = {
+            **base_site,
+            "transactionType": "A",
+        }
         valid = self.instance._validate_normalized_station_name(site, [duplicate])
         self.assertInvalid(valid)
+
 
 class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNormalizedStationNameTestCase):
     """
