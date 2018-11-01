@@ -23,11 +23,15 @@ To run the application locally execute the following:
 
 The swagger documentation can then be accessed at http://127.0.0.1:5000/api
 
-Default configuration variables can be overridden be creating a .env file. For instance to turn debug on,
-you will want to create an .env with the following:
+## Configuration
+Configuration is read from `config.py`. `config.py` tries to read most values from environment variables and provides defaults if they do not exist. A user running this app can customize config values by defining environment variables referenced in `config.py`.
+
+Configuration is also read from an optional `.env` Python file. Any python variable defined in `.env` overrides values set in `config.py` For instance, though `DEBUG = False` in `config.py`, you can turn debug on by creating a `.env` file with the following:
+
 ```python
 DEBUG = True
 ```
+
 For local development, you will need to provide a JWT token to the service. This can be done through the Swagger 
 documents by clicking the Authorize button and entering 'Bearer your.jwt.token'.
 
