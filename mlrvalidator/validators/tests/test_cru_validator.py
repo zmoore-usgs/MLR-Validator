@@ -113,22 +113,24 @@ class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStation
         base_site = {
             "stationIx": "MYSTATION",
             "siteNumber": "1234567890",
-            "agencyCode": "USGS",
         }
+
         station = {
             **base_site,
-            "projectNumber": "1",
+            "agencyCode": "USGS",
             "transactionType": "M",
         }
 
         existing_station0 = {
             **base_site,
-            "projectNumber": "2",
+            "agencyCode": "EPA",
         }
+
         existing_station1 = {
             **base_site,
-            "projectNumber": "3",
+            "agencyCode": "MNPCA",
         }
+
         valid = self.instance._validate_normalized_station_name(station, [existing_station0, existing_station1])
         self.assertInvalid(valid)
 
