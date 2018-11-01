@@ -4,6 +4,7 @@ PROJECT_DIR = os.path.dirname(__file__)
 REFERENCE_FILE_DIR = os.path.join(PROJECT_DIR, 'mlrvalidator/references')
 SCHEMA_DIR = os.path.join(PROJECT_DIR, 'mlrvalidator/schemas')
 DEBUG = False
+CRU_SERVICE_URL = os.getenv('cru_service_url', 'http://localhost')
 
 # The following four variables configure authentication
 

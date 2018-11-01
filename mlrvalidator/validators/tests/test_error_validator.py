@@ -25,7 +25,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -49,7 +49,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = False
         msingle_field.errors = {'A' : ['Invalid']}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -75,7 +75,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -101,7 +101,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -127,7 +127,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -151,7 +151,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.errors = {'A': ['Invalid cross']}
         msingle_field.validate.return_value = False
         msingle_field.errors = {'B': ['Missing']}
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 2)
@@ -179,7 +179,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = True
         msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         self.assertFalse(validator.validate({'agencyCode': 'USGS', 'siteNumber': '12345678'}, {'agencyCode': 'USGS', 'siteNumber': '12345678'}))
         self.assertEqual(len(validator.errors), 1)
         self.assertTrue('duplicate_site' in validator.errors)
