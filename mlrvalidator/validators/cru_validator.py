@@ -60,7 +60,7 @@ class CruValidator:
         :return: a list of dictionaries that represent monitoring locations
         """
         params = {'normalizedStationName': normalized_name}
-        response = requests.request.get(self._cru_service_url + '/monitoringLocations', params=params)
+        response = requests.get(self._cru_service_url + '/monitoringLocations', params=params)
         if 200 == response.status_code:
             stations = response.json()
         else:
