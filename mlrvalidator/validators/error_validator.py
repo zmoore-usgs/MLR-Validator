@@ -37,6 +37,7 @@ class ErrorValidator:
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_validator.validate(ddot_location, existing_location)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
+        self.cru_validator.validate(ddot_location)
 
         duplicate_error = {}
         if update:
@@ -52,11 +53,14 @@ class ErrorValidator:
                 }
 
         self._errors = defaultdict(list)
-        all_errors = chain(duplicate_error.items(),
-                           self.single_field_validator.errors.items(),
-                           self.cross_field_validator.errors.items(),
-                           self.cross_field_ref_validator.errors.items(),
-                           transition_errors.items())
+        all_errors = chain(
+            duplicate_error.items(),
+            self.single_field_validator.errors.items(),
+            self.cross_field_validator.errors.items(),
+            self.cross_field_ref_validator.errors.items(),
+            transition_errors.items(),
+            self.cru_validator.items()
+        )
 
         for k, v in chain(all_errors):
             self.errors[k].extend(v)
