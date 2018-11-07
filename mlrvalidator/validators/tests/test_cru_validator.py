@@ -5,161 +5,7 @@ import requests_mock
 import json
 
 
-class BaseDuplicateNormalizedStationNameTestCase(TestCase):
-    """
-    Utility methods for other test cases on duplicate normalized station names
-    """
-    def assertInvalid(self, valid):
-        self.assertFalse(valid)
-        self.assertIn(CruValidator.DUPLICATE_NORMALIZED_STATION_NAME, self.instance.errors)
-
-    def assertValid(self, valid):
-        self.assertTrue(valid)
-        self.assertNotIn(CruValidator.DUPLICATE_NORMALIZED_STATION_NAME, self.instance.errors)
-
-
-class LocalDuplicateNormalizedStationNameTestCase(BaseDuplicateNormalizedStationNameTestCase):
-    """
-    These are local tests; they avoid making any calls to methods that would hit the network
-    """
-
-    def setUp(self):
-        # don't specify a real URL
-        self.instance = CruValidator('')
-
-    def test_make_duplicate_normalized_station_error_message(self):
-        """
-        Ensure that the error message has enough information to be helpful
-        """
-        station_normalized_name = 'MYSTATION'
-        site_number = '1234567890'
-        station = {
-            "stationIx": station_normalized_name,
-            "siteNumber": site_number
-        }
-
-        other_station_normalized_name = 'YOURSTATION'
-        other_site_number = '0987654321'
-        other_station = {
-            "stationIx": other_station_normalized_name,
-            "siteNumber": other_site_number
-        }
-        err = self.instance._make_duplicate_normalized_station_error_message(station, [other_station])
-        self.assertIn(station_normalized_name, err)
-        self.assertNotIn(site_number, err)
-        self.assertIn(other_site_number, err)
-        self.assertIn(other_station_normalized_name, err)
-
-    def test_is_update(self):
-        self.assertTrue(self.instance._is_update({'transactionType': 'M'}))
-        self.assertFalse(self.instance._is_update({'transactionType': 'A'}))
-
-    def test_update_mismatching_site_number(self):
-        base_site = {
-            "stationIx": "MYSTATION",
-            "agencyCode": "USGS",
-        }
-        station = {
-            **base_site,
-            "siteNumber": '1234567890',
-            "transactionType": "M"
-        }
-
-        other_station = {
-            **base_site,
-            "siteNumber": "0987654321",
-        }
-        valid = self.instance._validate_normalized_station_name(station, [other_station])
-        self.assertInvalid(valid)
-
-    def test_update_mismatching_agency_code(self):
-        base_site = {
-            "stationIx": "MYSTATION",
-            "siteNumber": "1234567890",
-        }
-        station = {
-            **base_site,
-            "agencyCode": "USGS",
-            "transactionType": "M",
-        }
-
-        other_station = {
-            **base_site,
-            "agencyCode": "EPA",
-        }
-        valid = self.instance._validate_normalized_station_name(station, [other_station])
-        self.assertInvalid(valid)
-
-    def test_update_matching_site_number_and_agency_code(self):
-        base_site = {
-            "stationIx": "MYSTATION",
-            "siteNumber": "1234567890",
-            "agencyCode": "USGS",
-        }
-        station = {
-            **base_site,
-            "projectNumber": "1",
-            "transactionType": "M",
-        }
-
-        existing_station = {
-            **base_site,
-            "projectNumber": "2",
-        }
-        valid = self.instance._validate_normalized_station_name(station, [existing_station])
-        self.assertValid(valid)
-
-    def test_update_with_multiple_matching_sites(self):
-        base_site = {
-            "stationIx": "MYSTATION",
-            "siteNumber": "1234567890",
-        }
-
-        station = {
-            **base_site,
-            "agencyCode": "USGS",
-            "transactionType": "M",
-        }
-
-        existing_station0 = {
-            **base_site,
-            "agencyCode": "EPA",
-        }
-
-        existing_station1 = {
-            **base_site,
-            "agencyCode": "MNPCA",
-        }
-
-        valid = self.instance._validate_normalized_station_name(station, [existing_station0, existing_station1])
-        self.assertInvalid(valid)
-
-    def test_create_when_no_duplicates_exist(self):
-        site = {
-            "stationIx": "MYSTATION",
-            "siteNumber": "1234567890",
-            "transactionType": "A",
-            "agencyCode": "USGS"
-        }
-        valid = self.instance._validate_normalized_station_name(site, [])
-        self.assertValid(valid)
-
-    def test_create_when_duplicate_exists(self):
-        base_site = {
-            "stationIx": "MYSTATION",
-            "siteNumber": "1234567890",
-            "agencyCode": "USGS"
-        }
-        duplicate = base_site.copy()
-        site = {
-            **base_site,
-            "transactionType": "A",
-        }
-        valid = self.instance._validate_normalized_station_name(site, [duplicate])
-        self.assertInvalid(valid)
-
-
-class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNormalizedStationNameTestCase):
+class DuplicateNormalizedStationNameTestCase(TestCase):
     """
     These are local tests; they rely on a mocked CRU endpoint
     """
@@ -167,6 +13,14 @@ class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNo
     def setUp(self):
         # don't specify a real URL
         self.instance = CruValidator('http://localhost')
+
+    def assertInvalid(self, valid):
+        self.assertFalse(valid)
+        self.assertIn(CruValidator.DUPLICATE_NORMALIZED_STATION_NAME, self.instance.errors)
+
+    def assertValid(self, valid):
+        self.assertTrue(valid)
+        self.assertNotIn(CruValidator.DUPLICATE_NORMALIZED_STATION_NAME, self.instance.errors)
 
     @requests_mock.Mocker()
     def test_create_with_no_duplicates(self, mocker):
@@ -200,8 +54,18 @@ class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNo
         valid = self.instance.validate(site)
         self.assertInvalid(valid)
 
+    def test_create_with_missing_station_ix(self):
+        site = {
+            "siteNumber": "1234567890",
+            "transactionType": "A",
+            "agencyCode": "USGS"
+        }
+        valid = self.instance.validate(site)
+        self.assertFalse(valid)
+        self.assertIn(CruValidator.MISSING_NORMALIZED_STATION_NAME, self.instance.errors)
+
     @requests_mock.Mocker()
-    def test_update_existing(self, mocker):
+    def test_update_existing_keeping_station_ix_the_same(self, mocker):
 
         base_site = {
             "stationIx": "MYSTATION",
@@ -224,7 +88,50 @@ class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNo
         mock_response = json.dumps([existing_site])
         mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
 
-        valid = self.instance.validate(updated_site)
+        valid = self.instance.validate(updated_site, update=True)
+        self.assertValid(valid)
+
+    @requests_mock.Mocker()
+    def test_update_existing_with_new_station_ix(self, mocker):
+        updated_site = {
+            "siteNumber": "1234567890",
+            "agencyCode": "USGS",
+            "stationIx": "MYSTATION",
+            "projectNumber": "2",
+            "transactionType": "M",
+
+        }
+
+        mocker.get(requests_mock.ANY, status_code=404, text="[]")
+
+        valid = self.instance.validate(updated_site, update=True)
+        self.assertValid(valid)
+
+    @requests_mock.Mocker()
+    def test_update_existing_with_non_station_name_attributes(self, mocker):
+
+        base_site = {
+            "siteNumber": "1234567890",
+            "agencyCode": "USGS"
+        }
+
+        existing_site = {
+            **base_site,
+            "stationIx": "MYSTATION",
+            "projectNumber": "1",
+        }
+
+        updated_site = {
+            **base_site,
+            "projectNumber": "2",
+            "transactionType": "M",
+
+        }
+
+        mock_response = json.dumps([existing_site])
+        mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
+
+        valid = self.instance.validate(updated_site, update=True)
         self.assertValid(valid)
 
     @requests_mock.Mocker()
@@ -255,7 +162,7 @@ class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNo
         mock_response = json.dumps([existing_site0, existing_site1])
         mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
 
-        valid = self.instance.validate(updated_site)
+        valid = self.instance.validate(updated_site, update=True)
         self.assertInvalid(valid)
 
     @requests_mock.Mocker()
@@ -280,5 +187,49 @@ class DuplicateNormalizedStationNameTestCaseWithMockedCruService(BaseDuplicateNo
         mock_response = json.dumps([existing_site])
         mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
 
-        valid = self.instance.validate(updated_site)
+        valid = self.instance.validate(updated_site, update=True)
+        self.assertInvalid(valid)
+
+    @requests_mock.Mocker()
+    def test_update_ml_when_identifying_attributes_are_missing_from_existing_ml(self, mocker):
+        base_site = {
+            "stationIx": "MYSTATION",
+        }
+
+        existing_site = base_site.copy()
+
+        updated_site = {
+            **base_site,
+            "siteNumber": "1234567890",
+            "agencyCode": "USGS",
+            "transactionType": "M",
+        }
+
+        mock_response = json.dumps([existing_site])
+        mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
+
+        valid = self.instance.validate(updated_site, update=True)
+        self.assertInvalid(valid)
+
+    @requests_mock.Mocker()
+    def test_update_ml_when_identifying_attributes_are_missing_from_proposal(self, mocker):
+        base_site = {
+            "stationIx": "MYSTATION",
+        }
+
+        existing_site = {
+            **base_site,
+            "siteNumber": "1234567890",
+            "agencyCode": "USGS"
+        }
+
+        updated_site = {
+            **base_site,
+            "transactionType": "M",
+        }
+
+        mock_response = json.dumps([existing_site])
+        mocker.get(requests_mock.ANY, status_code=200, text=mock_response)
+
+        valid = self.instance.validate(updated_site, update=True)
         self.assertInvalid(valid)

@@ -13,6 +13,11 @@ stationName:
     maxlength: 50
     is_empty: False
     regex: ^[^\t#\*\\"\^_\$]*$
+stationIx:
+    required: True
+    maxlength: 50
+    is_empty: False
+    regex: ^[A-Z0-9]*$
 siteTypeCode:
     required: True
     is_empty: False
