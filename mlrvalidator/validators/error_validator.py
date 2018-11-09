@@ -8,7 +8,6 @@ from .cross_field_error_validator import CrossFieldErrorValidator
 from .cross_field_ref_error_validator import CrossFieldRefErrorValidator
 from .single_field_validator import SingleFieldValidator
 from .transition_validator import TransitionValidator
-from .cru_validator import CruValidator
 
 
 class ErrorValidator:
@@ -21,7 +20,6 @@ class ErrorValidator:
         self.cross_field_validator = CrossFieldErrorValidator()
         self.cross_field_ref_validator = CrossFieldRefErrorValidator(reference_file_dir)
         self.transition_validator = TransitionValidator(reference_file_dir)
-        self.cru_validator = CruValidator(cru_service_url)
         self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
@@ -37,7 +35,6 @@ class ErrorValidator:
         self.single_field_validator.validate(ddot_location, update=update)
         self.cross_field_validator.validate(ddot_location, existing_location)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
-        self.cru_validator.validate(ddot_location, update=update)
 
         duplicate_error = {}
         if update:
@@ -59,7 +56,6 @@ class ErrorValidator:
             self.cross_field_validator.errors.items(),
             self.cross_field_ref_validator.errors.items(),
             transition_errors.items(),
-            self.cru_validator.errors.items()
         )
 
         for k, v in chain(all_errors):

@@ -4,7 +4,6 @@ from unittest import TestCase, mock
 from ..error_validator import ErrorValidator
 
 
-@mock.patch('mlrvalidator.validators.error_validator.CruValidator')
 @mock.patch('mlrvalidator.validators.error_validator.SingleFieldValidator')
 @mock.patch('mlrvalidator.validators.error_validator.CrossFieldErrorValidator')
 @mock.patch('mlrvalidator.validators.error_validator.CrossFieldRefErrorValidator')
@@ -17,12 +16,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         cru_validator.validate.return_value = True
         cru_validator.errors = {}
 
-    def test_all_valid(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_all_valid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = True
         mtran.errors = {}
@@ -42,12 +40,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
 
-    def test_single_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_single_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = True
         mtran.errors = {}
@@ -69,12 +66,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 1)
         self.assertIn('A', validator.errors)
 
-    def test_cross_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_cross_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = True
         mtran.errors = {}
@@ -96,12 +92,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 1)
         self.assertIn('B', validator.errors)
 
-    def test_ref_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_ref_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = True
         mtran.errors = {}
@@ -123,12 +118,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 1)
         self.assertIn('B', validator.errors)
 
-    def test_tran_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_tran_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = False
         mtran.errors = {'B': ['Bad transition']}
@@ -149,12 +143,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 1)
         self.assertIn('B', validator.errors)
 
-    def test_multiple_errors(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_multiple_errors(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = False
         mtran.errors = {'B': ['Bad transition']}
@@ -177,12 +170,11 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors.get('A')), 1)
         self.assertEqual(len(validator.errors.get('B')), 3)
 
-    def test_duplicate_site_error(self, mtran_class, mref_class, mcross_class, msingle_field_class, cru_validator_class):
+    def test_duplicate_site_error(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         mtran = mtran_class.return_value
         mref = mref_class.return_value
         mcross = mcross_class.return_value
         msingle_field = msingle_field_class.return_value
-        self.setUpPassingValidator(cru_validator_class)
 
         mtran.validate.return_value = True
         mtran.errors = {}
