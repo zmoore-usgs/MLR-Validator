@@ -8,8 +8,7 @@ import requests_mock
 
 class BaseE2ETestCase(TestCase):
     def setUp(self):
-        self.v = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'],
-                   'http://localhost')
+        self.v = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
 
 class ErrorValidatorAgencyCodeTestCase(BaseE2ETestCase):

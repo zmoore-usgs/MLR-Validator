@@ -12,7 +12,7 @@ from .transition_validator import TransitionValidator
 
 class ErrorValidator:
 
-    def __init__(self, schema_dir, reference_file_dir, cru_service_url):
+    def __init__(self, schema_dir, reference_file_dir):
         with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
             error_schema = yaml.load(fd.read())
 
