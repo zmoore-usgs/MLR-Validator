@@ -12,24 +12,26 @@ from ..error_validator import ErrorValidator
 class ErrorValidatorErrorsTestCase(TestCase):
 
     def setUpPassingValidator(self, validator_class):
-        cru_validator = validator_class.return_value
-        cru_validator.validate.return_value = True
-        cru_validator.errors = {}
+        """
+        Given a mock validator class, tell its `validate` method to return `true`, and its `errors` property to be empty
+        :param validator_class:
+        :return:
+        """
+        validator = validator_class.return_value
+        validator.validate.return_value = True
+        validator.errors = {}
+
+    def setUpPassingValidators(self, *validator_classes):
+        """
+        call self.setUpPassingValdator on all parameterized mock validator classes
+        :param validator_classes:
+        :return:
+        """
+        for validator_class in validator_classes:
+            self.setUpPassingValidator(validator_class)
 
     def test_all_valid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
-        mref = mref_class.return_value
-        mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
-
-        mtran.validate.return_value = True
-        mtran.errors = {}
-        mref.validate.return_value = True
-        mref.errors = {}
-        mcross.validate.return_value = True
-        mcross.errors = {}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
+        self.setUpPassingValidators(mtran_class, mref_class, mcross_class, msingle_field_class)
 
         validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
         result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
