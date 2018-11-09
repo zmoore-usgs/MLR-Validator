@@ -8,12 +8,11 @@ from .cross_field_error_validator import CrossFieldErrorValidator
 from .cross_field_ref_error_validator import CrossFieldRefErrorValidator
 from .single_field_validator import SingleFieldValidator
 from .transition_validator import TransitionValidator
-from .cru_validator import CruValidator
 
 
 class ErrorValidator:
 
-    def __init__(self, schema_dir, reference_file_dir, cru_service_url):
+    def __init__(self, schema_dir, reference_file_dir):
         with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
             error_schema = yaml.load(fd.read())
 
@@ -21,7 +20,6 @@ class ErrorValidator:
         self.cross_field_validator = CrossFieldErrorValidator()
         self.cross_field_ref_validator = CrossFieldRefErrorValidator(reference_file_dir)
         self.transition_validator = TransitionValidator(reference_file_dir)
-        self.cru_validator = CruValidator(cru_service_url)
         self._errors = defaultdict(list)
 
     def validate(self, ddot_location, existing_location, update=False):
@@ -52,11 +50,13 @@ class ErrorValidator:
                 }
 
         self._errors = defaultdict(list)
-        all_errors = chain(duplicate_error.items(),
-                           self.single_field_validator.errors.items(),
-                           self.cross_field_validator.errors.items(),
-                           self.cross_field_ref_validator.errors.items(),
-                           transition_errors.items())
+        all_errors = chain(
+            duplicate_error.items(),
+            self.single_field_validator.errors.items(),
+            self.cross_field_validator.errors.items(),
+            self.cross_field_ref_validator.errors.items(),
+            transition_errors.items(),
+        )
 
         for k, v in chain(all_errors):
             self.errors[k].extend(v)

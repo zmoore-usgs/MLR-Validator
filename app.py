@@ -19,8 +19,7 @@ if application.config.get('AUTH_TOKEN_KEY_URL'):
     application.config['JWT_PUBLIC_KEY'] = resp.json()['value']
     application.config['JWT_ALGORITHM'] = 'RS256'
 
-error_validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'],
-                                 application.config['CRU_SERVICE_URL'])
+error_validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 warning_validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
 
 

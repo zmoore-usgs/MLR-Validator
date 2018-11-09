@@ -3,6 +3,7 @@ from unittest import TestCase, mock
 
 from ..error_validator import ErrorValidator
 
+
 @mock.patch('mlrvalidator.validators.error_validator.SingleFieldValidator')
 @mock.patch('mlrvalidator.validators.error_validator.CrossFieldErrorValidator')
 @mock.patch('mlrvalidator.validators.error_validator.CrossFieldRefErrorValidator')
@@ -10,22 +11,29 @@ from ..error_validator import ErrorValidator
 @mock.patch('mlrvalidator.validators.error_validator.open', mock.mock_open(read_data=''))
 class ErrorValidatorErrorsTestCase(TestCase):
 
+    def setUpPassingValidator(self, validator_class):
+        """
+        Given a mock validator class, tell its `validate` method to return `true`, and its `errors` property to be empty
+        :param validator_class:
+        :return:
+        """
+        validator = validator_class.return_value
+        validator.validate.return_value = True
+        validator.errors = {}
+
+    def setUpPassingValidators(self, *validator_classes):
+        """
+        call self.setUpPassingValdator on all parameterized mock validator classes
+        :param validator_classes:
+        :return:
+        """
+        for validator_class in validator_classes:
+            self.setUpPassingValidator(validator_class)
+
     def test_all_valid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
-        mref = mref_class.return_value
-        mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
+        self.setUpPassingValidators(mtran_class, mref_class, mcross_class, msingle_field_class)
 
-        mtran.validate.return_value = True
-        mtran.errors = {}
-        mref.validate.return_value = True
-        mref.errors = {}
-        mcross.validate.return_value = True
-        mcross.errors = {}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
-
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -35,21 +43,12 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors), 0)
 
     def test_single_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
-        mref = mref_class.return_value
-        mcross = mcross_class.return_value
+        self.setUpPassingValidators(mtran_class, mref_class, mcross_class)
         msingle_field = msingle_field_class.return_value
-
-        mtran.validate.return_value = True
-        mtran.errors = {}
-        mref.validate.return_value = True
-        mref.errors = {}
-        mcross.validate.return_value = True
-        mcross.errors = {}
         msingle_field.validate.return_value = False
         msingle_field.errors = {'A' : ['Invalid']}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -61,21 +60,12 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertIn('A', validator.errors)
 
     def test_cross_field_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
-        mref = mref_class.return_value
+        self.setUpPassingValidators(mtran_class, mref_class, msingle_field_class)
         mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
-
-        mtran.validate.return_value = True
-        mtran.errors = {}
-        mref.validate.return_value = True
-        mref.errors = {}
         mcross.validate.return_value = False
         mcross.errors = {'B': ['Invalid']}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -87,21 +77,12 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertIn('B', validator.errors)
 
     def test_ref_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
+        self.setUpPassingValidators(mtran_class, mcross_class, msingle_field_class)
         mref = mref_class.return_value
-        mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
-
-        mtran.validate.return_value = True
-        mtran.errors = {}
         mref.validate.return_value = False
         mref.errors = {'B': ['Bad']}
-        mcross.validate.return_value = True
-        mcross.errors = {}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -113,21 +94,13 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertIn('B', validator.errors)
 
     def test_tran_invalid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
+        self.setUpPassingValidators(mref_class, mcross_class, msingle_field_class)
         mtran = mtran_class.return_value
-        mref = mref_class.return_value
-        mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
-
         mtran.validate.return_value = False
         mtran.errors = {'B': ['Bad transition']}
-        mref.validate.return_value = True
-        mref.errors = {}
-        mcross.validate.return_value = True
-        mcross.errors = {}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -151,7 +124,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.errors = {'A': ['Invalid cross']}
         msingle_field.validate.return_value = False
         msingle_field.errors = {'B': ['Missing']}
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 2)
@@ -165,21 +138,9 @@ class ErrorValidatorErrorsTestCase(TestCase):
         self.assertEqual(len(validator.errors.get('B')), 3)
 
     def test_duplicate_site_error(self, mtran_class, mref_class, mcross_class, msingle_field_class):
-        mtran = mtran_class.return_value
-        mref = mref_class.return_value
-        mcross = mcross_class.return_value
-        msingle_field = msingle_field_class.return_value
+        self.setUpPassingValidators(mtran_class, mref_class, mcross_class, msingle_field_class)
 
-        mtran.validate.return_value = True
-        mtran.errors = {}
-        mref.validate.return_value = True
-        mref.errors = {}
-        mcross.validate.return_value = True
-        mcross.errors = {}
-        msingle_field.validate.return_value = True
-        msingle_field.errors = {}
-
-        validator = ErrorValidator('schema_dir', 'ref_dir', 'http://localhost')
+        validator = ErrorValidator('schema_dir', 'ref_dir')
         self.assertFalse(validator.validate({'agencyCode': 'USGS', 'siteNumber': '12345678'}, {'agencyCode': 'USGS', 'siteNumber': '12345678'}))
         self.assertEqual(len(validator.errors), 1)
         self.assertTrue('duplicate_site' in validator.errors)

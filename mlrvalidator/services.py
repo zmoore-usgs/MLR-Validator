@@ -77,6 +77,7 @@ ddot_location_model = api.model('DdotLocationModel', {
     "sourceOfDepthCode": fields.String(),
     "stateFipsCode": fields.String(),
     "stationName": fields.String(),
+    "stationIx": fields.String(), #Whereas most fields come from the ddot ingester service, this field is added by the transformer service
     "tertiaryUseOfSiteCode": fields.String(),
     "tertiaryUseOfWaterCode": fields.String(),
     "timeZoneCode": fields.String(),
@@ -90,7 +91,6 @@ location_model = api.clone('LocationModel', ddot_location_model, {
     "decimalLatitude": fields.Integer(),
     "decimalLongitude": fields.Integer(),
     "id": fields.Integer(),
-    "stationIx": fields.Integer(),
     "updated": fields.String(),
     "updatedBy": fields.String(),
 })
