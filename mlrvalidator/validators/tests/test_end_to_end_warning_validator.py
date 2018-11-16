@@ -168,3 +168,64 @@ class UseCodesTestCase(TestCase):
             )
             self.assertIn('uniqueUseCodes', validator.warnings)
 
+class BaseE2ETestCase(TestCase):
+    def setUp(self):
+        self.v = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+class WarningValidatorSiteNumberTestCase(BaseE2ETestCase):
+
+    def test_site_number_wu_no_first_digit_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '8765432109'}, {}, update=True))
+
+    def test_site_number_wu_greater_than_max_length_first_digit_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765432'}, {}, update=True))
+
+    def test_site_number_ll_valid(self):
+        self.v.validate({'siteTypeCode': 'AT', 'siteNumber': '012345678901234'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)    
+
+    def test_site_number_dsll_min_length_valid(self):
+        self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '12345678'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)
+
+    def test_site_number_dsll_max_length_valid(self):
+        self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '012345678901234'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)
+
+    def test_site_number_wu_min_length_first_digit_valid(self):
+        self.assertTrue(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '9876543210'}, {}, update=True))
+
+    def test_site_number_wu_max_length_first_digit_valid(self):
+        self.assertTrue(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765'}, {}, update=True))
+
+    def test_site_number_llwu_max_length_first_digit_valid(self):
+        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '987654321098765'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)
+
+    def test_site_number_llwu_max_length_valid(self):
+        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098765'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)
+
+    def test_site_number_llwu_min_length_valid(self):
+        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '9876543210'}, {}, update=True)
+        self.assertNotIn('siteNumber', self.v.warnings)
+
+    def test_site_number_ll_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'AT', 'siteNumber': '01234567890123'}, {}, update=True))
+
+    def test_site_number_dsll_less_than_min_length_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '1234567'}, {}, update=True))
+
+    def test_site_number_dsll_greater_than_max_length_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '0123456789012345'}, {}, update=True))
+
+    def test_site_number_wu_less_than_min_length_first_digit_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321'}, {}, update=True))
+
+    def test_site_number_llwu_greater_than_max_length_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '98765432109876543'}, {}, update=True))
+
+    def test_site_number_llwu_less_than_min_length_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '59876543'}, {}, update=True))
+
+    def test_site_number_llwu_wrong_first_digit_invalid(self):
+        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098'}, {}, update=True))
