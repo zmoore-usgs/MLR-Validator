@@ -62,7 +62,7 @@ class ErrorValidatorAgencyCodeTestCase(BaseE2ETestCase):
 class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_only_digits_is_valid(self):
-        self.assertTrue(self.v.validate({'siteNumber': '01234'}, {}, update=True))
+        self.assertTrue(self.v.validate({'siteNumber': '01234567'}, {}, update=True))
 
     def test_only_digits_trailing_space_is_valid(self):
         self.assertTrue(self.v.validate({'siteNumber': '01234   '}, {}, update=True))
