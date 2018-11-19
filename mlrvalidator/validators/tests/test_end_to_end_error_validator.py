@@ -102,6 +102,11 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
     def test_no_site_number_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': 'AT', 'siteNumber': ' '}, {}, update=True))
 
+    def test_only_digits_too_short_is_invalid(self):
+        self.assertFalse(self.v.validate({'siteNumber': '0123'}, {}, update=True))
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
+
+
 class ErrorValidatorStationNameTestCase(BaseE2ETestCase):
 
     def test_valid_chars_all_lower_is_valid(self):
