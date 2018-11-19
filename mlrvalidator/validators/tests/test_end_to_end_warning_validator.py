@@ -168,10 +168,9 @@ class UseCodesTestCase(TestCase):
             )
             self.assertIn('uniqueUseCodes', validator.warnings)
 
-class BaseE2ETestCase(TestCase):
+class WarningValidatorSiteNumberTestCase(TestCase):
     def setUp(self):
         self.v = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
-class WarningValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_site_number_wu_no_first_digit_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '8765432109'}, {}, update=True))
