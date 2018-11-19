@@ -3,7 +3,7 @@ import os
 import re
 
 from .base_cross_field_validator import BaseCrossFieldValidator
-from .reference import States, Counties, NationalWaterUseCodes
+from .reference import States, Counties, NationalWaterUseCodes, SiteNumberFormat
 
 class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
 
@@ -14,6 +14,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self.states_ref = States(os.path.join(reference_dir, 'state.json'))
         self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
         self.site_types_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
+        self.site_number_format_ref = SiteNumberFormat(os.path.join(reference_dir,'site_number_format.json'))
 
         super().__init__()
 
@@ -66,6 +67,30 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
             if (primary and secondary and tertiary) and ((primary == secondary) or (primary == tertiary) or (secondary == tertiary)):
                 self._errors['uniqueUseCodes'] = ['Primary, secondary, and tertiary fields must be unique']
 
+    def _validate_site_number_format(self):
+        '''
+        :return: boolean
+        '''
+        keys = ['siteNumber', 'siteTypeCode']
+        if self._any_fields_in_document(keys):
+            site_number, site_type_code = [self.merged_document.get(key, '').strip() for key in keys]
+
+            if site_number and site_type_code:
+                error_message = [
+                    'Site Number is not the right format for site type code {0}'.format(site_type_code)]
+                site_format_code = self.site_number_format_ref.get_site_number_template(site_type_code)
+                if site_format_code == 'LL' and len(site_number) != 15:
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'DSLL' and not 8 <= len(site_number) <= 15:
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'WU' and not (10 <= len(site_number) <= 15 and site_number[0] == '9'):
+                    self._errors['siteNumber'] = error_message
+
+                if site_format_code == 'LLWU' and not (len(site_number) == 15 or (10 <= len(site_number) < 15 and site_number[0] == '9')):
+                    self._errors['siteNumber'] = error_message
+
     def validate(self, document, existing_document):
         super().validate(document, existing_document)
         self._validate_county_latitude_range()
@@ -73,6 +98,7 @@ class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
         self._validate_altitude_range()
         self._validate_use_code('primaryUseOfSiteCode', 'secondaryUseOfSiteCode', 'tertiaryUseOfSiteCode')
         self._validate_use_code('primaryUseOfWaterCode', 'secondaryUseOfWaterCode', 'tertiaryUseOfWaterCode')
+        self._validate_site_number_format()
         return self._errors == {}
 
 

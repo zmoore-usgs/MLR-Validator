@@ -62,18 +62,18 @@ class ErrorValidatorAgencyCodeTestCase(BaseE2ETestCase):
 class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_only_digits_is_valid(self):
-        self.assertTrue(self.v.validate({'siteNumber': '01234'}, {}, update=True))
+        self.assertTrue(self.v.validate({'siteNumber': '01234567'}, {}, update=True))
 
     def test_only_digits_trailing_space_is_valid(self):
         self.assertTrue(self.v.validate({'siteNumber': '01234   '}, {}, update=True))
 
     def test_null_value_no_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ''}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
     def test_null_value_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ' '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
     def test_non_digit_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': 'a6'}, {}, update=True))
@@ -96,68 +96,15 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
         self.assertFalse(self.v.validate({'siteNumber': '                    '}, {}, update=True))
         self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
-    def test_site_number_ll_valid(self):
-        self.v.validate({'siteTypeCode': 'AT', 'siteNumber': '012345678901234'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
-    def test_site_number_dsll_min_length_valid(self):
-        self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '12345678'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
-    def test_site_number_dsll_max_length_valid(self):
-        self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '012345678901234'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
-    def test_site_number_wu_min_length_first_digit_valid(self):
-        self.assertTrue(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '9876543210'}, {}, update=True))
-
-    def test_site_number_wu_max_length_first_digit_valid(self):
-        self.assertTrue(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765'}, {}, update=True))
-
-    def test_site_number_llwu_max_length_first_digit_valid(self):
-        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '987654321098765'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
-    def test_site_number_llwu_max_length_valid(self):
-        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098765'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
-    def test_site_number_llwu_min_length_valid(self):
-        self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '9876543210'}, {}, update=True)
-        self.assertNotIn('siteNumber', self.v.errors)
-
     def test_no_site_type_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': ' ', 'siteNumber': '12345678'}, {}, update=True))
 
     def test_no_site_number_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': 'AT', 'siteNumber': ' '}, {}, update=True))
 
-    def test_site_number_ll_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'AT', 'siteNumber': '01234567890123'}, {}, update=True))
-
-    def test_site_number_dsll_less_than_min_length_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '1234567'}, {}, update=True))
-
-    def test_site_number_dsll_greater_than_max_length_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'GL', 'siteNumber': '0123456789012345'}, {}, update=True))
-
-    def test_site_number_wu_less_than_min_length_first_digit_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321'}, {}, update=True))
-
-    def test_site_number_wu_no_first_digit_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '8765432109'}, {}, update=True))
-
-    def test_site_number_wu_greater_than_max_length_first_digit_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765432'}, {}, update=True))
-
-    def test_site_number_llwu_greater_than_max_length_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '98765432109876543'}, {}, update=True))
-
-    def test_site_number_llwu_less_than_min_length_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '59876543'}, {}, update=True))
-
-    def test_site_number_llwu_wrong_first_digit_invalid(self):
-        self.assertFalse(self.v.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098'}, {}, update=True))
+    def test_only_digits_too_short_is_invalid(self):
+        self.assertFalse(self.v.validate({'siteNumber': '0123'}, {}, update=True))
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
 
 
 class ErrorValidatorStationNameTestCase(BaseE2ETestCase):

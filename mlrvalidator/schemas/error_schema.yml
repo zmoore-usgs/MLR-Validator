@@ -6,6 +6,7 @@ agencyCode:
 siteNumber:
     required: True
     maxlength: 15
+    minlength: 8
     is_empty: False
     valid_site_number: True
 stationName:

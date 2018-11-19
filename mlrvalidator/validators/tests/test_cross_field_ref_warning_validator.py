@@ -1,6 +1,6 @@
 
 import json
-
+import unittest
 from unittest import TestCase, mock
 
 from ..cross_field_ref_warning_validator import CrossFieldRefWarningValidator
@@ -273,3 +273,104 @@ class CrossFieldRefWarningUseCodeTestCase(TestCase):
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'A', sites[2]: 'C'}, {}))
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'A'}, {}))
             self.assertFalse(self.validator.validate({sites[0]: 'A', sites[1]: 'B', sites[2]: 'B'}, {}))
+
+class CrossFieldValidatorSiteNumberFieldTestCase(TestCase):
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.CountryStateReferenceValidator')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.States')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.LandNetCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.SiteTypesCrossField')
+    @mock.patch('mlrvalidator.validators.cross_field_ref_error_validator.NationalWaterUseCodes')
+    def setUp(self, mwater_use_ref, mland_net_ref, msite_type_ref, mstates_ref, mref_validator_class):
+        ref_list = {
+            "siteNumberFormatCodes": [
+            {
+                "siteNumberFormatCode": "LL",
+                "siteTypeCode": [
+                    "AT"
+                    ]
+            },
+            {
+                  "siteNumberFormatCode": "DSLL",
+                  "siteTypeCode": [
+                    "GL"
+                    ]
+            },
+            {
+                 "siteNumberFormatCode": "WU",
+                 "siteTypeCode": [
+                    "AW"
+                    ]
+            },
+            {
+                "siteNumberFormatCode": "LLWU",
+                "siteTypeCode": [
+                    "FA-CI"
+                ]
+            }
+            ]
+        }
+        mref_validator = mref_validator_class.return_value
+        mref_validator.validate.return_value = True
+        mref_validator.errors = []
+
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = CrossFieldRefWarningValidator('ref_dir')
+
+    def test_no_site_number_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AT', 'siteNumber': ' '}, {}))
+
+    def test_no_site_type_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': ' ', 'siteNumber': '12345678'}, {}))
+
+    def test_site_number_ll_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AT', 'siteNumber': '012345678901234'}, {}))
+
+    def test_site_number_dsll_min_length_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'GL', 'siteNumber': '12345678'}, {}))
+
+    def test_site_number_dsll_max_length_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'GL', 'siteNumber': '012345678901234'}, {}))
+
+    def test_site_number_wu_min_length_first_digit_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AW', 'siteNumber': '9876543210'}, {}))
+
+    def test_site_number_wu_max_length_first_digit_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765'}, {}))
+
+    def test_site_number_llwu_max_length_first_digit_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '987654321098765'}, {}))
+
+    def test_site_number_llwu_max_length_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098765'}, {}))
+
+    def test_site_number_llwu_min_length_valid(self):
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '9876543210'}, {}))
+
+    def test_site_number_ll_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AT', 'siteNumber': '01234567890123'}, {}))
+
+    def test_site_number_dsll_less_than_min_length_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'GL', 'siteNumber': '1234567'}, {}))
+
+    def test_site_number_dsll_greater_than_max_length_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'GL', 'siteNumber': '0123456789012345'}, {}))
+
+    def test_site_number_wu_less_than_min_length_first_digit_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321'}, {}))
+
+    def test_site_number_wu_no_first_digit_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AW', 'siteNumber': '8765432109'}, {}))
+
+    def test_site_number_wu_greater_than_max_length_first_digit_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'AW', 'siteNumber': '987654321098765432'}, {}))
+
+    def test_site_number_llwu_greater_than_max_length_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '98765432109876543'}, {}))
+
+    def test_site_number_llwu_less_than_min_length_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '59876543'}, {}))
+
+    def test_site_number_llwu_wrong_first_digit_invalid(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-CI', 'siteNumber': '087654321098'}, {}))
+
