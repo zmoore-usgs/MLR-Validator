@@ -97,6 +97,19 @@ class SingleFieldValidator(Validator):
             if not stripped_value.isdigit():
                 self._error(field, "Site Number can only have digits 0-9")
 
+    def _validate_valid_site_type(self, update, site_type):
+        """
+        FA and SS are not valid types for new sites, however they are valid for updating existing sites. So if update 
+        is False, this check is made.
+        
+        The rule's arguments are validated against this schema:
+        {'type': 'boolean'}
+        """
+        if update is False:       
+            invalid_site = site_type in ['SS','FA']
+            if site_type in invalid_site:
+                self._error(site_type, "Non-valid site type, may not use a non-vaild code for new site creation.")
+
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
         # Check that characters other than 0-9 or a blank space do not exist in field
