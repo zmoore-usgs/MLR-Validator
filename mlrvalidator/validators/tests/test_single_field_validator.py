@@ -69,6 +69,17 @@ class ValidateValidSiteTypeTestCase(TestCase):
     def setUp(self):
         self.validator = SingleFieldValidator(schema={'siteTypeCode': {'is_empty': False}}, reference_dir='')
 
+        self.good_data = {
+            'siteTypeCode': 'SS',
+            'siteNumber': '12345678',
+            'agencyCode': 'USGS'
+        }
+        self.good_data2 = {
+            'siteTypeCode': 'FA',
+            'siteNumber': '12345678',
+            'agencyCode': 'USGS'
+        }
+
         self.bad_data = {
             'siteTypeCode': 'FA',
             'siteNumber': '12345678',
@@ -80,9 +91,13 @@ class ValidateValidSiteTypeTestCase(TestCase):
             'agencyCode': 'USGS'
         }
 
-    def test_with_validate_not_ok(self, update=False):
-        self.assertFalse(self.validator.validate(self.bad_data))
-        self.assertFalse(self.validator.validate(self.bad_data2))
+    def test_with_validate_ok(self):
+        self.assertTrue(self.validator.validate(self.good_data, update=True))
+        self.assertTrue(self.validator.validate(self.good_data2, update=True))
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(self.validator.validate(self.bad_data, update=False))
+        self.assertFalse(self.validator.validate(self.bad_data2, update=False))
 
 class ValidateTypeNumericCheckTestCase(TestCase):
 
