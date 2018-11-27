@@ -5,7 +5,7 @@ from unittest import TestCase, mock
 
 from app import application
 
-from ..reference import ReferenceInfo, SiteTypeInvalidCodes
+from ..reference import ReferenceInfo
 from ..single_field_validator import SingleFieldValidator
 
 
@@ -70,14 +70,10 @@ class ValidateValidSiteTypeTestCase(TestCase):
         self.validator = SingleFieldValidator(schema={'siteTypeCode': {'valid_site_type': True}}, reference_dir='')
 
         self.bad_data = {
-            'siteTypeCode': 'FA',
-            'siteNumber': '12345678',
-            'agencyCode': 'USGS'
+            'siteTypeCode': 'FA'
         }
         self.bad_data2 = {
-            'siteTypeCode': 'SS',
-            'siteNumber': '12345678',
-            'agencyCode': 'USGS'
+            'siteTypeCode': 'SS'
         }
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
