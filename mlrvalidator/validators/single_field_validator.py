@@ -4,6 +4,8 @@ import os
 import re
 
 from cerberus import Validator
+from collections import defaultdict
+from itertools import chain
 
 from .reference import ReferenceInfo
 
@@ -19,6 +21,22 @@ class SingleFieldValidator(Validator):
 
         if self.reference_dir:
             self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
+
+    # def validate(self, ddot_location, existing_location, update):
+    #     self.single_field_validator.validate(ddot_location, update=update)
+    #     self._errors = defaultdict(list)
+    #     all_errors = chain(
+    #         self.single_field_validator.errors.items()
+    #     )
+
+    #     for k, v in chain(all_errors):
+    #         self.errors[k].extend(v)
+    #     return self._errors == {}
+
+    # @property
+    # def errors(self):
+    #     return self._errors
+
 
     def _validate_type_numeric(self, value):
         # check for numeric value
@@ -97,18 +115,18 @@ class SingleFieldValidator(Validator):
             if not stripped_value.isdigit():
                 self._error(field, "Site Number can only have digits 0-9")
 
-    def _validate_valid_site_type(self, update, site_type):
+    def _validate_valid_site_type(self, valid_site_type, field, value, update):
         """
         FA and SS are not valid types for new sites, however they are valid for updating existing sites. So if update 
         is False, this check is made.
         
         The rule's arguments are validated against this schema:
-        {'type': 'boolean'}
+        {'valid_site_type': True}
         """
         if update is False:       
-            invalid_site = site_type in ['SS','FA']
-            if site_type in invalid_site:
-                self._error(site_type, "Non-valid site type, may not use a non-vaild code for new site creation.")
+            invalid_site = value in ['SS','FA']
+            if invalid_site:
+                self._error(field, "Non-valid site type, may not use a non-vaild code for new site creation.")
 
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
