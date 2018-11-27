@@ -4,8 +4,6 @@ import os
 import re
 
 from cerberus import Validator
-from collections import defaultdict
-from itertools import chain
 
 from .reference import ReferenceInfo
 
