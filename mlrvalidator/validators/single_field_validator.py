@@ -22,22 +22,6 @@ class SingleFieldValidator(Validator):
         if self.reference_dir:
             self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
 
-    # def validate(self, ddot_location, existing_location, update):
-    #     self.single_field_validator.validate(ddot_location, update=update)
-    #     self._errors = defaultdict(list)
-    #     all_errors = chain(
-    #         self.single_field_validator.errors.items()
-    #     )
-
-    #     for k, v in chain(all_errors):
-    #         self.errors[k].extend(v)
-    #     return self._errors == {}
-
-    # @property
-    # def errors(self):
-    #     return self._errors
-
-
     def _validate_type_numeric(self, value):
         # check for numeric value
         if not value.strip():
@@ -115,18 +99,16 @@ class SingleFieldValidator(Validator):
             if not stripped_value.isdigit():
                 self._error(field, "Site Number can only have digits 0-9")
 
-    def _validate_valid_site_type(self, valid_site_type, field, value, update):
+    def _validate_valid_site_type(self, valid_site_type, field, value):
         """
-        FA and SS are not valid types for new sites, however they are valid for updating existing sites. So if update 
-        is False, this check is made.
+        Do not allow users to use non-valid types for new sites and if the record is being updated, the site type code must also be updated
         
         The rule's arguments are validated against this schema:
         {'valid_site_type': True}
-        """
-        if update is False:       
-            invalid_site = value in ['SS','FA']
-            if invalid_site:
-                self._error(field, "Non-valid site type, may not use a non-vaild code for new site creation.")
+        """      
+        site_type_invalid_code_list = self.reference_list.get_reference_info().get('siteTypeInvalidCode', [])
+        if value in site_type_invalid_code_list:
+            self._error(field, "Non-valid site type, may not use a non-vaild code for site creation or updates.")
 
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
