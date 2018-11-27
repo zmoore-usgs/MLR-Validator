@@ -646,19 +646,6 @@
       ]
     },
     {
-      "siteTypeCode": "FA",
-      "notNullAttrs": [
-        
-      ],
-      "nullAttrs": [
-        "contributingDrainageArea",
-        "drainageArea",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
-      ]
-    },
-    {
       "siteTypeCode": "FA-GC",
       "notNullAttrs": [
         
