@@ -3,7 +3,6 @@ from unittest import TestCase
 
 from app import application
 from ..error_validator import ErrorValidator
-import requests_mock
 
 
 class BaseE2ETestCase(TestCase):
@@ -173,95 +172,6 @@ class ErrorValidatorStationNameTestCase(BaseE2ETestCase):
     def test_only_spaces_too_long_is_invalid(self):
         self.assertFalse(self.v.validate({'stationName': '                                                            '}, {}, update=True))
         self.assertEqual(len(self.v.errors.get('stationName')), 2)
-
-@requests_mock.Mocker()
-class ErrorValidatorStationIxTestCase(BaseE2ETestCase):
-
-    def test_valid_chars_all_lower_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br549'}, {}, update=True))
-
-    def test_valid_chars_mix_upper_lower_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'YYyyNnNN'}, {}, update=True))
-
-    def test_valid_chars_all_upper_is_valid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertTrue(self.v.validate({'stationIx': 'ABCD'}, {}, update=True))
-
-    def test_valid_chars_space_in_middle_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br 549'}, {}, update=True))
-
-    def test_allowed_special_chars_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'a-b'}, {}, update=True))
-
-    def test_leading_space_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': '   BR549'}, {}, update=True))
-
-    def test_trailing_space_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'BR549   '}, {}, update=True))
-
-    def test_null_value_no_pad_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': ''}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('stationIx')), 1)
-
-    def test_null_value_pad_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': ' '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('stationIx')), 2)
-
-    def test_bad_special_char_pound_sign_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br5#49'}, {}, update=True))
-
-    def test_bad_special_char_tab_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br\t549'}, {}, update=True))
-
-    def test_bad_special_char_backslash_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br\\549'}, {}, update=True))
-
-    def test_bad_special_char_dollar_sign_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': '$br549'}, {}, update=True))
-
-    def test_bad_special_char_caret_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'b^r549'}, {}, update=True))
-
-    def test_bad_special_char_asterisk_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br5*49'}, {}, update=True))
-
-    def test_bad_special_char_double_quotes_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br54"9'}, {}, update=True))
-
-    def test_bad_special_char_underscore_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': 'br549_'}, {}, update=True))
-
-    def test_valid_chars_too_long_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': '0126954826512369548fesgdrs0126954826512369548fesgdrs'}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('stationIx')), 2)
-
-    def test_invalid_chars_too_long_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': '01269d8#**2g65\\1y23e69s548                         '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('stationIx')), 2)
-
-    def test_only_spaces_too_long_is_invalid(self, mocker):
-        mocker.get(requests_mock.ANY, status_code=404, text="[]")
-        self.assertFalse(self.v.validate({'stationIx': '                                                            '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('stationIx')), 3)
-
 
 class ErrorValidatorLatitudeTestCase(BaseE2ETestCase):
 
