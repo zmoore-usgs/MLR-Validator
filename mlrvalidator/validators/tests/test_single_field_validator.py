@@ -67,7 +67,8 @@ class ValidateValidSiteNumberTestCase(TestCase):
 class ValidateValidSiteTypeTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'siteTypeCode': {'valid_site_type': True}}, reference_dir='')
+        dir_path = os.path.dirname(os.path.realpath(__file__))+'/../../references'
+        self.validator = SingleFieldValidator(schema={'siteTypeCode': {'valid_site_type': True}}, reference_dir=dir_path)
 
         self.bad_data = {
             'siteTypeCode': 'FA'
