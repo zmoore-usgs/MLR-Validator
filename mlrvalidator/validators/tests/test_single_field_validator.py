@@ -67,8 +67,12 @@ class ValidateValidSiteNumberTestCase(TestCase):
 class ValidateValidSiteTypeTestCase(TestCase):
 
     def setUp(self):
-        dir_path = os.path.dirname(os.path.realpath(__file__))+'/../../references'
-        self.validator = SingleFieldValidator(schema={'siteTypeCode': {'valid_site_type': True}}, reference_dir=dir_path)
+        ref_list = {'siteTypeInvalidCode': ['FA', 'SS']}
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = SingleFieldValidator(schema={
+                'siteTypeInvalidCode': {'valid_site_type': True}
+            }, reference_dir='ref_dir')
 
         self.bad_data = {
             'siteTypeCode': 'FA'
@@ -76,6 +80,7 @@ class ValidateValidSiteTypeTestCase(TestCase):
         self.bad_data2 = {
             'siteTypeCode': 'SS'
         }
+
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.bad_data))
         self.assertFalse(self.validator.validate(self.bad_data2))
