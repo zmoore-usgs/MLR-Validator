@@ -106,7 +106,7 @@ class SingleFieldValidator(Validator):
         """      
         site_type_invalid_code_list = self.reference_list.get_reference_info().get('siteTypeInvalidCode', [])
         if value in site_type_invalid_code_list:
-            self._error(field, "Non-valid site type, may not use a non-vaild code for site creation or updates.")
+            self._error(field, "Non-valid site type, may not use a non-valid code for site creation or updates.")
 
     def _validate_valid_map_scale_chars(self, valid_map_scale_chars, field, value):
         """
