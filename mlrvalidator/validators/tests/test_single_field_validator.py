@@ -64,6 +64,26 @@ class ValidateValidSiteNumberTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
         self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
 
+class ValidateValidSiteTypeTestCase(TestCase):
+
+    def setUp(self):
+        ref_list = {'siteTypeInvalidCode': ['FA', 'SS']}
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = SingleFieldValidator(schema={
+                'siteTypeInvalidCode': {'valid_site_type': True}
+            }, reference_dir='ref_dir')
+
+        self.bad_data = {
+            'siteTypeCode': 'FA'
+        }
+        self.bad_data2 = {
+            'siteTypeCode': 'SS'
+        }
+
+    def test_with_validate_not_ok(self):
+        self.assertFalse(self.validator.validate(self.bad_data))
+        self.assertFalse(self.validator.validate(self.bad_data2))
 
 class ValidateTypeNumericCheckTestCase(TestCase):
 

@@ -466,27 +466,6 @@
       ]
     },
     {
-      "siteTypeCode": "SS",
-      "notNullAttrs": [
-        "latitude",
-        "longitude"
-      ],
-      "nullAttrs": [
-        "aquiferCode",
-        "aquiferTypeCode",
-        "contributingDrainageArea",
-        "drainageArea",
-        "holeDepth",
-        "nationalAquiferCode",
-        "nationalWaterUseCode",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "sourceOfDepthCode",
-        "tertiaryUseOfSiteCode",
-        "wellDepth"
-      ]
-    },
-    {
       "siteTypeCode": "ST",
       "notNullAttrs": [
         "latitude",
@@ -664,19 +643,6 @@
         "holeDepth",
         "sourceOfDepthCode",
         "wellDepth"
-      ]
-    },
-    {
-      "siteTypeCode": "FA",
-      "notNullAttrs": [
-        
-      ],
-      "nullAttrs": [
-        "contributingDrainageArea",
-        "drainageArea",
-        "primaryUseOfSiteCode",
-        "secondaryUseOfSiteCode",
-        "tertiaryUseOfSiteCode"
       ]
     },
     {

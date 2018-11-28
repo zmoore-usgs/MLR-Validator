@@ -1265,7 +1265,6 @@
     "AT",
     "AW",
     "ES",
-    "FA",
     "FA-AWL",
     "FA-CI",
     "FA-CS",
@@ -1312,12 +1311,15 @@
     "SB-TSM",
     "SB-UZ",
     "SP",
-    "SS",
     "ST",
     "ST-CA",
     "ST-DCH",
     "ST-TS",
     "WE"
+  ],
+  "siteTypeInvalidCode": [
+    "FA",
+    "SS"
   ],
   "siteWebReadyCode": [
     "L",

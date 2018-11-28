@@ -36,6 +36,10 @@ class NationalWaterUseCodes(ReferenceInfo):
         site_type_list = self.reference_info['siteTypeCodes']
         return get_dict(site_type_list, 'siteTypeCode', site_type_code).get('nationalWaterUseCodes', [])
 
+class SiteTypeInvalidCodes(ReferenceInfo):
+    def get_site_type_invalid_codes(self):
+        site_type_invalid_code_list = self.reference_info['siteTypeInvalidCode']
+        return site_type_invalid_code_list
 
 class Counties(CountryStateReference):
 

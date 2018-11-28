@@ -24,6 +24,7 @@ siteTypeCode:
     is_empty: False
     maxlength: 7
     valid_reference: True
+    valid_site_type: True
 latitude:
     maxlength: 11
     valid_latitude_dms: True
