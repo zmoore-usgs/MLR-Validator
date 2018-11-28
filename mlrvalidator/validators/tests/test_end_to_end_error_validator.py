@@ -3472,15 +3472,6 @@ class TimeZoneCodeTestCase(BaseE2ETestCase):
         )
         self.assertIn('timeZoneCode', self.v.errors)
 
-    def test_length_of_timeZoneCode(self):
-        self.v.validate(
-            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZP-10'},
-            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
-            update=True
-        )
-        self.assertIn('timeZoneCode', self.v.errors)
-
-
 class DaylightSavingsTimeFlag(BaseE2ETestCase):
 
     def test_required(self):
