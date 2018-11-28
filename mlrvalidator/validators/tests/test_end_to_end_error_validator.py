@@ -3472,6 +3472,14 @@ class TimeZoneCodeTestCase(BaseE2ETestCase):
         )
         self.assertIn('timeZoneCode', self.v.errors)
 
+    def test_length_of_timeZoneCode(self):
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'timeZoneCode': 'ZP-10'},
+            {'agencyCode': 'USGS', 'siteNumber': '12345678'},
+            update=True
+        )
+        self.assertIn('timeZoneCode', self.v.errors)
+
 
 class DaylightSavingsTimeFlag(BaseE2ETestCase):
 
@@ -3600,6 +3608,33 @@ class SiteTypeCodeTestCase(BaseE2ETestCase):
         )
         self.assertIn('siteTypeCode', self.v.errors)
 
+    def test_for_invalid_siteTypeCode(self):
+        #Cannot create sites with siteTypeCode in siteTypeCodeInvalid
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS'}, {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', self.v.errors)
+        
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA'}, {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', self.v.errors)
+        #Can/must update sites from invalid site type codes
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'AG'}, 
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS'},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', self.v.errors)
+        
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'ES', 'latitude': "12345678", 'longitude': "12345678"}, 
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS', 'latitude': "12345678", 'longitude': "12345678"},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', self.v.errors)
 
 class RemarksTestCase(BaseE2ETestCase):
 
