@@ -3600,6 +3600,33 @@ class SiteTypeCodeTestCase(BaseE2ETestCase):
         )
         self.assertIn('siteTypeCode', self.v.errors)
 
+    def test_for_invalid_site_type_code_transition(self):
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'AG'}, 
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS'},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', self.v.errors)
+        
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'ES', 'latitude': "12345678", 'longitude': "12345678"}, 
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS', 'latitude': "12345678", 'longitude': "12345678"},
+            update=True
+        )
+        self.assertNotIn('siteTypeCode', self.v.errors)    
+
+    def test_for_invalid_site_type_code(self):
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'SS'}, {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', self.v.errors)
+        
+        self.v.validate(
+            {'agencyCode': 'USGS', 'siteNumber': '12345678', 'siteTypeCode': 'FA'}, {},
+            update=False
+        )
+        self.assertIn('siteTypeCode', self.v.errors)
 
 class RemarksTestCase(BaseE2ETestCase):
 
