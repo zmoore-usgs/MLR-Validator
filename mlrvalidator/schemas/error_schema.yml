@@ -152,7 +152,7 @@ projectNumber:
 timeZoneCode:
     required: True
     is_empty: False
-    maxlength: 5
+    maxlength: 6
     valid_reference: True
 daylightSavingsTimeFlag:
     required: True
