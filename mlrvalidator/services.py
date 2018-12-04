@@ -115,9 +115,9 @@ def _validate_response(req_json, update=False):
 
     response = {}
     if not no_errors:
-        response["fatal_error_message"] = 'Fatal Errors: {0}'.format(dict(error_validator.errors))
+        response["fatal_error_message"] = error_validator.errors
     if not no_warnings:
-        response["warning_message"] = 'Validation Warnings: {0}'.format(dict(warning_validator.warnings))
+        response["warning_message"] = warning_validator.warnings
     if no_errors and no_warnings:
         response["validation_passed_message"] = 'Validations Passed'
 
