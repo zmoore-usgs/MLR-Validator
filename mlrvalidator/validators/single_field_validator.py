@@ -253,10 +253,17 @@ class SingleFieldValidator(Validator):
         """
 
         if valid_reference and self.reference_list:
-            stripped_value = value.strip()
+            stripped_value = value.rstrip()
+            errors = ''
             ref_list = self.reference_list.get_reference_info().get(field, [])
             if stripped_value and stripped_value not in ref_list:
-                return self._error(field, '{0} is not in reference list'.format(value))
+                errors += field + ' \'{0}\' is not in reference list'.format(value)
+            if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
+                if len(errors)!=0:
+                    errors += ';  '
+                errors += field + ' \'{0}\' contains illegal left-padding'.format(value)
+            if len(errors)!=0:
+                return self._error(field, errors)
 
     def _validate_valid_single_quotes(self, valid_single_quotes, field, value):
         """
