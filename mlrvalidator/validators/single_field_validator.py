@@ -93,9 +93,20 @@ class SingleFieldValidator(Validator):
         {'valid_site_number': True}
         """
         stripped_value = value.rstrip()
+        errors = ''
         if valid_site_number and stripped_value:
             if not stripped_value.isdigit():
-                self._error(field, "Site Number can only have digits 0-9")
+                errors += field + "Site Number can only have digits 0-9"
+        if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
+                if len(errors) != 0:
+                    errors += '; '
+                errors += field + ' \'{0}\' contains illegal leading spaces'.format(value)
+        if len(value.strip(' ')) < 8:
+                if len(errors) != 0:
+                    errors += '; '
+                errors += field + ' \'{0}\' does not meet minimum length requirements'.format(value)
+        if len(errors) != 0:
+            return self._error(field, errors)
 
     def _validate_valid_site_type(self, valid_site_type, field, value):
         """

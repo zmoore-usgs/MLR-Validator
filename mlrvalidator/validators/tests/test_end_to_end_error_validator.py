@@ -64,16 +64,16 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
     def test_only_digits_is_valid(self):
         self.assertTrue(self.v.validate({'siteNumber': '01234567'}, {}, update=True))
 
-    def test_only_digits_trailing_space_is_valid(self):
-        self.assertTrue(self.v.validate({'siteNumber': '01234   '}, {}, update=True))
+    def test_only_digits_trailing_space_is_invalid(self):
+        self.assertFalse(self.v.validate({'siteNumber': '01234   '}, {}, update=True))
 
     def test_null_value_no_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ''}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 3)
 
     def test_null_value_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ' '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 3)
 
     def test_non_digit_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': 'a6'}, {}, update=True))
@@ -94,7 +94,7 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_only_spaces_too_long_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': '                    '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 3)
 
     def test_no_site_type_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': ' ', 'siteNumber': '12345678'}, {}, update=True))
@@ -104,7 +104,7 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_only_digits_too_short_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': '0123'}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
 
 class ErrorValidatorStationNameTestCase(BaseE2ETestCase):

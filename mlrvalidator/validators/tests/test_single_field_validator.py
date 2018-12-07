@@ -36,12 +36,12 @@ class ValidateValidSiteNumberTestCase(TestCase):
     def setUp(self):
         self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}}, reference_dir='')
         self.only_digits_is_valid = {
-            'siteNumber': '01234'
+            'siteNumber': '01234567'
         }
-        self.null_value_no_pad_is_valid = {
+        self.null_value_no_pad_is_invalid = {
             'siteNumber': ''
         }
-        self.null_value_pad_is_valid = {
+        self.null_value_pad_is_invalid = {
             'siteNumber': ' '
         }
         self.non_digit_is_invalid = {
@@ -59,11 +59,11 @@ class ValidateValidSiteNumberTestCase(TestCase):
 
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.only_digits_is_valid))
-        self.assertTrue(self.validator.validate(self.null_value_no_pad_is_valid))
-        self.assertTrue(self.validator.validate(self.null_value_pad_is_valid))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.non_digit_is_invalid))
+        self.assertFalse(self.validator.validate(self.null_value_pad_is_invalid))
+        self.assertFalse(self.validator.validate(self.null_value_no_pad_is_invalid))
         self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
         self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
         self.assertFalse(self.validator.validate(self.left_padding_is_invalid))
