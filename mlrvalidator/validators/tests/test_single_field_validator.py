@@ -53,6 +53,9 @@ class ValidateValidSiteNumberTestCase(TestCase):
         self.only_digits_blank_space_is_invalid = {
             'siteNumber': '32   4'
         }
+        self.left_padding_is_invalid = {
+            'siteNumber': '  12345'
+        }
 
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.only_digits_is_valid))
@@ -63,6 +66,7 @@ class ValidateValidSiteNumberTestCase(TestCase):
         self.assertFalse(self.validator.validate(self.non_digit_is_invalid))
         self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
         self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
+        self.assertFalse(self.validator.validate(self.left_padding_is_invalid))
 
 class ValidateValidSiteTypeTestCase(TestCase):
 
@@ -799,6 +803,15 @@ class ValidateReferenceTestCase(TestCase):
 
     def test_invalid_field(self):
         self.assertFalse(self.validator.validate({'field2': 'A'}))
+
+    def test_field_preceding_left_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A'}))
+
+    def test_field_surrounded_by_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A   '}))
+    
+    def test_right_padding_is_okay(self):
+        self.assertTrue(self.validator.validate({'field1': 'A  '}))
 
 
 class ValidateSingleQuoteTestCase(TestCase):
