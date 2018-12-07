@@ -246,24 +246,24 @@ class SingleFieldValidator(Validator):
 
     def _validate_valid_reference(self, valid_reference, field, value):
         """
-        # Check that value is the list of allowable values
+        # Check that value is the list of allowable values and doesn't have illegal left-padding
 
         The rule's arguments are validated against this schema:
         {'type': 'boolean'}
         """
 
         if valid_reference and self.reference_list:
-            stripped_value = value.rstrip()
+            stripped_value = value.strip()
             errors = ''
             ref_list = self.reference_list.get_reference_info().get(field, [])
             if stripped_value and stripped_value not in ref_list:
                 errors += field + ' \'{0}\' is not in reference list'.format(value)
             if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
                 if len(errors)!=0:
-                    errors += ';  '
+                    errors += '; '
                 errors += field + ' \'{0}\' contains illegal left-padding'.format(value)
-            if len(errors)!=0:
-                return self._error(field, errors)
+        if len(errors)!=0:
+            return self._error(field, errors)
 
     def _validate_valid_single_quotes(self, valid_single_quotes, field, value):
         """
