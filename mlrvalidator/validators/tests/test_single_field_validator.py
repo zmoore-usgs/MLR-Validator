@@ -823,6 +823,12 @@ class ValidateValidPaddingTestCase(TestCase):
     def test_field_surrounded_by_spaces(self):
         self.assertFalse(self.validator.validate({'field1': '   A   '}))
 
+    def test_site_number_padding(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '  12345678'}))
+    
+    def test_agency_code_padding(self):
+        self.assertFalse(self.validator.validate({'agencyCode': '  USGS'}))
+
 class ValidateSingleQuoteTestCase(TestCase):
     def setUp(self):
         self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}}, reference_dir='')
