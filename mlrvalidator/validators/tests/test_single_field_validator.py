@@ -803,16 +803,25 @@ class ValidateReferenceTestCase(TestCase):
 
     def test_invalid_field(self):
         self.assertFalse(self.validator.validate({'field2': 'A'}))
-
-    def test_field_preceding_left_spaces(self):
-        self.assertFalse(self.validator.validate({'field1': '   A'}))
-
-    def test_field_surrounded_by_spaces(self):
-        self.assertFalse(self.validator.validate({'field1': '   A   '}))
     
     def test_right_padding_is_okay(self):
         self.assertTrue(self.validator.validate({'field1': 'A  '}))
 
+class ValidateValidPaddingTestCase(TestCase):
+    def setUp(self):
+        ref_list = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = SingleFieldValidator(schema={
+                'field1': {'valid_padding': True},
+                'field2': {'valid_padding': True}
+            }, reference_dir='ref_dir')
+    
+    def test_field_preceding_left_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A'}))
+    
+    def test_field_surrounded_by_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A   '}))
 
 class ValidateSingleQuoteTestCase(TestCase):
     def setUp(self):
