@@ -97,10 +97,6 @@ class SingleFieldValidator(Validator):
         if valid_site_number and stripped_value:
             if not stripped_value.isdigit():
                 errors += field + "Site Number can only have digits 0-9"
-        if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
-                if len(errors) != 0:
-                    errors += '; '
-                errors += field + ' \'{0}\' contains illegal leading spaces'.format(value)
         if len(value.strip(' ')) < 8:
                 if len(errors) != 0:
                     errors += '; '
@@ -255,26 +251,28 @@ class SingleFieldValidator(Validator):
             else:
                 self._error(field, error_message)
 
-    def _validate_valid_reference(self, valid_reference, field, value):
+    def _validate_valid_padding(self, valid_padding, field, value):
         """
-        # Check that value is the list of allowable values and doesn't have illegal left-padding
+        # Check that value doesn't have illegal left-padding
 
         The rule's arguments are validated against this schema:
         {'type': 'boolean'}
         """
+        if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
+            self._error(field, ' \'{0}\' contains illegal left-padding'.format(value))
+        
+    def _validate_valid_reference(self, valid_reference, field, value):
+        """
+        # Check that value is the list of allowable values
 
+        The rule's arguments are validated against this schema:
+        {'type': 'boolean'}
+        """
         if valid_reference and self.reference_list:
             stripped_value = value.strip()
-            errors = ''
             ref_list = self.reference_list.get_reference_info().get(field, [])
             if stripped_value and stripped_value not in ref_list:
-                errors += field + ' \'{0}\' is not in reference list'.format(value)
-            if len(value) > len(value.lstrip(' ')) and len(value) - value.count(' ') > 0:
-                if len(errors)!=0:
-                    errors += '; '
-                errors += field + ' \'{0}\' contains illegal left-padding'.format(value)
-        if len(errors)!=0:
-            return self._error(field, errors)
+                self._error(field, ' \'{0}\' is not in reference list'.format(value))
 
     def _validate_valid_single_quotes(self, valid_single_quotes, field, value):
         """

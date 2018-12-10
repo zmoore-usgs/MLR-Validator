@@ -2,11 +2,13 @@ agencyCode:
     required: True
     is_empty: False
     maxlength: 5
+    valid_padding: True
     valid_reference: True
 siteNumber:
     required: True
     maxlength: 15
     is_empty: False
+    valid_padding: True
     valid_site_number: True
 stationName:
     required: True
