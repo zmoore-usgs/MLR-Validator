@@ -36,12 +36,12 @@ class ValidateValidSiteNumberTestCase(TestCase):
     def setUp(self):
         self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}}, reference_dir='')
         self.only_digits_is_valid = {
-            'siteNumber': '01234'
+            'siteNumber': '01234567'
         }
-        self.null_value_no_pad_is_valid = {
+        self.null_value_no_pad_is_invalid = {
             'siteNumber': ''
         }
-        self.null_value_pad_is_valid = {
+        self.null_value_pad_is_invalid = {
             'siteNumber': ' '
         }
         self.non_digit_is_invalid = {
@@ -59,11 +59,11 @@ class ValidateValidSiteNumberTestCase(TestCase):
 
     def test_validate_ok(self):
         self.assertTrue(self.validator.validate(self.only_digits_is_valid))
-        self.assertTrue(self.validator.validate(self.null_value_no_pad_is_valid))
-        self.assertTrue(self.validator.validate(self.null_value_pad_is_valid))
 
     def test_with_validate_not_ok(self):
         self.assertFalse(self.validator.validate(self.non_digit_is_invalid))
+        self.assertFalse(self.validator.validate(self.null_value_pad_is_invalid))
+        self.assertFalse(self.validator.validate(self.null_value_no_pad_is_invalid))
         self.assertFalse(self.validator.validate(self.non_digit_special_char_is_invalid))
         self.assertFalse(self.validator.validate(self.only_digits_blank_space_is_invalid))
         self.assertFalse(self.validator.validate(self.left_padding_is_invalid))
@@ -803,16 +803,31 @@ class ValidateReferenceTestCase(TestCase):
 
     def test_invalid_field(self):
         self.assertFalse(self.validator.validate({'field2': 'A'}))
-
-    def test_field_preceding_left_spaces(self):
-        self.assertFalse(self.validator.validate({'field1': '   A'}))
-
-    def test_field_surrounded_by_spaces(self):
-        self.assertFalse(self.validator.validate({'field1': '   A   '}))
     
     def test_right_padding_is_okay(self):
         self.assertTrue(self.validator.validate({'field1': 'A  '}))
 
+class ValidateValidPaddingTestCase(TestCase):
+    def setUp(self):
+        ref_list = {'field1': ['A', 'B', 'C'], 'field2': ['AA', 'BB', 'CC']}
+        with mock.patch('mlrvalidator.validators.reference.open',
+                        mock.mock_open(read_data=json.dumps(ref_list))):
+            self.validator = SingleFieldValidator(schema={
+                'field1': {'valid_padding': True},
+                'field2': {'valid_padding': True}
+            }, reference_dir='ref_dir')
+    
+    def test_field_preceding_left_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A'}))
+    
+    def test_field_surrounded_by_spaces(self):
+        self.assertFalse(self.validator.validate({'field1': '   A   '}))
+
+    def test_site_number_padding(self):
+        self.assertFalse(self.validator.validate({'siteNumber': '  12345678'}))
+    
+    def test_agency_code_padding(self):
+        self.assertFalse(self.validator.validate({'agencyCode': '  USGS'}))
 
 class ValidateSingleQuoteTestCase(TestCase):
     def setUp(self):
