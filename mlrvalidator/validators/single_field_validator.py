@@ -96,7 +96,7 @@ class SingleFieldValidator(Validator):
         errors = ''
         if valid_site_number and stripped_value:
             if not stripped_value.isdigit():
-                errors += field + "Site Number can only have digits 0-9"
+                errors += field + " can only have digits 0-9"
         if len(value.strip(' ')) < 8:
                 if len(errors) != 0:
                     errors += '; '
