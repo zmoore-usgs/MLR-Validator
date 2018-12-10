@@ -69,11 +69,11 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_null_value_no_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ''}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 3)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
     def test_null_value_pad_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': ' '}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 3)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
 
     def test_non_digit_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': 'a6'}, {}, update=True))
@@ -104,7 +104,7 @@ class ErrorValidatorSiteNumberTestCase(BaseE2ETestCase):
 
     def test_only_digits_too_short_is_invalid(self):
         self.assertFalse(self.v.validate({'siteNumber': '0123'}, {}, update=True))
-        self.assertEqual(len(self.v.errors.get('siteNumber')), 2)
+        self.assertEqual(len(self.v.errors.get('siteNumber')), 1)
 
 
 class ErrorValidatorStationNameTestCase(BaseE2ETestCase):
