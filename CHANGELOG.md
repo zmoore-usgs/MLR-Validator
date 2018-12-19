@@ -9,10 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 - cschroedl@usgs.gov - Upgraded `requests` and `cryptography` to address security vulnerability https://nvd.nist.gov/vuln/detail/CVE-2018-18074
 
-### Added
-- cschroedl@usgs.gov - Added checks for duplicate normalized station names.
-- cschroedl@usgs.gov - Added new env var (cru_service_url) for integrating the Validator with the CRU Services (aka MLR-Legacy). 
-
 ### Updated
 - kmschoep@usgs.gov - remove land net validation
 - updated flask version due to CVE https://nvd.nist.gov/vuln/detail/CVE-2018-1000656
