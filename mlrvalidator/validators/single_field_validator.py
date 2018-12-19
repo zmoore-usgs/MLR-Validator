@@ -5,7 +5,7 @@ import re
 
 from cerberus import Validator
 
-from .reference import ReferenceInfo
+from .reference import SiteTypeInvalidCodes, ReferenceInfo
 
 
 class SingleFieldValidator(Validator):
@@ -19,6 +19,7 @@ class SingleFieldValidator(Validator):
 
         if self.reference_dir:
             self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
+            self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(self.reference_dir, 'site_type_invalid.json'))
 
     def _validate_type_numeric(self, value):
         # check for numeric value
@@ -111,7 +112,7 @@ class SingleFieldValidator(Validator):
         The rule's arguments are validated against this schema:
         {'valid_site_type': True}
         """      
-        site_type_invalid_code_list = self.reference_list.get_reference_info().get('siteTypeInvalidCode', [])
+        site_type_invalid_code_list = self.site_type_invalid_code_list.get_site_type_invalid_codes()
         if value in site_type_invalid_code_list:
             self._error(field, "Non-valid site type, may not use a non-valid code for site creation or updates.")
 
