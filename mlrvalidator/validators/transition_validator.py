@@ -19,6 +19,7 @@ class TransitionValidator:
             transitions = self.site_type_transition_ref.get_allowed_transitions(existing_value)
             if transitions and transitions.count(new_value) == 0:
                 self._errors['siteTypeCode'] = ['Can\'t change a siteTypeCode with existing value {0} to {1}'.format(existing_value, new_value)]
+        
         invalid_codes = self.site_type_invalid_code_list.get_site_type_invalid_codes()
         if existing_value in invalid_codes and new_value is '' or new_value in invalid_codes:
             self._errors['siteTypeCode'] = ['Existing record uses a non-valid site type, may not use a non-valid code for site creation or updates. Re-submit with a valid siteTypeCode.']
