@@ -22,6 +22,8 @@ class TransitionValidatorSiteTypeTestCase(TestCase):
 
     def test_missing_field(self):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-DV'}, {}))
+    
+    def test_missing_field2(self):
         self.assertTrue(self.validator.validate({}, {'siteTypeCode': 'AG'}))
 
     def test_existing_not_in_ref_list(self):
@@ -32,4 +34,22 @@ class TransitionValidatorSiteTypeTestCase(TestCase):
 
     def test_invalid_site_type_transition(self):
         self.assertFalse(self.validator.validate({'siteTypeCode': 'FA'}, {'siteTypeCode': 'FA'}))
+    
+    def test_invalid_site_type_transition2(self):
         self.assertFalse(self.validator.validate({'siteTypeCode': 'SS'}, {'siteTypeCode': 'SS'}))
+        
+    def test_invalid_site_type_transition3(self):
+        self.assertFalse(self.validator.validate({}, {'siteTypeCode': 'SS'}))
+
+class TransitionValidatorSiteTypeTestCase2(TestCase):
+
+    @mock.patch('mlrvalidator.validators.transition_validator.SiteTypeInvalidCodes')
+    @mock.patch('mlrvalidator.validators.transition_validator.FieldTransitions')
+    def setUp(self, mfield_transitions, msite_type_invalid_codes):
+    
+        msite_type_invalid_codes.return_value.get_site_type_invalid_codes.return_value = ['FA', 'SS']
+        mfield_transitions.return_value.get_allowed_transitions.return_value = ['FA-SPS','FA-WIW','GW']
+        self.validator = TransitionValidator('ref_dir')
+
+    def test_valid_transition(self):
+        self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-DV'}, {'siteTypeCode': 'AG'}))
