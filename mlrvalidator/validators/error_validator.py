@@ -36,22 +36,14 @@ class ErrorValidator:
         self.cross_field_validator.validate(ddot_location, existing_location)
         self.cross_field_ref_validator.validate(ddot_location, existing_location)
 
-        duplicate_error = {}
         if update:
             self.transition_validator.validate(ddot_location, existing_location)
             transition_errors = self.transition_validator.errors
         else:
             transition_errors = {}
-            if existing_location != {}:
-                duplicate_error = {
-                    'duplicate_site': [
-                        'Site with agencyCode {0} and siteNumber {1} already exists'.format(existing_location.get('agencyCode'),
-                                                                                             existing_location.get('siteNumber'))]
-                }
 
         self._errors = defaultdict(list)
         all_errors = chain(
-            duplicate_error.items(),
             self.single_field_validator.errors.items(),
             self.cross_field_validator.errors.items(),
             self.cross_field_ref_validator.errors.items(),
