@@ -30,7 +30,7 @@ requirements = read_requirements('requirements.txt')
 
 
 setup(name='usgs_wma_mlr_validator',
-      version='0.12.0',
+      version='0.13.0dev',
       description='MLR Validator Microservice',
       author='Mary Bucknell, Andrew Yan, Dave Steinich, Zack Moore, Kathy Schoephoester',
       author_email='mlr-devs@usgs.gov',
