@@ -41,6 +41,15 @@ class TransitionValidatorSiteTypeTestCase(TestCase):
     def test_invalid_site_type_transition3(self):
         self.assertFalse(self.validator.validate({}, {'siteTypeCode': 'SS'}))
 
+    def test_valid_existing_site_type_not_updated(self):
+        self.assertTrue(self.validator.validate({}, {'siteNumber': '410421095581902','agencyCode': 'USGS ', 'primaryUseOfSiteCode': 'W', 'dataReliabilityCode': 'C'}))
+
+    def test_valid_existing_site_type_not_updated2(self):
+        self.assertTrue(self.validator.validate({}, {'siteNumber': '422927088151601','agencyCode': 'USGS ', 'remarks': 'Test Remark for 422927088151601 2/4/2019'}))
+
+    def test_valid_existing_site_type_not_updated3(self):
+        self.assertTrue(self.validator.validate({}, {'databaseTableIdentifier': '0','transactionType': 'M','stationName': 'test 342323091232356                              ','siteTypeCode': 'GW','districtCode': '05','countryCode': 'US','stateFipsCode': '05','countyCode': '001','latitude': ' 342323','longitude': ' 0912323','coordinateAccuracyCode': 'U','coordinateMethodCode': 'U','coordinateDatumCode': 'NAD83','timeZoneCode': 'CST','daylightSavingsTimeFlag': 'Y','nationalWaterUseCode': 'IR','siteWebReadyCode': 'Y','dataReliabilityCode': 'C','primaryUseOfSiteCode': 'W','agencyCode': 'USGS ','siteNumber': '342323091232356'}))
+
 class TransitionValidatorSiteTypeTestCase2(TestCase):
 
     @mock.patch('mlrvalidator.validators.transition_validator.SiteTypeInvalidCodes')
