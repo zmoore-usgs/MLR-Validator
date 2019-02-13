@@ -68,7 +68,7 @@ SERVICE_CERT_KEY="/home/user/mlr/mlr-local-dev/ssl/wildcard.key"
 
 To run the Validator with the cert and public key from mlr-local-dev:
 
-Then in the `app.py` file, modify the last few lines to include pulling the cert path and cert key from mlr-local-dev into new strings we'll use to run the Flask app securely:
+In the Validator's `app.py` file, modify the last few lines to include pulling the cert path and cert key from mlr-local-dev into new strings we'll use to run the Flask app securely:
 ```python
 if __name__ == '__main__':
     cert = application.config['SERVICE_CERT_PATH']
