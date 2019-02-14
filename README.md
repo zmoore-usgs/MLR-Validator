@@ -48,3 +48,34 @@ jwt.encode({'authorities': ['one_role', 'two_role']}, 'secret', algorithm='HS256
 The output of this command will be the token that you can use. You will need to set JWT_SECRET_KEY to 'secret' in 
 your local .env file. See http://flask-jwt-simple.readthedocs.io/en/latest/options.html for the other options that 
 you can use.
+
+## Connecting with mlr-local-dev
+You can run the MLR-Validator locally alongside the [mlr-local-dev](https://github.com/USGS-CIDA/mlr-local-dev) project which runs the other MLR application services in Docker. This gives you the option of debugging the Validator through the MLR UI rather than through Swagger. There are small config changes as well as needing to run the Validator with https.
+
+Use the instructions on mlr-local-dev to get it running with two differences: 
+
+Modify the path to the Validator that the [mlr-gateway](https://github.com/USGS-CIDA/mlr-local-dev/blob/master/docker-reference/configuration/mlr-gateway/config.env#L10) configuration has, to point at the non-Docker Validator service instead.
+```yaml
+mlrgateway_legacyValidatorServers=https://localhost:5000
+```
+When starting the services in Terminal 3, remove the `mlr-validator` from the `docker-compose up` command suggested in the [Running](https://github.com/USGS-CIDA/mlr-local-dev#running) section
+
+Then in the `.env` file you created, add:
+```python
+SERVICE_CERT_PATH="/home/user/mlr/mlr-local-dev/ssl/wildcard.crt"
+SERVICE_CERT_KEY="/home/user/mlr/mlr-local-dev/ssl/wildcard.key"
+```
+
+To run the Validator with the cert and public key from mlr-local-dev:
+
+In the Validator's `app.py` file, modify the last few lines to include pulling the cert path and cert key from mlr-local-dev into new strings we'll use to run the Flask app securely:
+```python
+if __name__ == '__main__':
+    cert = application.config['SERVICE_CERT_PATH']
+    key = application.config['SERVICE_CERT_KEY']
+    application.run(ssl_context=(cert, key))
+```
+
+When you start debugging, it should now run securely at https://127.0.0.1:5000/api and debugging through the MLR UI is now possible.
+
+

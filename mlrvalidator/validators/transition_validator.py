@@ -12,6 +12,8 @@ class TransitionValidator:
         self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(reference_dir, 'site_type_invalid.json'))
 
     def validate(self, document, existing_document):
+        self._errors = {}
+
         existing_value = existing_document.get('siteTypeCode', '').strip()
         new_value = document.get('siteTypeCode', '').strip()
 

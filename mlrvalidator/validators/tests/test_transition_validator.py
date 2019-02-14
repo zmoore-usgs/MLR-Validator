@@ -62,3 +62,18 @@ class TransitionValidatorSiteTypeTestCase2(TestCase):
 
     def test_valid_transition(self):
         self.assertFalse(self.validator.validate({'siteTypeCode': 'FA-DV'}, {'siteTypeCode': 'AG'}))
+
+class TransitionValidatorErrorsClearAfterEachUse(TestCase):
+
+    @mock.patch('mlrvalidator.validators.transition_validator.SiteTypeInvalidCodes')
+    @mock.patch('mlrvalidator.validators.transition_validator.FieldTransitions')
+    def setUp(self, mfield_transitions, msite_type_invalid_codes):
+    
+        msite_type_invalid_codes.return_value.get_site_type_invalid_codes.return_value = ['FA', 'SS']
+        mfield_transitions.return_value.get_allowed_transitions.return_value = ['FA-SPS','FA-WIW','GW', 'FA-DV']
+        self.validator = TransitionValidator('ref_dir')
+
+    def test_invalid_transition_errors_response_population(self):
+        self.assertFalse(self.validator.validate({}, {'siteTypeCode': 'SS'}))
+        self.assertTrue(self.validator.validate({'siteTypeCode': 'FA-DV'}, {'siteTypeCode': 'AS'}))
+
