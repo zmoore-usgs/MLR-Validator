@@ -6,6 +6,7 @@ from .reference import SiteTypeInvalidCodes, FieldTransitions
 class TransitionValidator:
 
     def __init__(self, reference_dir):
+        self._errors = {}
         self.site_type_invalid_code_list = []
         self.site_type_transition_ref = FieldTransitions(os.path.join(reference_dir, 'site_type_transition.json'))
         self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(reference_dir, 'site_type_invalid.json'))
