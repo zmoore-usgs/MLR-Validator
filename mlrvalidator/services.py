@@ -100,6 +100,10 @@ validate_location_model = api.model('ValidateLocationModel', {
     'existingLocation': fields.Nested(location_model)
 })
 
+error_model = api.model('ErrorModel', {
+    'error_message': fields.String(required=True)
+})
+
 validation_model = api.model('SuccessModel', {'validation_passed_message': fields.String(),
                                               'warning_message': fields.String(),
                                               'fatal_error_message': fields.String()})
@@ -107,7 +111,7 @@ validation_model = api.model('SuccessModel', {'validation_passed_message': field
 
 def _validate_response(req_json, update=False):
     if 'ddotLocation' not in req_json or 'existingLocation' not in req_json:
-        raise BadRequest
+        raise BadRequest('Request is missing required components (ddotLocation and/or existingLocation).')
     ddot_location = req_json.get('ddotLocation')
     existing_location = req_json.get('existingLocation')
     no_errors = error_validator.validate(ddot_location, existing_location, update=update)
@@ -128,24 +132,40 @@ def _validate_response(req_json, update=False):
 class AddValidator(Resource):
 
     @api.response(200, 'Successfully validated', validation_model)
-    @api.response(401, 'Not authorized')
+    @api.response(400, 'Invalid validation request', error_model)
+    @api.response(401, 'Not authorized', error_model)
+    @api.response(422, 'Invalid token', error_model)
+    @api.response(500, 'Error during validation', error_model)
     @api.doc(security='apikey')
     @api.expect(validate_location_model)
     @jwt_required
     def post(self):
-        return _validate_response(request.get_json())
+        try:
+            response, status = _validate_response(request.get_json())
+        except BadRequest as err:
+            response, status = {'error_message': err.description}, 400
+        
+        return response, status
 
 
 @api.route('/validators/update')
 class UpdateValidator(Resource):
 
     @api.response(200, 'Successfully validated', validation_model)
-    @api.response(401, 'Not authorized')
+    @api.response(400, 'Invalid validation request', error_model)
+    @api.response(401, 'Not authorized', error_model)
+    @api.response(422, 'Invalid token', error_model)
+    @api.response(500, 'Error during validation', error_model)
     @api.doc(security='apikey')
     @api.expect(validate_location_model)
     @jwt_required
     def post(self):
-        return _validate_response(request.get_json(), update=True)
+        try:
+            response, status = _validate_response(request.get_json(), update=True)
+        except BadRequest as err:
+            response, status = {'error_message': err.description}, 400
+        
+        return response, status
 
 
 version_model = api.model('VersionModel', {
@@ -172,3 +192,8 @@ class Version(Resource):
                 "artifact": distribution.project_name
             }
         return resp
+
+@api.errorhandler
+def default_error_handler(error):
+    '''Default error handler'''
+    return {'error_message': str(error)}, getattr(error, 'code', 500)
