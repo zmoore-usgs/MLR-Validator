@@ -21,7 +21,7 @@ To run the application locally execute the following:
 % env/bin/python app.py
 ```
 
-The swagger documentation can then be accessed at http://127.0.0.1:5000/api
+The swagger documentation can then be accessed at http://127.0.0.1:6027/api
 
 ## Configuration
 Configuration is read from `config.py`. `config.py` tries to read most values from environment variables and provides defaults if they do not exist. A user running this app can customize config values by defining environment variables referenced in `config.py`.
