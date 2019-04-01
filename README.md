@@ -21,7 +21,7 @@ To run the application locally execute the following:
 % env/bin/python app.py
 ```
 
-The swagger documentation can then be accessed at http://127.0.0.1:6027/api
+The swagger documentation can then be accessed at http://127.0.0.1:5000/api (when running locally using the above command).
 
 ## Configuration
 Configuration is read from `config.py`. `config.py` tries to read most values from environment variables and provides defaults if they do not exist. A user running this app can customize config values by defining environment variables referenced in `config.py`.
@@ -59,7 +59,9 @@ Before any of these options are able to be run you must also generate certificat
 
 To build and run the application after completing the above steps you can run: `docker-compose up --build {profile}`, replacing `{profile}` with one of the options listed above.
 
-## Connecting with mlr-local-dev (without docker)
+The swagger documentation can then be accessed at http://127.0.0.1:6027/api
+
+## Connecting with mlr-local-dev (running mlr-validator outside of docker)
 You can run the MLR-Validator locally alongside the [mlr-local-dev](https://github.com/USGS-CIDA/mlr-local-dev) project which runs the other MLR application services in Docker. This gives you the option of debugging the Validator through the MLR UI rather than through Swagger. There are small config changes as well as needing to run the Validator with https.
 
 Use the instructions on mlr-local-dev to get it running with two differences: 
