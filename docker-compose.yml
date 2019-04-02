@@ -1,0 +1,26 @@
+---
+  version: '3.7'
+      
+  services:
+    mlr-validator:
+      build: .
+      image: mlr-validator
+      ports:
+        - "6027:6027"
+      volumes: 
+        - ./docker/certificates/import_certs:/home/python/certificates:ro
+      env_file:
+        - ./docker/config.env
+        - ./docker/secrets.env
+    
+    mlr-validator-local-dev:
+      build: .
+      image: mlr-validator
+      network_mode: "host"
+      ports:
+        - "6027:6027"
+      volumes: 
+        - ./docker/certificates/import_certs:/home/python/certificates:ro
+      env_file:
+        - ./docker/config.env
+        - ./docker/secrets.env

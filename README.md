@@ -21,7 +21,7 @@ To run the application locally execute the following:
 % env/bin/python app.py
 ```
 
-The swagger documentation can then be accessed at http://127.0.0.1:5000/api
+The swagger documentation can then be accessed at http://127.0.0.1:5000/api (when running locally using the above command).
 
 ## Configuration
 Configuration is read from `config.py`. `config.py` tries to read most values from environment variables and provides defaults if they do not exist. A user running this app can customize config values by defining environment variables referenced in `config.py`.
@@ -49,7 +49,19 @@ The output of this command will be the token that you can use. You will need to 
 your local .env file. See http://flask-jwt-simple.readthedocs.io/en/latest/options.html for the other options that 
 you can use.
 
-## Connecting with mlr-local-dev
+## Running with Docker 
+This application can also be run locally using the docker container built during the build process, though this does not allow the application to be run in debug mode. The included `docker-compose` file has 2 profiles to choose from when running the application locally:
+
+1. mlr-validator: This is the default profile which runs the application as it would be in our cloud environment. This is not recommended for local development as it makes configuring connections to other services running locally on your machine more difficult.
+2. mlr-validator-local-dev: This is the profile which runs the application as it would be in the mlr-local-dev project, and is configured to make it easy to replace the mlr-validator instance in the local-dev project with this instance. It is run the same as the `mlr-validator` profile, except it uses the docker host network driver.
+
+Before any of these options are able to be run you must also generate certificates for this application to serve using the `create_certificates` script in the `docker/certificates` directory. Additionally, this service must be able to connect to a running instance of Water Auth when starting, and it is recommended that you use the Water Auth instance from the `mlr-local-dev` project to accomplish this. In order for this application to communicate with any downstream services that it must call, including Water Auth, you must also place the certificates that are being served by those services into the `docker/certificates/import_certs` directory to be imported into the Python CA Certificates of the running container.
+
+To build and run the application after completing the above steps you can run: `docker-compose up --build {profile}`, replacing `{profile}` with one of the options listed above.
+
+The swagger documentation can then be accessed at http://127.0.0.1:6027/api
+
+## Connecting with mlr-local-dev (running mlr-validator outside of docker)
 You can run the MLR-Validator locally alongside the [mlr-local-dev](https://github.com/USGS-CIDA/mlr-local-dev) project which runs the other MLR application services in Docker. This gives you the option of debugging the Validator through the MLR UI rather than through Swagger. There are small config changes as well as needing to run the Validator with https.
 
 Use the instructions on mlr-local-dev to get it running with two differences: 
