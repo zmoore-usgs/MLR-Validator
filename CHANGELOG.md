@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.15.0] - 2019-04-12 - End of Pilot
 ### Added
 - Docker configuration
 
@@ -113,7 +115,8 @@ CVE https://nvd.nist.gov/vuln/detail/CVE-2018-10903
 - Implement single field validations
 - Swagger docs endpoint /api
 
-[Unreleased]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.14.0...master
+[Unreleased]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.15.0...master
+[0.15.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.14.0...MLR-Validator-0.15.0
 [0.14.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.13.0...MLR-Validator-0.14.0
 [0.13.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.12.0...MLR-Validator-0.13.0
 [0.12.0]: https://github.com/USGS-CIDA/MLR-Validator/compare/MLR-Validator-0.11.0...MLR-Validator-0.12.0
