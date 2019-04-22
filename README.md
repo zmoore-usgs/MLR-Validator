@@ -1,10 +1,30 @@
 # MLR-Validator
 Validates inserts and updates to the MLR system
-
 [![Build Status](https://travis-ci.org/USGS-CIDA/MLR-Validator.svg?branch=master)](https://travis-ci.org/USGS-CIDA/MLR-Validator)
 [![Coverage Status](https://coveralls.io/repos/github/USGS-CIDA/MLR-Validator/badge.svg)](https://coveralls.io/github/USGS-CIDA/MLR-Validator)
 
+## Service Description
+This service is part of the MLR microservices and is responsible for performing single-location validation for location adds or updates. Locations being added/updated in MLR from DDOt files have many validations that they must pass before they can be persisted in the databse an this service is responsible for performing those validations. The only validations outside the scope of this service are those that require making queries against the MLR Database which are the location uniqueness validations. These validations are run by the Legacy CRU service. The rule of thumb we have used for splitting the validations is that this service, the MLR Validator, is responsible for validating the componenets of a single lcoation including parameter values, ranges, reference list links, and others. If a location is successfully validated by this service it could be added to the MLR Database assuming there was no data currently in the database. Validations that are relative to the current contents of the MLR Database are handled by the Legacy CRU service because this service has no direct connection to the MLR Database to perform those validations.
 
+The MLR Validator is designed in such a way that if one validation fails the process will still continue and run all validations against the submitted location. This decision was made because users would prefer to know about _all_ of the issues in their file at once rather than having to resubmit and fix the file multiple times if only a single error was shown per-run.
+
+There are two different endpoints to execute validation of a single location JSON file: `/validators/add` and `/validators/update`. Add and update transactions share many validations, however there are some validations that are run in only one case or the other (such as transition validations, described below). As a result, we use two different endpoints for validation. While the DDot file itself contains the transaction type of each transaction being performed (add or update), the monitoring location data itself within each transaction does _not_. This is why we cannot have the validator service itself decide whether the input location is for an add or update, and instead this must be provided as part of the request by hitting one of the two API endpoints. Specifics about each API endpoint (such as the request and and response formats) can be read from the service Swagger API documentation.
+
+The MLR Validator runs several different kinds of validations including single-field and cross-field validations.
+
+Single-field validations are those that are checking the value of a single field of the location for validity. These validations do not depend on the values of any other fields of the location and only look at the value of a single field at a time. Validations in this category include acceptable value ranges, reference list checks (to ensure a value appears on a reference list), null/empty checks, and other related things.
+
+Cross-field validations are those that check the value of multiple fields of a location in conjunction to determine validity. These validations do depend on the value of multiple fields of the location and can include more complicated branching logic for various different situations. Validations in this category include checking for the existence of certain fields when other fields have a specific value (such as a ensuring a location has primary and secondary use codes defined when it has a tertiary use code defined), checking value ranges for one field when another field has a certain value (such as ensuring the provided latitude and longitude coordinates are within the provdided state), and other related things.
+
+In addition to these two primary kinds of validations, there are multiple validation _types_ as well including Error and Warning validations.
+
+Error validations are those that _must_ pass for the location to be considered valid and allowed to be persisted within the MLR Database. If an error validation fails the location being validated _cannot_ be persisted into the database and must be modified by the submitting user.
+
+Warning validations are those that are _not_ required to pass for the location to be considered valid. If a location fails several warning validations the user is notified of these failures but the location is still allowed to be persisted into the MLR Database.
+
+Several other types of validations exist such as Transition validations which are run only during location updates and check that when certain fields are being _changed_ from one value to another value they follow certain rules and guidelines.
+
+## Building and Running
 This project has been built and tested with python 3.6.x. To build the project locally you will need
 python 3 and virtualenv installed.
 ```bash
