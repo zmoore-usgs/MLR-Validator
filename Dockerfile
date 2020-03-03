@@ -32,6 +32,7 @@ ENV listening_port=6027
 ENV protocol=https
 ENV oauth_server_token_key_url=https://example.gov/oauth/token_key
 ENV authorized_roles=test_default
+ENV artifact_id=usgs-wma-mlr-validator
 
 COPY --chown=1000:1000 --from=build /build/dist/*.whl .
 
