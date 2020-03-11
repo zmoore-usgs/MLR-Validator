@@ -91,7 +91,7 @@ class SingleFieldValidator(Validator):
         however, need to ensure that the site number consists of only digits
 
         The rule's arguments are validated against this schema:
-        {'valid_site_number': True}
+        {'type': 'boolean'}
         """
         stripped_value = value.rstrip()
         errors = ''
@@ -110,7 +110,7 @@ class SingleFieldValidator(Validator):
         Do not allow users to use non-valid types for new sites and if the record is being updated, the site type code must also be updated
         
         The rule's arguments are validated against this schema:
-        {'valid_site_type': True}
+        {'type': 'boolean'}
         """      
         site_type_invalid_code_list = self.site_type_invalid_code_list.get_site_type_invalid_codes()
         if value in site_type_invalid_code_list:
