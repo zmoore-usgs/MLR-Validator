@@ -25,7 +25,7 @@ COPY --chown=1000:1000 json_population_scripts /build/json_population_scripts
 
 RUN env/bin/python -m unittest && env/bin/python setup.py bdist_wheel
 
-FROM cidasdpdasartip.cr.usgs.gov:8447/mlr-python-base-docker:latest
+FROM artifactory.wma.chs.usgs.gov/wma-docker/mlr/mlr-python-base:latest
 LABEL maintainer="gs-w_eto_eb_federal_employees@usgs.gov"
 
 ENV listening_port=6027
