@@ -3,6 +3,7 @@ import requests
 import json
 
 from flask import Flask
+from jwt.algorithms import RSAAlgorithm
 from mlrvalidator.validators.error_validator import ErrorValidator
 from mlrvalidator.validators.warning_validator import WarningValidator
 
