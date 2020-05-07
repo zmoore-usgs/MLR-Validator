@@ -36,13 +36,26 @@ python 3 and virtualenv installed.
 % env/bin/pip install -r requirements.txt
 ```
 
-To run the tests:
+### Reference List Files
+
+In order to run the app or the tests, external reference list files must be placed in the `mlrvalidator/references/remote` directory.
+If you have the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [saml2aws](https://github.com/Versent/saml2aws) installed, run this from the repo root to get started:
+
+```bash
+aws s3 sync s3://prod-owi-resources/resources/Application/mlr/test/configuration/mlr-validator/remote-references/ ./mlrvalidator/references/remote
+```
+
+### Testing
+
+After you have installed reference lists, you can run the tests:
 
 ```bash
 env/bin/python -m unittest
 ```
 
-To run the application locally execute the following:
+### Running
+
+After you have installed reference lists, you can run the application locally:
 
 ```bash
 % env/bin/python app.py

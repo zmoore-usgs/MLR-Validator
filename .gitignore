@@ -114,3 +114,6 @@ root.crt
 **/*.csr
 **/*.chain
 **/*.key
+
+# external reference lists
+/mlrvalidator/references/remote/*
