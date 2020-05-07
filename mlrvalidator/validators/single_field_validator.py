@@ -14,12 +14,12 @@ class SingleFieldValidator(Validator):
         ''''
         Added keyword argument reference_list which should be an instance of reference.ReferenceInfo
         '''
-        self.reference_dir = kwargs.get('reference_dir', {})
+        self.parent_reference_dir = kwargs.get('parent_reference_dir', {})
         super().__init__(*args, **kwargs)
 
-        if self.reference_dir:
-            self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
-            self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(self.reference_dir, 'site_type_invalid.json'))
+        if self.parent_reference_dir:
+            self.reference_list = ReferenceInfo(os.path.join(self.parent_reference_dir, 'remote', 'reference_lists.json'))
+            self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(self.parent_reference_dir, 'local', 'site_type_invalid.json'))
 
     def _validate_type_numeric(self, value):
         # check for numeric value

@@ -7,14 +7,14 @@ from .reference import States, Counties, NationalWaterUseCodes, SiteNumberFormat
 
 class CrossFieldRefWarningValidator(BaseCrossFieldValidator):
 
-    def __init__(self, reference_dir):
+    def __init__(self, remote_reference_dir):
         '''
         :param object states_reference: should be a references.States instance
         '''
-        self.states_ref = States(os.path.join(reference_dir, 'state.json'))
-        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
-        self.site_types_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
-        self.site_number_format_ref = SiteNumberFormat(os.path.join(reference_dir,'site_number_format.json'))
+        self.states_ref = States(os.path.join(remote_reference_dir, 'state.json'))
+        self.counties_ref = Counties(os.path.join(remote_reference_dir, 'county.json'))
+        self.site_types_ref = NationalWaterUseCodes(os.path.join(remote_reference_dir, 'national_water_use.json'))
+        self.site_number_format_ref = SiteNumberFormat(os.path.join(remote_reference_dir, 'site_number_format.json'))
 
         super().__init__()
 

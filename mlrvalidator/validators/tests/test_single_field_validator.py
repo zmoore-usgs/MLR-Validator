@@ -12,7 +12,7 @@ from ..single_field_validator import SingleFieldValidator
 class ValidateIsEmptyTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'agencyCode': {'is_empty': False}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'agencyCode': {'is_empty': False}}, parent_reference_dir='')
         self.good_data = {
             'agencyCode': 'USGS'
         }
@@ -34,7 +34,7 @@ class ValidateIsEmptyTestCase(TestCase):
 class ValidateValidSiteNumberTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'siteNumber': {'valid_site_number': True}}, parent_reference_dir='')
         self.only_digits_is_valid = {
             'siteNumber': '01234567'
         }
@@ -76,7 +76,7 @@ class ValidateValidSiteTypeTestCase(TestCase):
                         mock.mock_open(read_data=json.dumps(ref_list))):
             self.validator = SingleFieldValidator(schema={
                 'siteTypeInvalidCode': {'valid_site_type': True}
-            }, reference_dir='ref_dir')
+            }, parent_reference_dir='ref_dir')
 
         self.bad_data = {
             'siteTypeCode': 'FA'
@@ -92,7 +92,7 @@ class ValidateValidSiteTypeTestCase(TestCase):
 class ValidateTypeNumericCheckTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'altitude': {'type': 'numeric'}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'altitude': {'type': 'numeric'}}, parent_reference_dir='')
         self.good_data = {
             'altitude': '1234'
             }
@@ -162,7 +162,7 @@ class ValidateTypeNumericCheckTestCase(TestCase):
 class ValidateValidPrecisionTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'altitude': {'valid_precision': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'altitude': {'valid_precision': True}}, parent_reference_dir='')
         self.good_data = {
             'altitude': '1234'
             }
@@ -227,7 +227,7 @@ class ValidateValidPrecisionTestCase(TestCase):
 
 class ValidateTypePositiveNumericTestCase(TestCase):
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'contributingDrainageArea' : {'type': 'positive_numeric'}}, parent_reference_dir='')
         self.good_data = {
             'contributingDrainageArea': '1234',
         }
@@ -309,7 +309,7 @@ class ValidateTypePositiveNumericTestCase(TestCase):
 class ValidateValidMapScaleCharsTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'mapScale': {'valid_map_scale_chars': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'mapScale': {'valid_map_scale_chars': True}}, parent_reference_dir='')
         self.good_data = {
             'mapScale': '24000'
         }
@@ -347,7 +347,7 @@ class ValidateValidMapScaleCharsTestCase(TestCase):
 class ValidateValidLatitudeDMS(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'latitude': {'valid_latitude_dms': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'latitude': {'valid_latitude_dms': True}}, parent_reference_dir='')
         self.good_data = {
             'latitude': ' 123456'
         }
@@ -509,7 +509,7 @@ class ValidateValidLatitudeDMS(TestCase):
 class ValidateValidLongitudeDMSTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'longitude': {'valid_longitude_dms': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'longitude': {'valid_longitude_dms': True}}, parent_reference_dir='')
         self.good_data = {
             'longitude': ' 1234556'
         }
@@ -671,7 +671,7 @@ class ValidateValidLongitudeDMSTestCase(TestCase):
 class ValidateValidDateTestCase(TestCase):
 
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'firstConstructionDate': {'valid_date': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'firstConstructionDate': {'valid_date': True}}, parent_reference_dir='')
         self.good_data = {
             'firstConstructionDate': '20140912'
         }
@@ -790,7 +790,7 @@ class ValidateReferenceTestCase(TestCase):
             self.validator = SingleFieldValidator(schema={
                 'field1': {'valid_reference': True},
                 'field2': {'valid_reference': True}
-            }, reference_dir='ref_dir')
+            }, parent_reference_dir='ref_dir')
 
     def test_valid_field(self):
         self.assertTrue(self.validator.validate({'field2': 'AA'}))
@@ -815,7 +815,7 @@ class ValidateValidPaddingTestCase(TestCase):
             self.validator = SingleFieldValidator(schema={
                 'field1': {'valid_padding': True},
                 'field2': {'valid_padding': True}
-            }, reference_dir='ref_dir')
+            }, parent_reference_dir='ref_dir')
     
     def test_field_preceding_left_spaces(self):
         self.assertFalse(self.validator.validate({'field1': '   A'}))
@@ -831,7 +831,7 @@ class ValidateValidPaddingTestCase(TestCase):
 
 class ValidateSingleQuoteTestCase(TestCase):
     def setUp(self):
-        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}}, reference_dir='')
+        self.validator = SingleFieldValidator(schema={'field1': {'valid_single_quotes': True}}, parent_reference_dir='')
 
     def test_valid_field(self):
         self.assertTrue(self.validator.validate({'field1': '   '}))
