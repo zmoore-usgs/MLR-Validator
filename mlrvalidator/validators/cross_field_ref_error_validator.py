@@ -12,10 +12,9 @@ from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Count
 
 class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
-    def __init__(self, parent_reference_dir):
+    def __init__(self, local_reference_dir, remote_reference_dir):
         super().__init__()
-        remote_reference_dir = os.path.join(parent_reference_dir, 'remote')
-        local_reference_dir = os.path.join(parent_reference_dir, 'local')
+
         self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'aquifer.json'), 'aquiferCodes', 'aquiferCode')
         self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
         self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')

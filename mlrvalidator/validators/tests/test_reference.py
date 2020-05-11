@@ -6,8 +6,9 @@ from app import application
 from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties, \
     LandNetCrossField, SiteNumberFormat
 
-remote_reference_dir = os.path.join(application.config['REFERENCE_FILE_DIR'], 'remote')
-local_reference_dir = os.path.join(application.config['REFERENCE_FILE_DIR'], 'local')
+local_reference_dir = application.config['LOCAL_REFERENCE_DIR']
+remote_reference_dir =application.config['REMOTE_REFERENCE_DIR']
+
 class CountryStateReferenceTestCase(TestCase):
     def setUp(self):
         ref_list = {

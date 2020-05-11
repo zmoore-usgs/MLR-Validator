@@ -29,8 +29,8 @@ elif application.config.get('AUTH_TOKEN_KEY_URL'):
     application.config['JWT_PUBLIC_KEY'] = resp.json()['value']
     application.config['JWT_ALGORITHM'] = 'RS256'
 
-error_validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
-warning_validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+error_validator = ErrorValidator(application.config['SCHEMA_DIR'], application.config['LOCAL_REFERENCE_DIR'], application.config['REMOTE_REFERENCE_DIR'])
+warning_validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['LOCAL_REFERENCE_DIR'], application.config['REMOTE_REFERENCE_DIR'])
 
 
 from mlrvalidator.services import *

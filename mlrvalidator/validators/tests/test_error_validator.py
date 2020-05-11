@@ -33,7 +33,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
     def test_all_valid(self, mtran_class, mref_class, mcross_class, msingle_field_class):
         self.setUpPassingValidators(mtran_class, mref_class, mcross_class, msingle_field_class)
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A' : 'This', 'B' : 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -48,7 +48,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         msingle_field.validate.return_value = False
         msingle_field.errors = {'A' : ['Invalid']}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -65,7 +65,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = False
         mcross.errors = {'B': ['Invalid']}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -82,7 +82,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mref.validate.return_value = False
         mref.errors = {'B': ['Bad']}
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 1)
@@ -100,7 +100,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mtran.errors = {'B': ['Bad transition']}
 
 
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertTrue(result)
         self.assertEqual(len(validator.errors), 0)
@@ -124,7 +124,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.errors = {'A': ['Invalid cross']}
         msingle_field.validate.return_value = False
         msingle_field.errors = {'B': ['Missing']}
-        validator = ErrorValidator('schema_dir', 'ref_dir')
+        validator = ErrorValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
         result = validator.validate({'A': 'This', 'B': 'That'}, {})
         self.assertFalse(result)
         self.assertEqual(len(validator.errors), 2)

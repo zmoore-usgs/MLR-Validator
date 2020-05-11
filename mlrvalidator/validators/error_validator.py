@@ -12,15 +12,14 @@ from .transition_validator import TransitionValidator
 
 class ErrorValidator:
 
-    def __init__(self, schema_dir, parent_reference_dir):
+    def __init__(self, schema_dir, local_reference_dir, remote_reference_dir):
         with open(os.path.join(schema_dir, 'error_schema.yml')) as fd:
             error_schema = yaml.full_load(fd.read())
 
-        local_reference_dir = os.path.join(parent_reference_dir, 'local')
 
-        self.single_field_validator = SingleFieldValidator(error_schema, parent_reference_dir=parent_reference_dir, allow_unknown=True)
+        self.single_field_validator = SingleFieldValidator(error_schema, local_reference_dir=local_reference_dir, remote_reference_dir=remote_reference_dir, allow_unknown=True)
         self.cross_field_validator = CrossFieldErrorValidator()
-        self.cross_field_ref_validator = CrossFieldRefErrorValidator(parent_reference_dir)
+        self.cross_field_ref_validator = CrossFieldRefErrorValidator(local_reference_dir, remote_reference_dir)
         self.transition_validator = TransitionValidator(local_reference_dir)
         self._errors = defaultdict(list)
 
