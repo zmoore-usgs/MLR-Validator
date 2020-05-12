@@ -42,7 +42,7 @@ In order to run the app or the tests, external reference list files must be plac
 If you have the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [saml2aws](https://github.com/Versent/saml2aws) installed, run this from the repo root to get started:
 
 ```bash
-aws s3 sync s3://prod-owi-resources/resources/Application/mlr/test/configuration/mlr-validator/remote-references/ .
+aws s3 sync s3://prod-owi-resources/resources/Application/mlr/ci/configuration/mlr-validator/remote-references/ remote-references
 ```
 
 ### Testing
