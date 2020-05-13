@@ -9,12 +9,11 @@ from .single_field_validator import SingleFieldValidator
 
 class WarningValidator:
 
-    def __init__(self, schema_dir, reference_file_dir):
+    def __init__(self, schema_dir, local_reference_dir, remote_reference_dir):
         with open(os.path.join(schema_dir, 'warning_schema.yml')) as fd:
             warning_schema = yaml.full_load(fd.read())
-
-        self.single_field_validator = SingleFieldValidator(warning_schema, reference_dir=reference_file_dir, allow_unknown=True)
-        self.cross_field_ref_validator = CrossFieldRefWarningValidator(reference_file_dir)
+        self.single_field_validator = SingleFieldValidator(warning_schema, local_reference_dir=local_reference_dir, remote_reference_dir=remote_reference_dir, allow_unknown=True)
+        self.cross_field_ref_validator = CrossFieldRefWarningValidator(remote_reference_dir)
         self.cross_field_validator = CrossFieldWarningValidator()
         self._warnings = defaultdict(list)
 

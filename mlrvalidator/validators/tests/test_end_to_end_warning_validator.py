@@ -4,13 +4,10 @@ from unittest import TestCase
 from app import application
 from ..warning_validator import WarningValidator
 
-validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['LOCAL_REFERENCE_DIR'], application.config['REMOTE_REFERENCE_DIR'])
 
 
 class AltitudeWarningValidationsTestCase(TestCase):
-    def setUp(self):
-        validator = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
-
     def test_valid_altitude_range(self):
         validator .validate(
             {'agencyCode': 'USGS ', 'siteNumber': '12345678', 'altitude': '1234'},
@@ -170,7 +167,7 @@ class UseCodesTestCase(TestCase):
 
 class WarningValidatorSiteNumberTestCase(TestCase):
     def setUp(self):
-        self.v = WarningValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+        self.v = WarningValidator(application.config['SCHEMA_DIR'], application.config['LOCAL_REFERENCE_DIR'], application.config['REMOTE_REFERENCE_DIR'])
 
     def test_site_number_wu_no_first_digit_invalid(self):
         self.assertFalse(self.v.validate({'siteTypeCode': 'AW', 'siteNumber': '8765432109'}, {}, update=True))

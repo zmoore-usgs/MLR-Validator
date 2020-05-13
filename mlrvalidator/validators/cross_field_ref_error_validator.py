@@ -3,6 +3,8 @@ from collections import defaultdict
 import os
 import re
 
+from dateutil.parser import parser
+
 from .base_cross_field_validator import BaseCrossFieldValidator
 from .country_state_reference_validator import CountryStateReferenceValidator
 from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Counties, LandNetCrossField, SiteNumberFormat
@@ -10,19 +12,20 @@ from .reference import States, NationalWaterUseCodes, SiteTypesCrossField, Count
 
 class CrossFieldRefErrorValidator(BaseCrossFieldValidator):
 
-    def __init__(self, reference_dir):
+    def __init__(self, local_reference_dir, remote_reference_dir):
         super().__init__()
-        self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'aquifer.json'), 'aquiferCodes', 'aquiferCode')
-        self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
-        self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
 
-        self.counties_ref = Counties(os.path.join(reference_dir, 'county.json'))
-        self.mcd_ref = Counties(os.path.join(reference_dir, 'mcd.json'))
-        self.states_ref = States(os.path.join(reference_dir, 'state.json'))
-        self.national_water_use_ref = NationalWaterUseCodes(os.path.join(reference_dir, 'national_water_use.json'))
-        self.land_net_ref = LandNetCrossField(os.path.join(reference_dir, 'land_net.json'))
-        self.site_number_format_ref = SiteNumberFormat(os.path.join(reference_dir,'site_number_format.json'))
-        self.site_type_ref = SiteTypesCrossField(os.path.join(reference_dir, 'site_type_cross_field.json'))
+        self.aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'aquifer.json'), 'aquiferCodes', 'aquiferCode')
+        self.huc_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'huc.json'), 'hydrologicUnitCodes', 'hydrologicUnitCode')
+        self.national_aquifer_ref_validator = CountryStateReferenceValidator(os.path.join(remote_reference_dir, 'national_aquifer.json'), 'nationalAquiferCodes', 'nationalAquiferCode')
+
+        self.counties_ref = Counties(os.path.join(remote_reference_dir, 'county.json'))
+        self.mcd_ref = Counties(os.path.join(remote_reference_dir, 'mcd.json'))
+        self.states_ref = States(os.path.join(remote_reference_dir, 'state.json'))
+        self.national_water_use_ref = NationalWaterUseCodes(os.path.join(remote_reference_dir, 'national_water_use.json'))
+        self.land_net_ref = LandNetCrossField(os.path.join(remote_reference_dir, 'land_net.json'))
+        self.site_number_format_ref = SiteNumberFormat(os.path.join(remote_reference_dir,'site_number_format.json'))
+        self.site_type_ref = SiteTypesCrossField(os.path.join(local_reference_dir, 'site_type_cross_field.json'))
 
     def _validate_counties(self):
         keys = ['countryCode', 'stateFipsCode', 'countyCode']

@@ -6,6 +6,8 @@ from app import application
 from ..reference import CountryStateReference, NationalWaterUseCodes, States, FieldTransitions, SiteTypesCrossField, Counties, \
     LandNetCrossField, SiteNumberFormat
 
+local_reference_dir = application.config['LOCAL_REFERENCE_DIR']
+remote_reference_dir =application.config['REMOTE_REFERENCE_DIR']
 
 class CountryStateReferenceTestCase(TestCase):
     def setUp(self):
@@ -57,7 +59,7 @@ class CountryStateReferenceTestCase(TestCase):
 
 class ValidateGetNationalWaterUseCase(TestCase):
     def setUp(self):
-        self.national_water_use = NationalWaterUseCodes(os.path.join(application.config['REFERENCE_FILE_DIR'], 'national_water_use.json'))
+        self.national_water_use = NationalWaterUseCodes(os.path.join(remote_reference_dir, 'national_water_use.json'))
 
     def test_validate_ok(self):
         good_national_water_use = [
@@ -86,7 +88,7 @@ class ValidateGetNationalWaterUseCase(TestCase):
 
 class ValidateGetCountyCodeCase(TestCase):
     def setUp(self):
-        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
+        self.county = Counties(os.path.join(remote_reference_dir, 'county.json'))
 
     def test_validate_ok(self):
         good_county = ["000", "005", "040", "050", "060"]
@@ -108,7 +110,7 @@ class ValidateGetCountyCodeCase(TestCase):
 
 class ValidateGetCountyAttributesCase(TestCase):
     def setUp(self):
-        self.county = Counties(os.path.join(application.config['REFERENCE_FILE_DIR'], 'county.json'))
+        self.county = Counties(os.path.join(remote_reference_dir, 'county.json'))
 
     def test_validate_ok(self):
         good_county = {
@@ -143,7 +145,7 @@ class ValidateGetCountyAttributesCase(TestCase):
 
 class ValidateGetStateCodeCase(TestCase):
     def setUp(self):
-        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
+        self.state = States(os.path.join(remote_reference_dir, 'state.json'))
 
     def test_validate_ok(self):
         good_state = ["00", "90", "91", "92", "93", "94", "95", "96", "97", "98"]
@@ -160,7 +162,7 @@ class ValidateGetStateCodeCase(TestCase):
 
 class ValidateGetStateAttributesCase(TestCase):
     def setUp(self):
-        self.state = States(os.path.join(application.config['REFERENCE_FILE_DIR'], 'state.json'))
+        self.state = States(os.path.join(remote_reference_dir, 'state.json'))
 
     def test_validate_ok(self):
         good_state = {
@@ -190,7 +192,7 @@ class ValidateGetStateAttributesCase(TestCase):
 
 class ValidateGetFieldTransitionsCase(TestCase):
     def setUp(self):
-        self.site_type = FieldTransitions(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_transition.json'))
+        self.site_type = FieldTransitions(os.path.join(local_reference_dir, 'site_type_transition.json'))
 
     def test_validate_ok(self):
         good_new_site_type = [
@@ -217,7 +219,7 @@ class ValidateGetFieldTransitionsCase(TestCase):
 class ValidateGetSiteTypesCrossFieldCase(TestCase):
 
     def setUp(self):
-        self.site_type_cf = SiteTypesCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_type_cross_field.json'))
+        self.site_type_cf = SiteTypesCrossField(os.path.join(local_reference_dir, 'site_type_cross_field.json'))
 
     def test_real_site_type_code(self):
         result = self.site_type_cf.get_site_type_field_dependencies('ST-DCH')
@@ -275,7 +277,7 @@ class ValidateGetSiteTypesCrossFieldCase(TestCase):
 class ValidateGetLandNetCrossFieldCase(TestCase):
 
     def setUp(self):
-        self.land_net = LandNetCrossField(os.path.join(application.config['REFERENCE_FILE_DIR'], 'land_net.json'))
+        self.land_net = LandNetCrossField(os.path.join(remote_reference_dir, 'land_net.json'))
 
     def test_real_district_code(self):
         result = self.land_net.get_land_net_templates('55')
@@ -296,7 +298,7 @@ class ValidateGetLandNetCrossFieldCase(TestCase):
 
 class ValidateGetSiteNumberFormatCase(TestCase):
     def setUp(self):
-        self.site_format = SiteNumberFormat(os.path.join(application.config['REFERENCE_FILE_DIR'], 'site_number_format.json'))
+        self.site_format = SiteNumberFormat(os.path.join(remote_reference_dir, 'site_number_format.json'))
 
     def test_real_site_type(self):
         result = self.site_format.get_site_number_template('FA-HP')

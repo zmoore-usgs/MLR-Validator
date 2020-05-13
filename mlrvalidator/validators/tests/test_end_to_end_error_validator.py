@@ -7,7 +7,7 @@ from ..error_validator import ErrorValidator
 
 class BaseE2ETestCase(TestCase):
     def setUp(self):
-        self.v = ErrorValidator(application.config['SCHEMA_DIR'], application.config['REFERENCE_FILE_DIR'])
+        self.v = ErrorValidator(application.config['SCHEMA_DIR'], application.config['LOCAL_REFERENCE_DIR'], application.config['REMOTE_REFERENCE_DIR'])
 
 
 class ErrorValidatorAgencyCodeTestCase(BaseE2ETestCase):

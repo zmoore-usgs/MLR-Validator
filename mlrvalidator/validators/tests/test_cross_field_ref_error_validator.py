@@ -18,7 +18,7 @@ class CrossFieldRefValidatorAllValidatorsTestCase(TestCase):
         mref_validator = mref_validator_class.return_value
         mref_validator.validate.return_value = False
         mref_validator.errors = {'field1' : ['Error message']}
-        self.validator = CrossFieldRefErrorValidator('ref_dir')
+        self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_multiple_error(self):
         self.assertFalse(self.validator.validate({'dummyfield': 'A'}, {}))
@@ -103,7 +103,7 @@ class CrossFieldRefValidatorForCountiesTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_county_not_in_list(self):
         self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode' : '90', 'countyCode': '002'}, {}))
@@ -180,7 +180,7 @@ class CrossFieldRefValidatorForMCDsTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_mcd_in_list(self):
         self.validator.validate(
@@ -300,7 +300,7 @@ class CrossFieldRefValidatorForCountiesTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_county_not_in_list(self):
         self.assertFalse(self.validator.validate({'countryCode': 'CA', 'stateFipsCode' : '90', 'countyCode': '002'}, {}))
@@ -381,7 +381,7 @@ class CrossFieldRefValidatorForStatesTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_state_not_in_list(self):
         self.assertFalse(self.validator.validate({'countryCode': 'US', 'stateFipsCode': '02'}, {}))
@@ -473,7 +473,7 @@ class CrossFieldRefValidatorForNationalWaterUseTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_water_use_code_not_in_list(self):
         self.assertFalse(self.validator.validate({'siteTypeCode': 'AG', 'nationalWaterUseCode': 'CC'}, {}))
@@ -523,7 +523,7 @@ class CrossFieldValidatorSiteTypeFieldTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_with_null_attrs_for_site(self):
         self.assertTrue(self.validator.validate({'siteTypeCode': 'AS', 'field1': '   ', 'field2' : 'A'},
@@ -566,7 +566,7 @@ class CrossFieldValidatorLandNetTestCase(TestCase):
 
         with mock.patch('mlrvalidator.validators.reference.open',
                         mock.mock_open(read_data=json.dumps(ref_list))):
-            self.validator = CrossFieldRefErrorValidator('ref_dir')
+            self.validator = CrossFieldRefErrorValidator('ref_dir', 'ref_dir')
 
     def test_with_existing_district_code_qqqtrs_valid_template(self):
         self.assertTrue(self.validator.validate({'districtCode': '55', 'landNet': 'SWSWSWS010T09832R093425'}, {}))

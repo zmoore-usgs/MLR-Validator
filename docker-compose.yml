@@ -23,6 +23,7 @@
         - "6027:6027"
       volumes: 
         - ./docker/certificates/import_certs:/home/python/certificates:ro
+        - ./remote-references:/home/python/remote-references:ro
       << : *secrets-config
       env_file:
         - ./docker/config.env

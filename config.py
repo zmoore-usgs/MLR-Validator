@@ -1,7 +1,8 @@
 import os
 
 PROJECT_DIR = os.path.dirname(__file__)
-REFERENCE_FILE_DIR = os.path.join(PROJECT_DIR, 'mlrvalidator/references')
+LOCAL_REFERENCE_DIR = os.path.join(PROJECT_DIR, 'mlrvalidator/references/local')
+REMOTE_REFERENCE_DIR = os.getenv('remote_reference_dir', os.path.join(PROJECT_DIR, 'remote-references'))
 SCHEMA_DIR = os.path.join(PROJECT_DIR, 'mlrvalidator/schemas')
 DEBUG = False
 CRU_SERVICE_URL = os.getenv('cru_service_url', 'http://localhost')

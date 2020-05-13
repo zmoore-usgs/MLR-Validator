@@ -20,7 +20,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = True
         mcross.errors = {}
 
-        validator = WarningValidator('schema_dir', 'ref_dir')
+        validator = WarningValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
 
         self.assertTrue(validator.validate({'A' : 'This', 'B' : 'That'}, {}))
         self.assertEqual(len(validator.warnings), 0)
@@ -37,7 +37,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = True
         mcross.errors = {}
 
-        validator = WarningValidator('schema_dir', 'ref_dir')
+        validator = WarningValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 1)
@@ -55,7 +55,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = True
         mcross.errors = {}
 
-        validator = WarningValidator('schema_dir', 'ref_dir')
+        validator = WarningValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 2)
@@ -74,7 +74,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = False
         mcross.errors = {'A': ['Not good'], 'B': ['No match']}
 
-        validator = WarningValidator('schema_dir', 'ref_dir')
+        validator = WarningValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 2)
@@ -93,7 +93,7 @@ class ErrorValidatorErrorsTestCase(TestCase):
         mcross.validate.return_value = False
         mcross.errors = {'A': ['Bad']}
 
-        validator = WarningValidator('schema_dir', 'ref_dir')
+        validator = WarningValidator('schema_dir', 'local_ref_dir', 'remote_ref_dir')
 
         self.assertFalse(validator.validate({'A': 'This', 'B': 'That'}, {}))
         self.assertEqual(len(validator.warnings), 2)

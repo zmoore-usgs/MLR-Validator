@@ -22,8 +22,14 @@ COPY --chown=1000:1000 MANIFEST.in /build/MANIFEST.in
 COPY --chown=1000:1000 *.py /build/
 COPY --chown=1000:1000 mlrvalidator /build/mlrvalidator
 COPY --chown=1000:1000 json_population_scripts /build/json_population_scripts
+COPY --chown=1000:1000 remote-references /build/remote-references
+RUN env/bin/python -m unittest
 
-RUN env/bin/python -m unittest && env/bin/python setup.py bdist_wheel
+# After unit tests complete successfully, remove remote reference lists
+# The user will need to mount those files at runtime
+RUN rm -rf /build/remote-references
+
+RUN env/bin/python setup.py bdist_wheel
 
 FROM artifactory.wma.chs.usgs.gov/wma-docker/mlr/mlr-python-base-docker:latest
 LABEL maintainer="gs-w_eto_eb_federal_employees@usgs.gov"
@@ -33,6 +39,7 @@ ENV protocol=https
 ENV oauth_server_jwks_url=https://test.gov/oauth/jwks.json
 ENV authorized_roles=test_default
 ENV artifact_id=usgs-wma-mlr-validator
+ENV remote_reference_dir=/home/python/remote-references
 
 COPY --chown=1000:1000 --from=build /build/dist/*.whl .
 

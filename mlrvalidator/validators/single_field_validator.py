@@ -11,15 +11,14 @@ from .reference import SiteTypeInvalidCodes, ReferenceInfo
 class SingleFieldValidator(Validator):
 
     def __init__(self, *args, **kwargs):
-        ''''
-        Added keyword argument reference_list which should be an instance of reference.ReferenceInfo
-        '''
-        self.reference_dir = kwargs.get('reference_dir', {})
+        self.local_reference_dir = kwargs.get('local_reference_dir', {})
+        self.remote_reference_dir = kwargs.get('remote_reference_dir', {})
         super().__init__(*args, **kwargs)
 
-        if self.reference_dir:
-            self.reference_list = ReferenceInfo(os.path.join(self.reference_dir, 'reference_lists.json'))
-            self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(self.reference_dir, 'site_type_invalid.json'))
+        if self.remote_reference_dir:
+            self.reference_list = ReferenceInfo(os.path.join(self.remote_reference_dir, 'reference_lists.json'))
+        if self.local_reference_dir:
+            self.site_type_invalid_code_list = SiteTypeInvalidCodes(os.path.join(self.local_reference_dir, 'site_type_invalid.json'))
 
     def _validate_type_numeric(self, value):
         # check for numeric value
