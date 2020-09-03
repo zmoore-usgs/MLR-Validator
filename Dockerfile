@@ -1,4 +1,4 @@
-FROM python:3.6-alpine as build
+FROM python:3.8-alpine as build
 
 ENV PIP_CERT=/etc/ssl/certs/ca-certificates.crt
 
@@ -14,7 +14,7 @@ COPY --chown=1000:1000 requirements.txt /build/requirements.txt
 
 WORKDIR /build
 
-RUN virtualenv --python=python3.6 env
+RUN virtualenv --python=python3.8 env
 RUN env/bin/pip install -r requirements.txt && env/bin/pip install wheel
 
 COPY --chown=1000:1000 README.md /build/README.md
